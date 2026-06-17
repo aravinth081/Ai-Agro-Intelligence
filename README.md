@@ -8,6 +8,9 @@ Agro_Intelligence is a state-of-the-art **Smart Farming & Agri-Fintech Ecosystem
 
 ## 🚀 Key Features
 
+- **🌐 Dynamic Bilingual Support**: Switch the entire application dynamically between **English** and **Tamil** (தமிழ்) instantly without page reloading. Translates all form fields, placeholders, metrics, and guides.
+- **🌓 Adaptive Theme Modes**: Fully optimized support for both **Dark Mode** and **Light Mode** with automatic color contrast corrections ensuring high legibility for mathematical and text data under all ambient conditions.
+- **📱 Mobile & Responsive Layouts**: Extensively tailored using responsive media queries to render beautifully on mobile, tablet, and desktop screens.
 - **📊 Farmer Dashboard**: A central hub showing live farm data, active tasks, personal crop logs, and custom recommendations.
 - **📈 Marketplace & Rates**: Real-time market rate comparisons, crop pricing indicators, and stock tracking.
 - **🌦️ Climate & Weather Advisor**: Live GPS-based weather reports via OpenWeatherMap API integrated with optimal crop schedules.
