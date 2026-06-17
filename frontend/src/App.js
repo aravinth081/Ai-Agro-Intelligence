@@ -38,7 +38,295 @@ const translations = {
   }
 };
 
-const CROP_LIST = [{ en: "Paddy", ta: "நெல்" }, { en: "Sugarcane", ta: "கரும்பு" }, { en: "Turmeric", ta: "மஞ்சள்" }, { en: "Vegetables", ta: "காய்கறிகள்" }, { en: "Cotton", ta: "பருத்தி" }, { en: "Maize", ta: "மக்காச்சோளம்" }, { en: "Banana", ta: "வாழை" }, { en: "Groundnut", ta: "நிலக்கடலை" }];
+const translationMap = {
+  // General & Landing
+  "Farmers Assistance": "உழவர் உதவி மையம்",
+  "Connecting Farmers with Future Tech": "எதிர்கால தொழில்நுட்பத்துடன் விவசாயத்தை இணைத்தல்",
+  "Login": "உள்நுழைக",
+  "Registration": "பதிவு செய்க",
+  "Close": "மூடு",
+  "Go back": "திரும்பவும்",
+  "Authenticate": "அங்கீகரி",
+  "Initialize Account": "கணக்கை உருவாக்குதல்",
+  "Create Username": "புதிய பயனர் பெயர்",
+  "Create Password": "புதிய கடவுச்சொல்",
+  "Operator Name": "விவசாயி பெயர்",
+  "Primary Crop Name": "முதன்மை பயிர் பெயர்",
+  "Land Area (Acres)": "நில அளவு (ஏக்கர்)",
+  "Your Name": "உங்கள் பெயர்",
+  "Ex: Wheat, Cotton, Tomato": "உதா: கோதுமை, பருத்தி, தக்காளி",
+  "Ex: 5": "உதா: 5",
+  "Select": "தேர்வு செய்",
+  "Save": "சேமி",
+  "Update Profile": "சுயவிவரத்தை புதுப்பி",
+  "Save & Initialize Profile": "சுயவிவரத்தை சேமித்து துவக்கு",
+
+  // Digital Twin Setup
+  "Farmer Digital Twin": "விவசாயி டிஜிட்டல் இரட்டை",
+  "Saved locally on this device (localStorage).": "இந்த சாதனத்தில் உள்ளூரில் சேமிக்கப்பட்டது (localStorage).",
+  "Farmer name": "விவசாயி பெயர்",
+  "Location/District": "வட்டம்/மாவட்டம்",
+  "Land size (acres)": "நில அளவு (ஏக்கர்)",
+  "Soil type": "மண் வகை",
+  "Crop history (last season)": "பயிர் வரலாறு (கடந்த பருவம்)",
+  "Irrigation Source & Type": "நீர்ப்பாசன ஆதாரம் & வகை",
+  "Farming Method": "விவசாய முறை",
+  "Enter your full name": "உங்கள் முழு பெயரை உள்ளிடவும்",
+  "Digital Profile": "டிஜிட்டல் சுயவிவரம்",
+  "Manage Your Farming Identity": "உங்கள் விவசாய அடையாளத்தை நிர்வகிக்கவும்",
+  "Irrigation": "நீர்ப்பாசனம்",
+  "Borewell": "ஆழ்துளை கிணறு",
+  "Canal": "கால்வாய்",
+  "Drip Irrigation": "சொட்டு நீர் பாசனம்",
+  "Rainfed": "மானாவாரி",
+  "Organic Farming": "இயற்கை விவசாயம்",
+  "Conventional (Chemical)": "வழக்கமான முறை (ரசாயனம்)",
+  "ZBNF / Natural": "ZBNF / இயற்கை விவசாயம்",
+
+  // Season Analytics
+  "Season Analytics": "பருவக்கால பகுப்பாய்வு",
+  "Real-time Cultivation Metrics for": "இதற்கான உண்மைநேர சாகுபடி அளவீடுகள்:",
+  "Growth Progress": "வளர்ச்சி முன்னேற்றம்",
+  "Day": "நாள்",
+  "Est. Harvest": "மதிப்பிடப்பட்ட அறுவடை",
+  "Thermal Units (GDD)": "வெப்ப அலகுகள் (GDD)",
+  "Water Consumed": "பயன்படுத்தப்பட்ட நீர்",
+  "Fertilizer Cycle": "உர சுழற்சி",
+  "Phase 2 Done": "கட்டம் 2 முடிந்தது",
+  "Close Analytics": "பகுப்பாய்வை மூடு",
+
+  // Dashboard & Navigation
+  "Live Open-Meteo API": "நேரடி Open-Meteo API",
+  "DISTRICT, TN": "மாவட்டம், தமிழ்நாடு",
+  "Farm Command": "விவசாய கட்டுப்பாட்டு",
+  "Center": "மையம்",
+  "Operator": "இயக்குனர்",
+  "Air Humidity (Live)": "காற்றின் ஈரப்பதம் (நேரடி)",
+  "Est. Soil Moisture": "மண்ணின் ஈரப்பதம் (மதிப்பீடு)",
+  "Sensor Status": "சென்சார் நிலை",
+  "ONLINE": "ஆன்லைன்",
+  "Syncing via satellite link": "செயற்கைக்கோள் வழியாக ஒத்திசைக்கப்படுகிறது",
+  "Crop Health Risk": "பயிர் சுகாதார ஆபத்து",
+  "HIGH RISK": "அதிக ஆபத்து",
+  "LOW / STABLE": "குறைந்த / நிலையான நிலை",
+  "Immediate attention required": "உடனடி கவனம் தேவை",
+  "No immediate threats detected.": "உடனடி அச்சுறுத்தல்கள் எதுவும் கண்டறியப்படவில்லை.",
+  "Active Cultivation": "செயலில் உள்ள சாகுபடி",
+  "Season Active": "செயலில் உள்ள பருவம்",
+  "Primary Crop": "முதன்மை பயிர்",
+  "Total Area": "மொத்த பரப்பளவு",
+  "Acres": "ஏக்கர்",
+  "Irrigation Source": "நீர்ப்பாசன ஆதாரம்",
+  "Crop Stage Tracker": "பயிர் நிலை கண்காணிப்பு",
+  "Vegetative Stage (Day 45)": "வளர்ச்சி நிலை (நாள் 45)",
+  "Sowing": "விதைப்பு",
+  "Vegetative": "வளர்ச்சி",
+  "Flowering": "பூக்கும் பருவம்",
+  "Harvest": "அறுவடை",
+  "Next Recommended Action": "அடுத்த பரிந்துரைக்கப்பட்ட நடவடிக்கை",
+  "Live Mandi Tick": "நேரடி மண்டி விலை நிலவரம்",
+  "Live": "நேரடி",
+  "Your Crop": "உங்கள் பயிர்",
+  "Cotton (Long)": "பருத்தி (நீள இழை)",
+  "Turmeric": "மஞ்சள்",
+  "Tomato (Hybrid)": "தக்காளி (ஹைப்ரிட்)",
+  "View Full Market Intelligence": "முழு சந்தை நுண்ணறிவைக் காட்டு",
+
+  // AI Crop Doctor
+  "AI Crop Doctor": "AI பயிர் மருத்துவர்",
+  "Live Plant.id Engine & Geo-Routing": "நேரடி Plant.id இன்ஜின் & புவி-வழித்தடம்",
+  "Stop Audio": "ஒலியை நிறுத்து",
+  "Read Audio": "ஒலியை இயக்கு",
+  "View Lab Report": "ஆய்வக அறிக்கையைப் பார்",
+  "Target Leaf": "பாதிக்கப்பட்ட இலை",
+  "Change": "மாற்று",
+  "Click to upload leaf image": "பயிர் இலை படத்தை பதிவேற்ற கிளிக் செய்யவும்",
+  "Detected Crop": "கண்டறியப்பட்ட பயிர்",
+  "Leaf Age": "இலையின் வயது",
+  "Yield & Economic Risk": "மகசூல் & பொருளாதார ஆபத்து",
+  "Projected Yield Loss": "திட்டமிடப்பட்ட மகசூல் இழப்பு",
+  "If Untreated": "சிகிச்சை அளிக்காவிட்டால்",
+  "Value Risk": "மதிப்பு ஆபத்து",
+  "Per Acre": "ஒரு ஏக்கருக்கு",
+  "Est. Treatment Cost": "மதிப்பிடப்பட்ட சிகிச்சை செலவு",
+  "Acre": "ஏக்கர்",
+  "CRITICAL RISK:": "முக்கிய ஆபத்து:",
+  "Immediate treatment within 48 hours can recover up to 85% of projected losses.": "48 மணி நேரத்திற்குள் உடனடி சிகிச்சை அளிப்பதன் மூலம் திட்டமிடப்பட்ட இழப்பில் 85% வரை மீட்டெடுக்க முடியும்.",
+  "Awaiting Image": "படத்திற்காக காத்திருக்கிறது",
+  "Upload a clear picture of the affected leaf to ping our Real-time AI API.": "எங்கள் நேரடி AI API உடன் இணைக்க பாதிக்கப்பட்ட இலையின் தெளிவான படத்தை பதிவேற்றவும்.",
+  "Live API Connection Active": "நேரடி API இணைப்பு செயலில் உள்ளது",
+  "FETCHING LIVE GPS COORDINATES...": "நேரடி ஜிபிஎஸ் ஒருங்கிணைப்புகளைப் பெறுகிறது...",
+  "PINGING OPENWEATHERMAP API...": "OPENWEATHERMAP API ஐ இணைக்கிறது...",
+  "SENDING IMAGE TO PLANT.ID CLOUD ENGINE...": "PLANT.ID கிளவுட் இன்ஜினுக்கு படத்தை அனுப்புகிறது...",
+  "AWAITING SERVER RESPONSE...": "சர்வர் பதிலுக்காக காத்திருக்கிறது...",
+  "HEALTHY": "ஆரோக்கியமானது",
+  "PATHOGEN DETECTED": "நோய் கிருமி கண்டறியப்பட்டது",
+  "Pathology Result": "நோயியல் முடிவு",
+  "AI Confidence": "AI நம்பிக்கை",
+  "Severity Level": "தீவிரத்தன்மை அளவு",
+  "Root Cause Analysis (Why?)": "மூல காரணம் பகுப்பாய்வு (ஏன்?)",
+  "Real-time Weather": "உண்மைநேர வானிலை",
+  "Water Issue": "நீர் பிரச்சனை",
+  "Nutrient Imbalance": "ஊட்டச்சத்து சமநிலையின்மை",
+  "Pest Possibility": "பூச்சி தாக்குதல் சாத்தியம்",
+  "Chemical Spray": "ரசாயன தெளிப்பு",
+  "Recommended Medicine": "பரிந்துரைக்கப்பட்ட மருந்து",
+  "Dosage": "அளவு",
+  "Method": "முறை",
+  "Frequency": "அதிர்வெண்",
+  "Pre-Harvest Interval (PHI)": "அறுவடைக்கு முந்தைய இடைவெளி (PHI)",
+  "Safety Warning": "பாதுகாப்பு எச்சரிக்கை",
+  "Schedule Treatment": "சிகிச்சையை திட்டமிடு",
+  "Organic Option": "இயற்கை விருப்பம்",
+  "Recommended Bio-Control": "பரிந்துரைக்கப்பட்ட உயிர்-கட்டுப்பாடு",
+  "Safety Profile": "பாதுகாப்பு விவரம்",
+  "Find Medicine Nearby": "அருகிலுள்ள மருந்து கடையைக் கண்டுபிடி",
+  "away": "தொலைவில்",
+  "View Details": "விவரங்களைப் பார்",
+
+  // Pathology Report Modal
+  "Pathology Report Preview": "நோயியல் அறிக்கை முன்னோட்டம்",
+  "Downloading...": "பதிவிறக்கப்படுகிறது...",
+  "Download PDF": "PDF பதிவிறக்கு",
+  "Botany Pathology Diagnostics": "தாவர நோயியல் கண்டறிதல்",
+  "Date": "தேதி",
+  "Report ID": "அறிக்கை ஐடி",
+  "Assessment Report": "மதிப்பீட்டு அறிக்கை",
+  "Diagnosis Result": "கண்டறிதல் முடிவு",
+  "Severity / Status": "தீவிரத்தன்மை / நிலை",
+  "AI Confidence Score": "AI நம்பிக்கை மதிப்பெண்",
+  "1. Analysis Details": "1. பகுப்பாய்வு விவரங்கள்",
+  "Weather Trigger:": "வானிலை தூண்டுதல்:",
+  "Water Issue:": "நீர் பிரச்சனை:",
+  "Nutrient Factors:": "ஊட்டச்சத்து காரணிகள்:",
+  "2. Prescribed Mitigation Plan": "2. பரிந்துரைக்கப்பட்ட தணிப்பு திட்டம்",
+  "A: Chemical Intervention": "A: ரசாயன தலையீடு",
+  "Medicine": "மருந்து",
+  "Dosage & Method": "அளவு மற்றும் முறை",
+  "Pre-Harvest Interval": "அறுவடைக்கு முந்தைய இடைவெளி",
+  "Safety Warnings": "பாதுகாப்பு எச்சரிக்கைகள்",
+  "B: Organic / Bio-Control Option": "B: இயற்கை / உயிர்-கட்டுப்பாடு விருப்பம்",
+  "Agent": "காரணி",
+  "Computionally generated advisory report by AgroRisk AI Engine.": "AgroRisk AI இன்ஜினின் கணினி மூலம் உருவாக்கப்பட்ட ஆலோசனை அறிக்கை.",
+  "Requires field validation before large scale application.": "பெரிய அளவிலான பயன்பாட்டிற்கு முன் கள சரிபார்ப்பு தேவை.",
+  "Authorized Advisory Seal": "அங்கீகரிக்கப்பட்ட ஆலோசனை முத்திரை",
+
+  // AI Predictive Simulator
+  "AI Predictive Simulator": "AI கணிப்பு சிமுலேட்டர்",
+  "Enterprise-grade econometric and climatic stress modeling for agricultural risk assessment.": "வேளாண் இடர் மதிப்பீட்டிற்கான காலநில அழுத்த மாதிரி.",
+  "AI Confidence:": "AI நம்பிக்கை:",
+  "Model: V-3.0 (Quantum)": "மாதிரி: V-3.0 (குவாண்டம்)",
+  "Global Scenarios :": "உலகளாவிய காட்சிகள்:",
+  "Micro-Stressors": "நுண்-அழுத்தங்கள்",
+  "Rainfall decrease": "மழைப்பொழிவு குறைவு",
+  "Temperature increase": "வெப்பநிலை அதிகரிப்பு",
+  "Disease pressure": "நோய் அழுத்தம்",
+  "Market price drop": "சந்தை விலை வீழ்ச்சி",
+  "6-Month Revenue Forecast": "6-மாத வருவாய் கணிப்பு",
+  "Updated Integrated Risk Matrix": "புதுப்பிக்கப்பட்ட ஒருங்கிணைந்த இடர் மெட்ரிக்ஸ்",
+  "System Risk Level": "கணினி இடர் நிலை",
+  "Worst Case Scenario": "மோசமான சூழ்நிலை காட்சி",
+  "Estimated Yield Loss": "மதிப்பிடப்பட்ட மகசூல் இழப்பு",
+  "Market Price Drop Impact": "சந்தை விலை வீழ்ச்சி தாக்கம்",
+  "Loan Repayment Stress": "கடன் திருப்பிச் செலுத்தும் அழுத்தம்",
+  "Geo-Resource Impact": "புவி-வள தாக்கம்",
+  "Groundwater Depletion": "நிலத்தடி நீர் குறைவு",
+  "Soil Moisture Loss": "மண் ஈரப்பதம் இழப்பு",
+  "Mitigation ROI": "தணிப்பு ROI",
+  "Est. Cost": "மதிப்பிடப்பட்ட செலவு",
+  "Revenue Saved": "சேமிக்கப்பட்ட வருவாய்",
+  "Check PMFBY Insurance Eligibility": "PMFBY காப்பீட்டு தகுதியைச் சரிபார்",
+  "Worst case": "மிக மோசமான நிலை",
+  "Estimated loss:": "மதிப்பிடப்பட்ட இழப்பு:",
+  "Early Risk Detection & Strategy": "ஆரம்பகால இடர் கண்டறிதல் & உத்தி",
+  "Market Volatility Spike": "சந்தை ஏற்ற இறக்க உயர்வு",
+  "Severe Drought Warning": "கடுமையான வறட்சி எச்சரிக்கை",
+  "Heat Stress Alert": "வெப்ப அழுத்த எச்சரிக்கை",
+  "No Critical Alerts": "முக்கிய எச்சரிக்கைகள் இல்லை",
+  "System metrics are currently within safe thresholds. Use Global Scenarios to simulate stress events.": "கணினி அளவீடுகள் தற்போது பாதுகாப்பான வரம்புகளுக்குள் உள்ளன. அழுத்த நிகழ்வுகளை உருவகப்படுத்த உலகளாவிய காட்சிகளைப் பயன்படுத்தவும்.",
+  "AI Action Plan": "AI செயல் திட்டம்",
+
+  // Marketplace
+  "Agri Marketplace": "வேளாண் சந்தை",
+  "Sell Produce": "விளைபொருட்களை விற்க",
+  "List your fresh harvest directly to verified buyers. Manage stock, quality grades, and logistics.": "உங்கள் புதிய அறுவடையை சரிபார்க்கப்பட்ட வாங்குபவர்களிடம் நேரடியாக பட்டியலிடுங்கள். இருப்பு, தர நிலைகள் மற்றும் தளவாடங்களை நிர்வகிக்கவும்.",
+  "Create Listing": "பட்டியலை உருவாக்கு",
+  "Buy Inputs": "உள்ளீடுகளை வாங்க",
+  "Purchase high-quality seeds, organic fertilizers, and farming tools at wholesale prices.": "உயர்தர விதைகள், இயற்கை உரங்கள் மற்றும் விவசாயக் கருவிகளை மொத்த விலையில் வாங்கவும்.",
+  "Shop Now": "இப்போது வாங்குங்கள்",
+  "Seller Dashboard": "விற்பனையாளர் கட்டுப்பாட்டு அறை",
+  "Create Comprehensive Product Listing": "தயாரிப்பு பட்டியலை உருவாக்கு",
+  "Verified Digital Twin Farmer": "சரிபார்க்கப்பட்ட டிஜிட்டல் இரட்டை விவசாயி",
+  "Seller Rating": "விற்பனையாளர் மதிப்பீடு",
+  "Orders Done": "நிறைவேற்றப்பட்ட ஆர்டர்கள்",
+  "1. Basic Product Details": "1. அடிப்படை தயாரிப்பு விவரங்கள்",
+
+  // Macro Policy & Smart Market Compare
+  "Macro Policy Desk": "மேக்ரோ கொள்கை பிரிவு",
+  "Active Alert Directive": "செயலில் உள்ள எச்சரிக்கை உத்தரவு",
+  "Estimated Market Impact": "மதிப்பிடப்பட்ட சந்தை தாக்கம்",
+  "Affected Commodity": "பாதிக்கப்பட்ட பொருள்",
+  "AI Recommendation": "AI பரிந்துரை",
+  "Acknowledge & Close": "அங்கீகரித்து மூடு",
+  "Intelligence Report": "நுண்ணறிவு அறிக்கை",
+  "Smart Market Compare": "ஸ்மார்ட் சந்தை ஒப்பீடு",
+  "Enterprise Commodity Trading Terminal": "பொருட்கள் வர்த்தக முனையம்",
+  "Live Exchange Sync": "நேரடி பரிமாற்ற ஒத்திசைவு",
+  "Target Commodity": "இலக்கு பொருள்",
+  "Volume (KG)": "அளவு (கிலோ)",
+  "Origin Node": "மூல முனையம்",
+  "Destination Node": "இலக்கு முனையம்",
+  "Execute Intelligence Scan": "நுண்ணறிவு ஸ்கேன் இயக்கு",
+  "Compiling Neural Data...": "தரவை பகுப்பாய்வு செய்கிறது...",
+
+  // Loan Portal
+  "Farmer Loan Access (SIMULATION)": "விவசாயி கடன் அணுகல் (உருவகப்படுத்துதல்)",
+  "India-context loan types": "இந்திய கடன் வகைகள்",
+  "Select loan type": "கடன் வகையைத் தேர்ந்தெடு",
+  "Document upload": "ஆவணப் பதிவேற்றம்",
+  "Eligibility check": "தகுதி சரிபார்ப்பு",
+  "Submit & track": "சமர்ப்பி & கண்காணி",
+  "Required Documents": "தேவையான ஆவணங்கள்",
+  "Identity Proof": "அடையாள சான்று",
+  "Land Record": "நில ஆவணம்",
+  "Bank Statement": "வங்கி கணக்கு அறிக்கை",
+  "Crop Proof": "பயிர் ஆதாரம்",
+  "Income Proof": "வருமான சான்று",
+
+  // Feedback & Learning
+  "Feedback & Learning": "கருத்து & கற்றல்",
+  "Your feedback changes internal confidence weights": "உங்கள் கருத்து உள் நம்பகத்தன்மை அளவுகளை மேம்படுத்தும்",
+  "Write your feedback here...": "உங்கள் கருத்தை இங்கே எழுதவும்...",
+  "Submit Log": "பதிவேற்று",
+
+  // Crops & Districts & Common Variables
+  "Paddy": "நெல்",
+  "Sugarcane": "கரும்பு",
+  "Vegetables": "காய்கறிகள்",
+  "Cotton": "பருத்தி",
+  "Maize": "மக்காச்சோளம்",
+  "Banana": "வாழை",
+  "Groundnut": "நிலக்கடலை",
+  "Paddy (Your Crop)": "நெல் (உங்கள் பயிர்)",
+  "Salem": "சேலம்",
+  "Coimbatore": "கோயம்புத்தூர்",
+  "Thanjavur": "தஞ்சாவூர்",
+  "Erode": "ஈரோடு",
+  "Madurai": "மதுரை",
+  "Trichy": "திருச்சி",
+  "Conventional": "வழக்கமான முறை (ரசாயனம்)"
+};
+
+let currentAppLang = 'en';
+const T = (text) => {
+  if (!text) return '';
+  if (currentAppLang === 'ta') {
+    return translationMap[text] || translationMap[text.trim()] || text;
+  }
+  return text;
+};
+
+const CROP_LIST = [{ en: "Paddy", ta: "நெல்" }, { en: "Sugarcane", ta: "கரும்பு" }, { en: "Turmeric", ta: "மஞ்சள்" }, { en: "Vegetables", ta: "காயறிகள்" }, { en: "Cotton", ta: "பருத்தி" }, { en: "Maize", ta: "மக்காச்சோளம்" }, { en: "Banana", ta: "வாழை" }, { en: "Groundnut", ta: "நிலக்கடலை" }];
 const BANK_LIST = ["State Bank of India (SBI)", "Indian Bank", "Canara Bank", "Punjab National Bank", "NABARD", "Cooperative Banks (PACS)", "Regional Rural Bank"];
 
 // ==========================================
@@ -157,7 +445,7 @@ const SuggestionInput = ({ label, value, onChange, placeholder, options, type = 
 
   return (
     <div className="relative flex flex-col gap-2">
-      <label className="text-slate-500 text-[10px] font-black uppercase tracking-widest block">{label}</label>
+      <label className="text-slate-500 text-[10px] font-black uppercase tracking-widest block">{T(label)}</label>
       <input
         type={type}
         value={value}
@@ -165,7 +453,7 @@ const SuggestionInput = ({ label, value, onChange, placeholder, options, type = 
         onFocus={() => { if(options) { setIsOpen(true); setFiltered(options); } }}
         onBlur={() => setTimeout(() => setIsOpen(false), 200)} 
         className="w-full bg-[#0d120f] border border-white/10 p-3.5 rounded-xl text-white outline-none focus:border-[#4CAF50] font-bold text-sm transition-colors placeholder:text-slate-600 relative z-10"
-        placeholder={placeholder}
+        placeholder={T(placeholder)}
         required
       />
       {isOpen && options && filtered.length > 0 && (
@@ -176,7 +464,7 @@ const SuggestionInput = ({ label, value, onChange, placeholder, options, type = 
               onMouseDown={() => { onChange(opt); setIsOpen(false); }}
               className="p-3 text-slate-300 font-bold hover:bg-[#4CAF50] hover:text-black cursor-pointer border-b border-white/5 text-sm transition-colors"
             >
-              {opt}
+              {T(opt)}
             </div>
           ))}
         </div>
@@ -628,10 +916,10 @@ const DigitalTwin = ({ setDtData, handleNav }) => {
         <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#4CAF50] to-transparent opacity-50"></div>
         <div className="mb-10">
             <h2 className="text-4xl font-black text-white tracking-tight flex items-center gap-3 mb-2">
-                <User className="text-[#4CAF50]" size={36}/> Farmer Digital Twin
+                <User className="text-[#4CAF50]" size={36}/> {T("Farmer Digital Twin")}
             </h2>
             <p className="text-slate-400 font-bold text-sm flex items-center gap-2">
-                <Database size={16} className="text-slate-500"/> Saved locally on this device (localStorage).
+                <Database size={16} className="text-slate-500"/> {T("Saved locally on this device (localStorage).")}
             </p>
         </div>
         
@@ -639,8 +927,8 @@ const DigitalTwin = ({ setDtData, handleNav }) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
             
             <div className="relative">
-              <label className="text-slate-500 text-[10px] font-black uppercase tracking-widest block mb-2">Farmer name</label>
-              <input type="text" value={formData.name} onChange={handleNameChange} onFocus={() => { if(formData.name.length > 0) setShowSuggestions(true); }} onBlur={() => setTimeout(() => setShowSuggestions(false), 200)} placeholder="Enter your full name" className="w-full bg-[#0d120f] border border-white/10 p-4 rounded-xl outline-none focus:border-[#4CAF50] text-sm font-bold text-white transition-all shadow-inner relative z-10" required />
+              <label className="text-slate-500 text-[10px] font-black uppercase tracking-widest block mb-2">{T("Farmer name")}</label>
+              <input type="text" value={formData.name} onChange={handleNameChange} onFocus={() => { if(formData.name.length > 0) setShowSuggestions(true); }} onBlur={() => setTimeout(() => setShowSuggestions(false), 200)} placeholder={T("Enter your full name")} className="w-full bg-[#0d120f] border border-white/10 p-4 rounded-xl outline-none focus:border-[#4CAF50] text-sm font-bold text-white transition-all shadow-inner relative z-10" required />
               {showSuggestions && filteredNames.length > 0 && (
                   <div className="absolute z-50 w-full mt-2 bg-[#1f2922] border border-[#4CAF50]/50 rounded-xl shadow-2xl max-h-48 overflow-y-auto custom-scrollbar">
                       {filteredNames.map((n, i) => (
@@ -671,7 +959,7 @@ const DigitalTwin = ({ setDtData, handleNav }) => {
           </div>
           <div className="pt-6 border-t border-white/5 mt-8">
               <button type="submit" className="w-full md:w-auto md:px-12 bg-[#4CAF50] text-black font-black p-4 rounded-xl uppercase tracking-widest hover:scale-[1.02] transition-transform flex justify-center items-center gap-3 shadow-[0_0_20px_rgba(76,175,80,0.2)] ml-auto">
-                  <CheckCircle2 size={20} /> Save & Initialize Profile
+                  <CheckCircle2 size={20} /> {T("Save & Initialize Profile")}
               </button>
           </div>
         </form>
@@ -763,44 +1051,44 @@ const Dashboard = ({ dtData = {}, setDtData, handleNav }) => {
         <div className="fixed inset-0 z-[200] bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
             <div className="bg-[#111613] p-8 rounded-[2rem] border border-[#4CAF50]/30 shadow-2xl w-full max-w-md relative animate-in zoom-in-95">
                 <button onClick={() => setShowProfileModal(false)} className="absolute top-6 right-6 text-slate-500 hover:text-white"><X size={20}/></button>
-                <h3 className="text-2xl font-black uppercase text-white mb-2 flex items-center gap-2"><User className="text-[#4CAF50]"/> Digital Profile</h3>
-                <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mb-6">Manage Your Farming Identity</p>
+                <h3 className="text-2xl font-black uppercase text-white mb-2 flex items-center gap-2"><User className="text-[#4CAF50]"/> {T("Digital Profile")}</h3>
+                <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mb-6">{T("Manage Your Farming Identity")}</p>
                 <form onSubmit={handleProfileSave} className="space-y-4">
                     <div>
-                        <label className="text-slate-500 text-[10px] font-black uppercase tracking-widest block mb-2">Operator Name</label>
-                        <input type="text" value={tempProfile.name} onChange={e => setTempProfile({...tempProfile, name: e.target.value})} placeholder="Your Name" className="w-full bg-[#0d120f] border border-white/10 p-4 rounded-xl outline-none focus:border-[#4CAF50] text-sm font-bold text-white" required/>
+                        <label className="text-slate-500 text-[10px] font-black uppercase tracking-widest block mb-2">{T("Operator Name")}</label>
+                        <input type="text" value={tempProfile.name} onChange={e => setTempProfile({...tempProfile, name: e.target.value})} placeholder={T("Your Name")} className="w-full bg-[#0d120f] border border-white/10 p-4 rounded-xl outline-none focus:border-[#4CAF50] text-sm font-bold text-white" required/>
                     </div>
                     <div>
-                        <label className="text-slate-500 text-[10px] font-black uppercase tracking-widest block mb-2">Primary Crop Name</label>
-                        <input type="text" value={tempProfile.crop} onChange={e => setTempProfile({...tempProfile, crop: e.target.value})} placeholder="Ex: Wheat, Cotton, Tomato" className="w-full bg-[#0d120f] border border-white/10 p-4 rounded-xl outline-none focus:border-[#4CAF50] text-sm font-bold text-white" required/>
+                        <label className="text-slate-500 text-[10px] font-black uppercase tracking-widest block mb-2">{T("Primary Crop Name")}</label>
+                        <input type="text" value={tempProfile.crop} onChange={e => setTempProfile({...tempProfile, crop: e.target.value})} placeholder={T("Ex: Wheat, Cotton, Tomato")} className="w-full bg-[#0d120f] border border-white/10 p-4 rounded-xl outline-none focus:border-[#4CAF50] text-sm font-bold text-white" required/>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <label className="text-slate-500 text-[10px] font-black uppercase tracking-widest block mb-2">Land Area (Acres)</label>
-                            <input type="number" value={tempProfile.area} onChange={e => setTempProfile({...tempProfile, area: e.target.value})} placeholder="Ex: 5" className="w-full bg-[#0d120f] border border-white/10 p-4 rounded-xl outline-none focus:border-[#4CAF50] text-sm font-bold text-white" required/>
+                            <label className="text-slate-500 text-[10px] font-black uppercase tracking-widest block mb-2">{T("Land Area (Acres)")}</label>
+                            <input type="number" value={tempProfile.area} onChange={e => setTempProfile({...tempProfile, area: e.target.value})} placeholder={T("Ex: 5")} className="w-full bg-[#0d120f] border border-white/10 p-4 rounded-xl outline-none focus:border-[#4CAF50] text-sm font-bold text-white" required/>
                         </div>
                         <div>
-                            <label className="text-slate-500 text-[10px] font-black uppercase tracking-widest block mb-2">Irrigation</label>
+                            <label className="text-slate-500 text-[10px] font-black uppercase tracking-widest block mb-2">{T("Irrigation")}</label>
                             <select value={tempProfile.irrigation} onChange={e => setTempProfile({...tempProfile, irrigation: e.target.value})} className="w-full bg-[#0d120f] border border-white/10 p-4 rounded-xl outline-none focus:border-[#4CAF50] text-sm font-bold text-white appearance-none">
-                                <option value="">Select</option>
-                                <option value="Borewell">Borewell</option>
-                                <option value="Canal">Canal</option>
-                                <option value="Drip Irrigation">Drip Irrigation</option>
-                                <option value="Rainfed">Rainfed</option>
+                                <option value="">{T("Select")}</option>
+                                <option value="Borewell">{T("Borewell")}</option>
+                                <option value="Canal">{T("Canal")}</option>
+                                <option value="Drip Irrigation">{T("Drip Irrigation")}</option>
+                                <option value="Rainfed">{T("Rainfed")}</option>
                             </select>
                         </div>
                     </div>
                     <div>
-                        <label className="text-slate-500 text-[10px] font-black uppercase tracking-widest block mb-2">Farming Method</label>
+                        <label className="text-slate-500 text-[10px] font-black uppercase tracking-widest block mb-2">{T("Farming Method")}</label>
                         <select value={tempProfile.farmingMethod} onChange={e => setTempProfile({...tempProfile, farmingMethod: e.target.value})} className="w-full bg-[#0d120f] border border-white/10 p-4 rounded-xl outline-none focus:border-[#4CAF50] text-sm font-bold text-white appearance-none">
-                            <option value="">Select</option>
-                            <option value="Organic Farming">Organic Farming</option>
-                            <option value="Conventional">Conventional (Chemical)</option>
-                            <option value="ZBNF">ZBNF / Natural</option>
+                            <option value="">{T("Select")}</option>
+                            <option value="Organic Farming">{T("Organic Farming")}</option>
+                            <option value="Conventional">{T("Conventional (Chemical)")}</option>
+                            <option value="ZBNF">{T("ZBNF / Natural")}</option>
                         </select>
                     </div>
                     <button type="submit" className="w-full bg-[#4CAF50] text-black font-black py-4 rounded-xl uppercase mt-4 hover:scale-105 transition-transform flex justify-center items-center gap-2">
-                        <Save size={18}/> Update Profile
+                        <Save size={18}/> {T("Update Profile")}
                     </button>
                 </form>
             </div>
@@ -813,14 +1101,14 @@ const Dashboard = ({ dtData = {}, setDtData, handleNav }) => {
             <div className="bg-[#111613] p-8 rounded-[2rem] border border-[#4CAF50]/30 shadow-[0_0_50px_rgba(76,175,80,0.15)] w-full max-w-lg relative animate-in zoom-in-95 overflow-hidden">
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#4CAF50] to-transparent opacity-50"></div>
                 <button onClick={() => setShowSeasonModal(false)} className="absolute top-6 right-6 text-slate-500 hover:text-white"><X size={20}/></button>
-                <h3 className="text-2xl font-black uppercase text-white mb-2 flex items-center gap-2"><Activity className="text-[#4CAF50]"/> Season Analytics</h3>
-                <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mb-8">Real-time Cultivation Metrics for {displayCrop}</p>
+                <h3 className="text-2xl font-black uppercase text-white mb-2 flex items-center gap-2"><Activity className="text-[#4CAF50]"/> {T("Season Analytics")}</h3>
+                <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mb-8">{T("Real-time Cultivation Metrics for")} {T(displayCrop)}</p>
 
                 <div className="space-y-6">
                     <div className="bg-[#0d120f] border border-white/5 p-5 rounded-2xl shadow-inner">
                         <div className="flex justify-between items-end mb-2">
-                            <span className="text-slate-400 text-[10px] font-black uppercase tracking-widest">Growth Progress</span>
-                            <span className="text-[#4CAF50] text-xs font-black uppercase">Day 45 / 120</span>
+                            <span className="text-slate-400 text-[10px] font-black uppercase tracking-widest">{T("Growth Progress")}</span>
+                            <span className="text-[#4CAF50] text-xs font-black uppercase">{T("Day")} 45 / 120</span>
                         </div>
                         <div className="w-full bg-slate-800 h-2 mt-2 rounded-full overflow-hidden flex relative">
                             <div className="bg-[#4CAF50] h-full relative" style={{width: '37.5%'}}>
@@ -831,25 +1119,25 @@ const Dashboard = ({ dtData = {}, setDtData, handleNav }) => {
 
                     <div className="grid grid-cols-2 gap-4">
                         <div className="bg-[#0d120f] border border-white/5 p-4 rounded-xl hover:border-[#4CAF50]/30 transition-colors">
-                            <span className="text-slate-500 text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 mb-1"><Calendar size={12}/> Est. Harvest</span>
+                            <span className="text-slate-500 text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 mb-1"><Calendar size={12}/> {T("Est. Harvest")}</span>
                             <h4 className="text-white font-black text-sm">Oct 15, 2026</h4>
                         </div>
                         <div className="bg-[#0d120f] border border-white/5 p-4 rounded-xl hover:border-[#4CAF50]/30 transition-colors">
-                            <span className="text-slate-500 text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 mb-1"><Sun size={12} className="text-yellow-400"/> Thermal Units (GDD)</span>
+                            <span className="text-slate-500 text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 mb-1"><Sun size={12} className="text-yellow-400"/> {T("Thermal Units (GDD)")}</span>
                             <h4 className="text-white font-black text-sm">840 °C-days</h4>
                         </div>
                         <div className="bg-[#0d120f] border border-white/5 p-4 rounded-xl hover:border-[#4CAF50]/30 transition-colors">
-                            <span className="text-slate-500 text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 mb-1"><Droplets size={12} className="text-blue-400"/> Water Consumed</span>
+                            <span className="text-slate-500 text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 mb-1"><Droplets size={12} className="text-blue-400"/> {T("Water Consumed")}</span>
                             <h4 className="text-white font-black text-sm">1.2M Liters</h4>
                         </div>
                         <div className="bg-[#0d120f] border border-white/5 p-4 rounded-xl hover:border-[#4CAF50]/30 transition-colors">
-                            <span className="text-slate-500 text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 mb-1"><Sprout size={12} className="text-green-400"/> Fertilizer Cycle</span>
-                            <h4 className="text-white font-black text-sm">Phase 2 Done</h4>
+                            <span className="text-slate-500 text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 mb-1"><Sprout size={12} className="text-green-400"/> {T("Fertilizer Cycle")}</span>
+                            <h4 className="text-white font-black text-sm">{T("Phase 2 Done")}</h4>
                         </div>
                     </div>
 
                     <button onClick={() => setShowSeasonModal(false)} className="w-full bg-transparent border border-[#4CAF50]/50 text-[#4CAF50] hover:bg-[#4CAF50] hover:text-black transition-all font-black uppercase tracking-widest text-xs py-4 rounded-xl mt-4">
-                        Close Analytics
+                        {T("Close Analytics")}
                     </button>
                 </div>
             </div>
@@ -860,14 +1148,14 @@ const Dashboard = ({ dtData = {}, setDtData, handleNav }) => {
       <div className="relative bg-[#0d120f] border border-[#4CAF50]/20 rounded-[2rem] p-8 mb-8 overflow-hidden shadow-2xl flex flex-col md:flex-row justify-between items-end">
           <div className="absolute top-6 right-8 flex items-center gap-2 bg-green-950/50 border border-green-500/30 px-3 py-1.5 rounded-full z-20">
               <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-              <span className="text-green-400 text-[9px] font-black uppercase tracking-widest">Live Open-Meteo API</span>
+              <span className="text-green-400 text-[9px] font-black uppercase tracking-widest">{T("Live Open-Meteo API")}</span>
           </div>
           <div>
-              <h3 className="text-[#4CAF50] font-black uppercase tracking-widest mb-2 flex items-center gap-2"><MapPin size={16}/> {displayDistrict} DISTRICT, TN</h3>
-              <h1 className="text-5xl md:text-6xl font-black text-white tracking-tight leading-none mb-4">Farm Command<br/>Center</h1>
+              <h3 className="text-[#4CAF50] font-black uppercase tracking-widest mb-2 flex items-center gap-2"><MapPin size={16}/> {T(displayDistrict)} {T("DISTRICT, TN")}</h3>
+              <h1 className="text-5xl md:text-6xl font-black text-white tracking-tight leading-none mb-4">Command<br/>{T("Center")}</h1>
               <button onClick={() => setShowProfileModal(true)} className="flex items-center gap-3 text-white hover:text-[#4CAF50] transition-colors border border-white/10 hover:border-[#4CAF50]/50 bg-white/5 px-5 py-3 rounded-xl text-sm font-black uppercase tracking-widest shadow-lg">
                   <div className="bg-[#4CAF50]/20 p-2 rounded-full"><User size={16} className="text-[#4CAF50]"/></div> 
-                  Operator: {operatorName} <Settings size={14} className="ml-2 opacity-50"/>
+                  {T("Operator")}: {operatorName} <Settings size={14} className="ml-2 opacity-50"/>
               </button>
           </div>
           <div className="bg-[#111613] p-6 rounded-3xl border border-white/5 flex items-center gap-6 shadow-xl mt-6 md:mt-0">
@@ -882,24 +1170,24 @@ const Dashboard = ({ dtData = {}, setDtData, handleNav }) => {
       {/* 4 SMALL METRIC CARDS */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <div className="bg-[#111613] p-5 rounded-2xl border border-white/5 shadow-lg relative overflow-hidden">
-             <span className="text-slate-500 text-[9px] font-black uppercase tracking-widest flex items-center gap-2 mb-2"><Droplets size={12} className="text-blue-400"/> Air Humidity (Live)</span>
+             <span className="text-slate-500 text-[9px] font-black uppercase tracking-widest flex items-center gap-2 mb-2"><Droplets size={12} className="text-blue-400"/> {T("Air Humidity (Live)")}</span>
              <h4 className="text-3xl font-black text-white">{realtimeData.humidity}%</h4>
              <div className="w-full bg-blue-900/30 h-1 mt-4 rounded-full"><div className="bg-blue-500 h-full rounded-full" style={{width: `${realtimeData.humidity}%`}}></div></div>
           </div>
           <div className="bg-[#111613] p-5 rounded-2xl border border-white/5 shadow-lg relative overflow-hidden">
-             <span className="text-slate-500 text-[9px] font-black uppercase tracking-widest flex items-center gap-2 mb-2"><Layers size={12} className="text-orange-400"/> Est. Soil Moisture</span>
+             <span className="text-slate-500 text-[9px] font-black uppercase tracking-widest flex items-center gap-2 mb-2"><Layers size={12} className="text-orange-400"/> {T("Est. Soil Moisture")}</span>
              <h4 className="text-3xl font-black text-white">61%</h4>
              <div className="w-full bg-orange-900/30 h-1 mt-4 rounded-full"><div className="bg-orange-500 h-full rounded-full" style={{width: '61%'}}></div></div>
           </div>
           <div className="bg-[#111613] p-5 rounded-2xl border border-white/5 shadow-lg relative overflow-hidden">
-             <span className="text-slate-500 text-[9px] font-black uppercase tracking-widest flex items-center gap-2 mb-2"><Wifi size={12} className="text-purple-400"/> Sensor Status</span>
-             <h4 className="text-3xl font-black text-white">ONLINE</h4>
-             <p className="text-slate-500 text-[10px] font-bold mt-2">Syncing via satellite link</p>
+             <span className="text-slate-500 text-[9px] font-black uppercase tracking-widest flex items-center gap-2 mb-2"><Wifi size={12} className="text-purple-400"/> {T("Sensor Status")}</span>
+             <h4 className="text-3xl font-black text-white">{T("ONLINE")}</h4>
+             <p className="text-slate-500 text-[10px] font-bold mt-2">{T("Syncing via satellite link")}</p>
           </div>
           <div className={`bg-[#111613] p-5 rounded-2xl border shadow-lg relative overflow-hidden ${dtData?.diseaseRisk ? 'border-red-500/30' : 'border-white/5'}`}>
-             <span className="text-slate-500 text-[9px] font-black uppercase tracking-widest flex items-center gap-2 mb-2"><Bug size={12} className={`text-${dtData?.diseaseRisk ? 'red' : 'green'}-400`}/> Crop Health Risk</span>
-             <h4 className={`text-2xl font-black ${dtData?.diseaseRisk ? 'text-red-400' : 'text-white'}`}>{dtData?.diseaseRisk ? 'HIGH RISK' : 'LOW / STABLE'}</h4>
-             <p className="text-slate-500 text-[10px] font-bold mt-2">{dtData?.diseaseRisk ? 'Immediate attention required' : 'No immediate threats detected.'}</p>
+             <span className="text-slate-500 text-[9px] font-black uppercase tracking-widest flex items-center gap-2 mb-2"><Bug size={12} className={`text-${dtData?.diseaseRisk ? 'red' : 'green'}-400`}/> {T("Crop Health Risk")}</span>
+             <h4 className={`text-2xl font-black ${dtData?.diseaseRisk ? 'text-red-400' : 'text-white'}`}>{dtData?.diseaseRisk ? T('HIGH RISK') : T('LOW / STABLE')}</h4>
+             <p className="text-slate-500 text-[10px] font-bold mt-2">{dtData?.diseaseRisk ? T('Immediate attention required') : T('No immediate threats detected.')}</p>
           </div>
       </div>
 
@@ -909,53 +1197,53 @@ const Dashboard = ({ dtData = {}, setDtData, handleNav }) => {
         {/* LEFT: ACTIVE CULTIVATION STATUS */}
         <div className="lg:col-span-8 bg-[#0d120f] border border-white/5 rounded-[2rem] p-8 shadow-2xl flex flex-col">
           <div className="flex flex-wrap justify-between items-center mb-8 border-b border-white/5 pb-4 gap-4">
-             <h3 className="text-xl font-black uppercase text-white flex items-center gap-2 tracking-widest"><Sprout className="text-[#4CAF50]"/> Active Cultivation</h3>
+             <h3 className="text-xl font-black uppercase text-white flex items-center gap-2 tracking-widest"><Sprout className="text-[#4CAF50]"/> {T("Active Cultivation")}</h3>
              <div className="flex gap-2">
                  <span className="bg-blue-950/40 text-blue-400 border border-blue-500/30 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest">
                      {farmingMethod}
                  </span>
                  {/* 🔥 UPDATED: Clickable Season Active Button */}
                  <button onClick={() => setShowSeasonModal(true)} className="bg-green-950/40 text-[#4CAF50] border border-[#4CAF50]/30 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest hover:bg-[#4CAF50] hover:text-black transition-all cursor-pointer shadow-[0_0_15px_rgba(76,175,80,0.2)] flex items-center gap-1">
-                     Season Active <ChevronRight size={10} strokeWidth={3}/>
+                     {T("Season Active")} <ChevronRight size={10} strokeWidth={3}/>
                  </button>
              </div>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
              <div className="bg-[#111613] p-4 rounded-2xl border border-white/5 flex flex-col justify-center">
-                <span className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">Primary Crop</span>
+                <span className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">{T("Primary Crop")}</span>
                 <h4 className="text-lg font-black text-white capitalize truncate">{primaryCrop}</h4>
              </div>
              <div className="bg-[#111613] p-4 rounded-2xl border border-white/5 flex flex-col justify-center">
-                <span className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">Total Area</span>
-                <h4 className="text-lg font-black text-white">{landArea} Acres</h4>
+                <span className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">{T("Total Area")}</span>
+                <h4 className="text-lg font-black text-white">{landArea} {T("Acres")}</h4>
              </div>
              <div className="bg-[#111613] p-4 rounded-2xl border border-white/5 flex flex-col justify-center col-span-2">
-                <span className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">Irrigation Source</span>
+                <span className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">{T("Irrigation Source")}</span>
                 <h4 className="text-lg font-black text-blue-400 flex items-center gap-2 truncate"><Droplet size={16}/> {irrigation}</h4>
              </div>
           </div>
 
           <div className="bg-[#111613] border border-white/5 p-5 rounded-2xl mb-6">
              <div className="flex justify-between items-end mb-2">
-                <span className="text-slate-400 text-[10px] font-black uppercase tracking-widest flex items-center gap-2"><Calendar size={14}/> Crop Stage Tracker</span>
-                <span className="text-[#4CAF50] text-xs font-black uppercase">Vegetative Stage (Day 45)</span>
+                <span className="text-slate-400 text-[10px] font-black uppercase tracking-widest flex items-center gap-2"><Calendar size={14}/> {T("Crop Stage Tracker")}</span>
+                <span className="text-[#4CAF50] text-xs font-black uppercase">{T("Vegetative Stage (Day 45)")}</span>
              </div>
              <div className="w-full bg-slate-800 h-2 mt-2 rounded-full overflow-hidden flex">
                 <div className="bg-[#4CAF50] h-full" style={{width: '40%'}}></div>
              </div>
              <div className="flex justify-between mt-2 text-[9px] font-bold text-slate-500 uppercase tracking-widest">
-                <span>Sowing</span>
-                <span className="text-[#4CAF50]">Vegetative</span>
-                <span>Flowering</span>
-                <span>Harvest</span>
+                <span>{T("Sowing")}</span>
+                <span className="text-[#4CAF50]">{T("Vegetative")}</span>
+                <span>{T("Flowering")}</span>
+                <span>{T("Harvest")}</span>
              </div>
           </div>
 
           <div className="bg-gradient-to-r from-yellow-950/20 to-[#0d120f] border border-yellow-600/30 p-6 rounded-2xl flex items-start gap-4 mt-auto">
              <div className="p-3 bg-yellow-500/10 rounded-full shrink-0"><AlertTriangle className="text-yellow-500" size={24}/></div>
              <div>
-                <h4 className="text-yellow-500 font-black text-sm uppercase tracking-widest mb-1">Next Recommended Action</h4>
+                <h4 className="text-yellow-500 font-black text-sm uppercase tracking-widest mb-1">{T("Next Recommended Action")}</h4>
                 <p className="text-slate-300 font-bold text-sm leading-relaxed">{getRecommendation(primaryCrop, irrigation, farmingMethod)}</p>
              </div>
           </div>
@@ -964,9 +1252,9 @@ const Dashboard = ({ dtData = {}, setDtData, handleNav }) => {
         {/* RIGHT: LIVE MANDI TICK */}
         <div className="lg:col-span-4 bg-[#0d120f] border border-white/5 rounded-[2rem] p-8 shadow-2xl flex flex-col">
           <div className="flex justify-between items-center mb-8 border-b border-white/5 pb-4">
-             <h3 className="text-lg font-black uppercase text-white flex items-center gap-2 tracking-widest"><TrendingUp className="text-[#4CAF50]"/> Live Mandi Tick</h3>
+             <h3 className="text-lg font-black uppercase text-white flex items-center gap-2 tracking-widest"><TrendingUp className="text-[#4CAF50]"/> {T("Live Mandi Tick")}</h3>
              <span className="bg-green-950/40 text-[#4CAF50] border border-[#4CAF50]/30 px-2 py-1 rounded-md text-[9px] font-black uppercase tracking-widest flex items-center gap-1">
-               <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div> Live
+               <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div> {T("Live")}
              </span>
           </div>
 
@@ -974,7 +1262,7 @@ const Dashboard = ({ dtData = {}, setDtData, handleNav }) => {
              <div className="bg-[#111613] border border-[#4CAF50]/30 p-4 rounded-xl flex justify-between items-center relative overflow-hidden">
                 <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#4CAF50]"></div>
                 <div>
-                   <h4 className="text-white font-black text-sm capitalize">{displayCrop} (Your Crop)</h4>
+                   <h4 className="text-white font-black text-sm capitalize">{T(displayCrop)} ({T("Your Crop")})</h4>
                    <p className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">₹/Qtl</p>
                 </div>
                 <div className="text-right">
@@ -985,7 +1273,7 @@ const Dashboard = ({ dtData = {}, setDtData, handleNav }) => {
 
              <div className="bg-[#111613] border border-white/5 p-4 rounded-xl flex justify-between items-center">
                 <div>
-                   <h4 className="text-white font-black text-sm">Cotton (Long)</h4>
+                   <h4 className="text-white font-black text-sm">{T("Cotton (Long)")}</h4>
                    <p className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">₹/Qtl</p>
                 </div>
                 <div className="text-right">
@@ -996,7 +1284,7 @@ const Dashboard = ({ dtData = {}, setDtData, handleNav }) => {
              
              <div className="bg-[#111613] border border-white/5 p-4 rounded-xl flex justify-between items-center">
                 <div>
-                   <h4 className="text-white font-black text-sm">Turmeric</h4>
+                   <h4 className="text-white font-black text-sm">{T("Turmeric")}</h4>
                    <p className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">₹/Qtl</p>
                 </div>
                 <div className="text-right">
@@ -1007,7 +1295,7 @@ const Dashboard = ({ dtData = {}, setDtData, handleNav }) => {
 
              <div className="bg-[#111613] border border-white/5 p-4 rounded-xl flex justify-between items-center">
                 <div>
-                   <h4 className="text-white font-black text-sm">Tomato (Hybrid)</h4>
+                   <h4 className="text-white font-black text-sm">{T("Tomato (Hybrid)")}</h4>
                    <p className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">₹/Qtl</p>
                 </div>
                 <div className="text-right">
@@ -1018,7 +1306,7 @@ const Dashboard = ({ dtData = {}, setDtData, handleNav }) => {
           </div>
           
           <button onClick={() => handleNav('market')} className="w-full mt-6 text-[#4CAF50] font-black text-[10px] uppercase tracking-widest hover:text-white transition-colors flex items-center justify-center gap-2 border border-transparent hover:border-white/10 p-2 rounded-lg">
-             <Globe size={14}/> View Full Market Intelligence
+             <Globe size={14}/> {T("View Full Market Intelligence")}
           </button>
         </div>
       </div>
@@ -1274,16 +1562,16 @@ const CropDiseasePrediction = ({ handleNav }) => {
       {/* HEADER */}
       <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-            <h2 className="text-3xl font-black mb-2 flex items-center gap-3 uppercase tracking-tighter"><Microscope className="text-[#4CAF50]" size={32}/> AI Crop Doctor</h2>
-            <p className="text-slate-400 text-sm font-bold uppercase tracking-widest">Live Plant.id Engine & Geo-Routing</p>
+            <h2 className="text-3xl font-black mb-2 flex items-center gap-3 uppercase tracking-tighter"><Microscope className="text-[#4CAF50]" size={32}/> {T("AI Crop Doctor")}</h2>
+            <p className="text-slate-400 text-sm font-bold uppercase tracking-widest">{T("Live Plant.id Engine & Geo-Routing")}</p>
         </div>
         {analysisResult && (
             <div className="flex gap-3">
                 <button onClick={readOutLoud} className={`border ${isSpeaking ? 'bg-blue-500/20 border-blue-500 text-blue-400' : 'bg-transparent border-white/20 text-white hover:border-blue-400'} px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all flex items-center gap-2`}>
-                    <Volume2 size={16} className={isSpeaking ? 'animate-pulse' : ''}/> {isSpeaking ? 'Stop Audio' : 'Read Audio'}
+                    <Volume2 size={16} className={isSpeaking ? 'animate-pulse' : ''}/> {isSpeaking ? T('Stop Audio') : T('Read Audio')}
                 </button>
                 <button onClick={() => setShowReportModal(true)} className="bg-[#1a231d] border border-[#4CAF50]/50 text-[#4CAF50] px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-[#4CAF50] hover:text-black transition-all shadow-[0_0_15px_rgba(76,175,80,0.2)] flex items-center gap-2">
-                    <FileText size={16}/> View Lab Report
+                    <FileText size={16}/> {T("View Lab Report")}
                 </button>
             </div>
         )}
@@ -1295,8 +1583,8 @@ const CropDiseasePrediction = ({ handleNav }) => {
         <div className="lg:col-span-4 space-y-6">
           <div className="bg-[#111613] p-6 rounded-[2rem] border border-white/5 shadow-2xl relative overflow-hidden">
             <div className="flex justify-between items-center mb-4 relative z-10">
-              <h3 className="text-white font-black text-xs uppercase tracking-widest flex items-center gap-2"><Camera size={16} className="text-[#4CAF50]"/> Target Leaf</h3>
-              {selectedImage && <button onClick={() => fileInputRef.current.click()} className="bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-colors flex items-center gap-1 backdrop-blur-md"><Upload size={12}/> Change</button>}
+              <h3 className="text-white font-black text-xs uppercase tracking-widest flex items-center gap-2"><Camera size={16} className="text-[#4CAF50]"/> {T("Target Leaf")}</h3>
+              {selectedImage && <button onClick={() => fileInputRef.current.click()} className="bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-colors flex items-center gap-1 backdrop-blur-md"><Upload size={12}/> {T("Change")}</button>}
             </div>
             <input type="file" accept="image/*" ref={fileInputRef} onChange={handleImageUpload} className="hidden" />
             <div onClick={() => !selectedImage && fileInputRef.current.click()} className={`w-full aspect-square rounded-2xl border-2 border-dashed flex flex-col items-center justify-center relative overflow-hidden transition-all ${selectedImage ? 'border-transparent' : 'border-white/20 hover:border-[#4CAF50]/50 cursor-pointer bg-[#0d120f]'}`}>
@@ -1320,18 +1608,18 @@ const CropDiseasePrediction = ({ handleNav }) => {
               ) : (
                 <>
                   <Upload size={40} className="text-slate-600 mb-4"/>
-                  <p className="text-slate-400 font-bold text-sm">Click to upload leaf image</p>
+                  <p className="text-slate-400 font-bold text-sm">{T("Click to upload leaf image")}</p>
                 </>
               )}
             </div>
             {analysisResult && (
               <div className="grid grid-cols-2 gap-4 mt-6 relative z-10">
                 <div className="bg-[#0d120f] border border-white/5 p-4 rounded-xl">
-                  <p className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">Detected Crop</p>
+                  <p className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">{T("Detected Crop")}</p>
                   <p className="text-white font-bold text-sm flex items-center gap-2"><Sprout size={14} className="text-[#4CAF50]"/> {analysisResult.crop}</p>
                 </div>
                 <div className="bg-[#0d120f] border border-white/5 p-4 rounded-xl">
-                  <p className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">Leaf Age</p>
+                  <p className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">{T("Leaf Age")}</p>
                   <p className="text-white font-bold text-sm flex items-center gap-2"><Leaf size={14} className="text-yellow-500"/> {analysisResult.leafAge}</p>
                 </div>
               </div>
@@ -1340,16 +1628,16 @@ const CropDiseasePrediction = ({ handleNav }) => {
           {analysisResult && analysisResult.severity !== "NONE" && (
             <div className="bg-[#111613] border border-white/5 rounded-[2rem] p-6 shadow-2xl relative overflow-hidden animate-in slide-in-from-bottom-5">
                <div className="absolute left-0 top-0 h-full w-1 bg-red-500"></div>
-               <h3 className="text-white font-black text-xs uppercase tracking-widest mb-6 flex items-center gap-2"><TrendingDown size={16} className="text-red-500"/> Yield & Economic Risk</h3>
+               <h3 className="text-white font-black text-xs uppercase tracking-widest mb-6 flex items-center gap-2"><TrendingDown size={16} className="text-red-500"/> {T("Yield & Economic Risk")}</h3>
                <div className="space-y-4 mb-6">
-                 <div className="bg-[#0d120f] border border-white/5 p-4 rounded-xl flex justify-between items-center"><div className="flex items-center gap-3"><div className="p-2 bg-red-500/10 rounded-lg"><Package size={16} className="text-red-500"/></div><div><p className="text-slate-400 text-[9px] font-black uppercase tracking-widest">Projected Yield Loss</p><p className="text-slate-500 text-[8px] font-bold uppercase tracking-widest">If Untreated</p></div></div><span className="text-red-500 font-black text-xl">{analysisResult.yieldLoss}</span></div>
-                 <div className="bg-[#0d120f] border border-white/5 p-4 rounded-xl flex justify-between items-center"><div className="flex items-center gap-3"><div className="p-2 bg-orange-500/10 rounded-lg"><Banknote size={16} className="text-orange-500"/></div><div><p className="text-slate-400 text-[9px] font-black uppercase tracking-widest">Value Risk</p><p className="text-slate-500 text-[8px] font-bold uppercase tracking-widest">Per Acre</p></div></div><span className="text-orange-500 font-black text-xl">{analysisResult.valueRisk}</span></div>
+                 <div className="bg-[#0d120f] border border-white/5 p-4 rounded-xl flex justify-between items-center"><div className="flex items-center gap-3"><div className="p-2 bg-red-500/10 rounded-lg"><Package size={16} className="text-red-500"/></div><div><p className="text-slate-400 text-[9px] font-black uppercase tracking-widest">{T("Projected Yield Loss")}</p><p className="text-slate-500 text-[8px] font-bold uppercase tracking-widest">{T("If Untreated")}</p></div></div><span className="text-red-500 font-black text-xl">{analysisResult.yieldLoss}</span></div>
+                 <div className="bg-[#0d120f] border border-white/5 p-4 rounded-xl flex justify-between items-center"><div className="flex items-center gap-3"><div className="p-2 bg-orange-500/10 rounded-lg"><Banknote size={16} className="text-orange-500"/></div><div><p className="text-slate-400 text-[9px] font-black uppercase tracking-widest">{T("Value Risk")}</p><p className="text-slate-500 text-[8px] font-bold uppercase tracking-widest">{T("Per Acre")}</p></div></div><span className="text-orange-500 font-black text-xl">{analysisResult.valueRisk}</span></div>
                </div>
                <div className="border-t border-white/5 pt-4 mb-4">
-                  <div className="flex justify-between items-center mb-1"><span className="text-slate-400 text-[9px] font-black uppercase tracking-widest">Est. Treatment Cost</span><span className="text-[#4CAF50] font-black text-sm">₹{analysisResult.costPerAcre} / Acre</span></div>
+                  <div className="flex justify-between items-center mb-1"><span className="text-slate-400 text-[9px] font-black uppercase tracking-widest">{T("Est. Treatment Cost")}</span><span className="text-[#4CAF50] font-black text-sm">₹{analysisResult.costPerAcre} / {T("Acre")}</span></div>
                   <div className="w-full bg-[#0d120f] h-1.5 rounded-full overflow-hidden"><div className="bg-[#4CAF50] h-full" style={{width: '20%'}}></div></div>
                </div>
-               <p className="text-[10px] text-slate-400 leading-relaxed font-bold"><span className="text-yellow-500 flex items-center gap-1 inline-flex"><AlertTriangle size={10}/> CRITICAL RISK:</span> Immediate treatment within 48 hours can recover up to 85% of projected losses.</p>
+               <p className="text-[10px] text-slate-400 leading-relaxed font-bold"><span className="text-yellow-500 flex items-center gap-1 inline-flex"><AlertTriangle size={10}/> {T("CRITICAL RISK:")}</span> {T("Immediate treatment within 48 hours can recover up to 85% of projected losses.")}</p>
             </div>
           )}
         </div>
@@ -1359,26 +1647,26 @@ const CropDiseasePrediction = ({ handleNav }) => {
           {!analysisResult && !isAnalyzing ? (
              <div className="bg-[#111613] rounded-[2rem] border border-white/5 shadow-2xl flex-1 flex flex-col items-center justify-center p-12 text-center opacity-50">
                <Activity size={80} className="text-slate-600 mb-6" strokeWidth={1}/>
-               <h2 className="text-2xl font-black text-white uppercase tracking-widest mb-2">Awaiting Image</h2>
-               <p className="text-slate-400 font-bold text-sm max-w-sm">Upload a clear picture of the affected leaf to ping our Real-time AI API.</p>
+               <h2 className="text-2xl font-black text-white uppercase tracking-widest mb-2">{T("Awaiting Image")}</h2>
+               <p className="text-slate-400 font-bold text-sm max-w-sm">{T("Upload a clear picture of the affected leaf to ping our Real-time AI API.")}</p>
              </div>
           ) : isAnalyzing ? (
              <div className="bg-[#111613] rounded-[2rem] border border-[#4CAF50]/30 shadow-[0_0_40px_rgba(76,175,80,0.1)] flex-1 flex flex-col p-10 font-mono text-sm text-[#4CAF50]">
-                <div className="flex items-center gap-3 mb-8"><div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div><h3 className="font-black uppercase tracking-widest text-white">Live API Connection Active</h3></div>
-                <div className="space-y-4 animate-in fade-in"><p>> FETCHING LIVE GPS COORDINATES...</p><p>> PINGING OPENWEATHERMAP API...</p><p>> SENDING IMAGE TO PLANT.ID CLOUD ENGINE...</p><p className="text-yellow-500">> AWAITING SERVER RESPONSE...</p><p className="animate-pulse">_</p></div>
+                <div className="flex items-center gap-3 mb-8"><div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div><h3 className="font-black uppercase tracking-widest text-white">{T("Live API Connection Active")}</h3></div>
+                <div className="space-y-4 animate-in fade-in"><p>> {T("FETCHING LIVE GPS COORDINATES...")}</p><p>> {T("PINGING OPENWEATHERMAP API...")}</p><p>> {T("SENDING IMAGE TO PLANT.ID CLOUD ENGINE...")}</p><p className="text-yellow-500">> {T("AWAITING SERVER RESPONSE...")}</p><p className="animate-pulse">_</p></div>
              </div>
           ) : (
              <div className="animate-in slide-in-from-right-10 duration-500 flex flex-col gap-6 h-full">
                 
                 {/* 1. PATHOLOGY RESULT */}
                 <div className="bg-[#111613] border border-white/5 p-8 rounded-[2rem] shadow-lg relative overflow-hidden">
-                  <div className={`absolute top-0 right-0 px-6 py-1.5 font-black text-[10px] uppercase tracking-widest rounded-bl-xl ${analysisResult.severity === 'NONE' ? 'bg-[#4CAF50] text-black' : 'bg-red-500 text-white'}`}>{analysisResult.severity === 'NONE' ? 'HEALTHY' : 'PATHOGEN DETECTED'}</div>
-                  <h4 className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-4 flex items-center gap-2"><AlertCircle size={14}/> Pathology Result</h4>
+                  <div className={`absolute top-0 right-0 px-6 py-1.5 font-black text-[10px] uppercase tracking-widest rounded-bl-xl ${analysisResult.severity === 'NONE' ? 'bg-[#4CAF50] text-black' : 'bg-red-500 text-white'}`}>{analysisResult.severity === 'NONE' ? T('HEALTHY') : T('PATHOGEN DETECTED')}</div>
+                  <h4 className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-4 flex items-center gap-2"><AlertCircle size={14}/> {T("Pathology Result")}</h4>
                   <div className="flex justify-between items-end">
                     <div><h1 className="text-5xl font-black text-white mb-2">{analysisResult.name}</h1><p className={`text-xs font-black uppercase tracking-widest flex items-center gap-2 ${analysisResult.severity === 'NONE' ? 'text-[#4CAF50]' : 'text-red-400'}`}><Bug size={14}/> {analysisResult.type}</p></div>
                     <div className="flex gap-6">
-                      <div className="text-right border-r border-white/10 pr-6"><p className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">AI Confidence</p><p className="text-[#4CAF50] font-black text-2xl">{analysisResult.confidence}</p></div>
-                      <div className="text-right"><p className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">Severity Level</p><p className={`font-black text-2xl ${analysisResult.severity === 'HIGH' ? 'text-red-500' : analysisResult.severity === 'MEDIUM' ? 'text-yellow-500' : 'text-[#4CAF50]'}`}>{analysisResult.severity}</p></div>
+                      <div className="text-right border-r border-white/10 pr-6"><p className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">{T("AI Confidence")}</p><p className="text-[#4CAF50] font-black text-2xl">{analysisResult.confidence}</p></div>
+                      <div className="text-right"><p className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">{T("Severity Level")}</p><p className={`font-black text-2xl ${analysisResult.severity === 'HIGH' ? 'text-red-500' : analysisResult.severity === 'MEDIUM' ? 'text-yellow-500' : 'text-[#4CAF50]'}`}>{analysisResult.severity}</p></div>
                     </div>
                   </div>
                 </div>
@@ -1386,13 +1674,13 @@ const CropDiseasePrediction = ({ handleNav }) => {
                 {/* 2. ROOT CAUSE ANALYSIS */}
                 {analysisResult.severity !== "NONE" && (
                   <div className="bg-[#111613] border border-white/5 p-8 rounded-[2rem] shadow-lg">
-                    <h4 className="text-blue-400 text-[10px] font-black uppercase tracking-widest mb-4 flex items-center gap-2"><Microscope size={14}/> Root Cause Analysis (Why?)</h4>
+                    <h4 className="text-blue-400 text-[10px] font-black uppercase tracking-widest mb-4 flex items-center gap-2"><Microscope size={14}/> {T("Root Cause Analysis (Why?)")}</h4>
                     <p className="bg-[#0d120f] border border-blue-500/20 p-4 rounded-xl text-slate-300 font-bold text-sm leading-relaxed mb-6 shadow-inner">{analysisResult.cause}</p>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                      <div className="bg-[#0d120f] p-4 rounded-xl border border-white/5"><Thermometer size={14} className="text-orange-400 mb-2"/><p className="text-slate-500 text-[8px] font-black uppercase tracking-widest mb-1">Real-time Weather</p><p className="text-white font-bold text-xs truncate" title={analysisResult.weatherTrigger}>{analysisResult.weatherTrigger}</p></div>
-                      <div className="bg-[#0d120f] p-4 rounded-xl border border-white/5"><Droplets size={14} className="text-blue-400 mb-2"/><p className="text-slate-500 text-[8px] font-black uppercase tracking-widest mb-1">Water Issue</p><p className="text-white font-bold text-xs">{analysisResult.waterIssue}</p></div>
-                      <div className="bg-[#0d120f] p-4 rounded-xl border border-white/5"><FlaskConical size={14} className="text-purple-400 mb-2"/><p className="text-slate-500 text-[8px] font-black uppercase tracking-widest mb-1">Nutrient Imbalance</p><p className="text-white font-bold text-xs">{analysisResult.nutrient}</p></div>
-                      <div className="bg-[#0d120f] p-4 rounded-xl border border-white/5"><Bug size={14} className="text-red-400 mb-2"/><p className="text-slate-500 text-[8px] font-black uppercase tracking-widest mb-1">Pest Possibility</p><p className="text-white font-bold text-xs">{analysisResult.pest}</p></div>
+                      <div className="bg-[#0d120f] p-4 rounded-xl border border-white/5"><Thermometer size={14} className="text-orange-400 mb-2"/><p className="text-slate-500 text-[8px] font-black uppercase tracking-widest mb-1">{T("Real-time Weather")}</p><p className="text-white font-bold text-xs truncate" title={analysisResult.weatherTrigger}>{analysisResult.weatherTrigger}</p></div>
+                      <div className="bg-[#0d120f] p-4 rounded-xl border border-white/5"><Droplets size={14} className="text-blue-400 mb-2"/><p className="text-slate-500 text-[8px] font-black uppercase tracking-widest mb-1">{T("Water Issue")}</p><p className="text-white font-bold text-xs">{analysisResult.waterIssue}</p></div>
+                      <div className="bg-[#0d120f] p-4 rounded-xl border border-white/5"><FlaskConical size={14} className="text-purple-400 mb-2"/><p className="text-slate-500 text-[8px] font-black uppercase tracking-widest mb-1">{T("Nutrient Imbalance")}</p><p className="text-white font-bold text-xs">{analysisResult.nutrient}</p></div>
+                      <div className="bg-[#0d120f] p-4 rounded-xl border border-white/5"><Bug size={14} className="text-red-400 mb-2"/><p className="text-slate-500 text-[8px] font-black uppercase tracking-widest mb-1">{T("Pest Possibility")}</p><p className="text-white font-bold text-xs">{analysisResult.pest}</p></div>
                     </div>
                   </div>
                 )}
@@ -1404,43 +1692,43 @@ const CropDiseasePrediction = ({ handleNav }) => {
                     {/* CHEMICAL SPRAY CARD */}
                     <div className="bg-[#0b0b0b] border border-red-500/20 rounded-[2rem] p-6 relative overflow-hidden flex flex-col shadow-lg">
                         <div className="absolute top-0 right-0 bg-red-950/50 text-red-400 px-3 py-1 text-[8px] font-black uppercase tracking-widest rounded-bl-lg">Fast Action</div>
-                        <h4 className="text-red-400 font-black text-sm uppercase tracking-widest mb-4 flex items-center gap-2"><FlaskConical size={16}/> Chemical Spray</h4>
-                        <div className="mb-4"><p className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">Recommended Medicine</p><p className="text-white font-black text-lg">{analysisResult.chemical.name}</p></div>
+                        <h4 className="text-red-400 font-black text-sm uppercase tracking-widest mb-4 flex items-center gap-2"><FlaskConical size={16}/> {T("Chemical Spray")}</h4>
+                        <div className="mb-4"><p className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">{T("Recommended Medicine")}</p><p className="text-white font-black text-lg">{analysisResult.chemical.name}</p></div>
                         <div className="grid grid-cols-2 gap-3 mb-5">
-                            <div className="bg-[#111613] p-3 rounded-xl border border-white/5"><p className="text-slate-500 text-[8px] font-black uppercase tracking-widest mb-1">Dosage</p><p className="text-white font-bold text-xs">{analysisResult.chemical.dosage}</p></div>
-                            <div className="bg-[#111613] p-3 rounded-xl border border-white/5"><p className="text-slate-500 text-[8px] font-black uppercase tracking-widest mb-1">Method</p><p className="text-white font-bold text-xs">{analysisResult.chemical.method}</p></div>
+                            <div className="bg-[#111613] p-3 rounded-xl border border-white/5"><p className="text-slate-500 text-[8px] font-black uppercase tracking-widest mb-1">{T("Dosage")}</p><p className="text-white font-bold text-xs">{analysisResult.chemical.dosage}</p></div>
+                            <div className="bg-[#111613] p-3 rounded-xl border border-white/5"><p className="text-slate-500 text-[8px] font-black uppercase tracking-widest mb-1">{T("Method")}</p><p className="text-white font-bold text-xs">{analysisResult.chemical.method}</p></div>
                         </div>
                         <div className="space-y-3 mb-5 border-t border-white/5 pt-4">
-                            <div className="flex items-start gap-3"><Calendar size={14} className="text-blue-400 mt-0.5 shrink-0"/><div><p className="text-slate-500 text-[8px] font-black uppercase tracking-widest">Frequency</p><p className="text-slate-300 text-xs font-bold">{analysisResult.chemical.frequency}</p></div></div>
-                            <div className="flex items-start gap-3"><Clock size={14} className="text-yellow-500 mt-0.5 shrink-0"/><div><p className="text-slate-500 text-[8px] font-black uppercase tracking-widest">Pre-Harvest Interval (PHI)</p><p className="text-yellow-500 text-xs font-black">{analysisResult.chemical.phi}</p></div></div>
-                            <div className="flex items-start gap-3"><ShieldAlert size={14} className="text-orange-500 mt-0.5 shrink-0"/><div><p className="text-slate-500 text-[8px] font-black uppercase tracking-widest">Safety Warning</p><p className="text-orange-400 text-xs font-bold">{analysisResult.chemical.safety}</p></div></div>
+                            <div className="flex items-start gap-3"><Calendar size={14} className="text-blue-400 mt-0.5 shrink-0"/><div><p className="text-slate-500 text-[8px] font-black uppercase tracking-widest">{T("Frequency")}</p><p className="text-slate-300 text-xs font-bold">{analysisResult.chemical.frequency}</p></div></div>
+                            <div className="flex items-start gap-3"><Clock size={14} className="text-yellow-500 mt-0.5 shrink-0"/><div><p className="text-slate-500 text-[8px] font-black uppercase tracking-widest">{T("Pre-Harvest Interval (PHI)")}</p><p className="text-yellow-500 text-xs font-black">{analysisResult.chemical.phi}</p></div></div>
+                            <div className="flex items-start gap-3"><ShieldAlert size={14} className="text-orange-500 mt-0.5 shrink-0"/><div><p className="text-slate-500 text-[8px] font-black uppercase tracking-widest">{T("Safety Warning")}</p><p className="text-orange-400 text-xs font-bold">{analysisResult.chemical.safety}</p></div></div>
                         </div>
                         <div className="mt-auto space-y-2 pt-4 border-t border-white/5">
                             <p className="text-[#4CAF50] text-xs font-bold flex items-center gap-2"><Check size={12}/> {analysisResult.chemical.pros}</p>
                             <p className="text-red-400 text-xs font-bold flex items-center gap-2"><X size={12}/> {analysisResult.chemical.cons}</p>
                         </div>
-                        <button onClick={() => { setTreatmentToSchedule(analysisResult.chemical); setShowScheduleModal(true); }} className="w-full mt-4 bg-red-950/30 text-red-400 border border-red-500/30 hover:bg-red-500 hover:text-white px-4 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2"><Calendar size={14}/> Schedule Treatment</button>
+                        <button onClick={() => { setTreatmentToSchedule(analysisResult.chemical); setShowScheduleModal(true); }} className="w-full mt-4 bg-red-950/30 text-red-400 border border-red-500/30 hover:bg-red-500 hover:text-white px-4 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2"><Calendar size={14}/> {T("Schedule Treatment")}</button>
                     </div>
 
                     {/* ORGANIC OPTION CARD (NOW BLACK bg-[#0b0b0b]) */}
                     <div className="bg-[#0b0b0b] border border-[#4CAF50]/30 rounded-[2rem] p-6 relative overflow-hidden flex flex-col shadow-lg">
                         <div className="absolute top-0 right-0 bg-green-950/50 text-[#4CAF50] px-3 py-1 text-[8px] font-black uppercase tracking-widest rounded-bl-lg">Eco Safe</div>
-                        <h4 className="text-[#4CAF50] font-black text-sm uppercase tracking-widest mb-4 flex items-center gap-2"><Leaf size={16}/> Organic Option</h4>
-                        <div className="mb-4"><p className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">Recommended Bio-Control</p><p className="text-white font-black text-lg">{analysisResult.organic.name}</p></div>
+                        <h4 className="text-[#4CAF50] font-black text-sm uppercase tracking-widest mb-4 flex items-center gap-2"><Leaf size={16}/> {T("Organic Option")}</h4>
+                        <div className="mb-4"><p className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">{T("Recommended Bio-Control")}</p><p className="text-white font-black text-lg">{analysisResult.organic.name}</p></div>
                         <div className="grid grid-cols-2 gap-3 mb-5">
-                            <div className="bg-[#111613] p-3 rounded-xl border border-white/5"><p className="text-slate-500 text-[8px] font-black uppercase tracking-widest mb-1">Dosage</p><p className="text-white font-bold text-xs">{analysisResult.organic.dosage}</p></div>
-                            <div className="bg-[#111613] p-3 rounded-xl border border-white/5"><p className="text-slate-500 text-[8px] font-black uppercase tracking-widest mb-1">Method</p><p className="text-white font-bold text-xs">{analysisResult.organic.method}</p></div>
+                            <div className="bg-[#111613] p-3 rounded-xl border border-white/5"><p className="text-slate-500 text-[8px] font-black uppercase tracking-widest mb-1">{T("Dosage")}</p><p className="text-white font-bold text-xs">{analysisResult.organic.dosage}</p></div>
+                            <div className="bg-[#111613] p-3 rounded-xl border border-white/5"><p className="text-slate-500 text-[8px] font-black uppercase tracking-widest mb-1">{T("Method")}</p><p className="text-white font-bold text-xs">{analysisResult.organic.method}</p></div>
                         </div>
                         <div className="space-y-3 mb-5 border-t border-white/5 pt-4">
-                            <div className="flex items-start gap-3"><Calendar size={14} className="text-[#4CAF50] mt-0.5 shrink-0"/><div><p className="text-slate-500 text-[8px] font-black uppercase tracking-widest">Frequency</p><p className="text-slate-300 text-xs font-bold">{analysisResult.organic.frequency}</p></div></div>
-                            <div className="flex items-start gap-3"><Clock size={14} className="text-[#4CAF50] mt-0.5 shrink-0"/><div><p className="text-slate-500 text-[8px] font-black uppercase tracking-widest">Pre-Harvest Interval (PHI)</p><p className="text-[#4CAF50] text-xs font-black">{analysisResult.organic.phi}</p></div></div>
-                            <div className="flex items-start gap-3"><ShieldCheck size={14} className="text-[#4CAF50] mt-0.5 shrink-0"/><div><p className="text-slate-500 text-[8px] font-black uppercase tracking-widest">Safety Profile</p><p className="text-[#4CAF50] text-xs font-bold">{analysisResult.organic.safety}</p></div></div>
+                            <div className="flex items-start gap-3"><Calendar size={14} className="text-[#4CAF50] mt-0.5 shrink-0"/><div><p className="text-slate-500 text-[8px] font-black uppercase tracking-widest">{T("Frequency")}</p><p className="text-slate-300 text-xs font-bold">{analysisResult.organic.frequency}</p></div></div>
+                            <div className="flex items-start gap-3"><Clock size={14} className="text-[#4CAF50] mt-0.5 shrink-0"/><div><p className="text-slate-500 text-[8px] font-black uppercase tracking-widest">{T("Pre-Harvest Interval (PHI)")}</p><p className="text-[#4CAF50] text-xs font-black">{analysisResult.organic.phi}</p></div></div>
+                            <div className="flex items-start gap-3"><ShieldCheck size={14} className="text-[#4CAF50] mt-0.5 shrink-0"/><div><p className="text-slate-500 text-[8px] font-black uppercase tracking-widest">{T("Safety Profile")}</p><p className="text-[#4CAF50] text-xs font-bold">{analysisResult.organic.safety}</p></div></div>
                         </div>
                         <div className="mt-auto space-y-2 pt-4 border-t border-white/5">
                             <p className="text-[#4CAF50] text-xs font-bold flex items-center gap-2"><Check size={12}/> {analysisResult.organic.pros}</p>
                             <p className="text-orange-400 text-xs font-bold flex items-center gap-2"><X size={12}/> {analysisResult.organic.cons}</p>
                         </div>
-                        <button onClick={() => { setTreatmentToSchedule(analysisResult.organic); setShowScheduleModal(true); }} className="w-full mt-4 bg-green-950/30 text-[#4CAF50] border border-[#4CAF50]/30 hover:bg-[#4CAF50] hover:text-black px-4 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2"><Calendar size={14}/> Schedule Treatment</button>
+                        <button onClick={() => { setTreatmentToSchedule(analysisResult.organic); setShowScheduleModal(true); }} className="w-full mt-4 bg-green-950/30 text-[#4CAF50] border border-[#4CAF50]/30 hover:bg-[#4CAF50] hover:text-black px-4 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2"><Calendar size={14}/> {T("Schedule Treatment")}</button>
                     </div>
                     </div>
                 )}
@@ -1449,15 +1737,15 @@ const CropDiseasePrediction = ({ handleNav }) => {
                 {nearbyShops.length > 0 && (
                   <div className="bg-[#111613] border border-blue-500/20 p-6 rounded-[2rem] shadow-lg animate-in slide-in-from-bottom-5 mt-2">
                     <div className="flex justify-between items-center mb-4">
-                      <h4 className="text-blue-400 text-[10px] font-black uppercase tracking-widest flex items-center gap-2"><MapPin size={14}/> Find Medicine Nearby</h4>
+                      <h4 className="text-blue-400 text-[10px] font-black uppercase tracking-widest flex items-center gap-2"><MapPin size={14}/> {T("Find Medicine Nearby")}</h4>
                       <span className="text-slate-400 text-[9px] font-bold uppercase tracking-widest bg-white/5 px-2 py-1 rounded">📍 {userLocation}</span>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       {nearbyShops.map((shop, i) => (
                         <div key={i} onClick={() => setSelectedShop(shop)} className="bg-[#0d120f] border border-white/5 p-4 rounded-xl hover:border-blue-500/50 transition-all cursor-pointer group shadow-sm hover:shadow-blue-500/10">
                            <h5 className="text-white font-bold text-xs group-hover:text-blue-400 transition-colors mb-1 truncate">{shop.name}</h5>
-                           <p className="text-slate-500 text-[9px] font-bold flex items-center gap-1 mb-2"><Navigation size={10}/> {shop.dist} away</p>
-                           <div className="flex justify-between items-center mt-3 pt-3 border-t border-white/5"><span className={`text-[8px] font-black uppercase px-2 py-0.5 rounded ${shop.status === 'Open Now' ? 'bg-green-900/30 text-green-400' : 'bg-orange-900/30 text-orange-400'}`}>{shop.status}</span><span className="text-blue-400 text-[9px] font-black uppercase group-hover:underline">View Details</span></div>
+                           <p className="text-slate-500 text-[9px] font-bold flex items-center gap-1 mb-2"><Navigation size={10}/> {shop.dist} {T("away")}</p>
+                           <div className="flex justify-between items-center mt-3 pt-3 border-t border-white/5"><span className={`text-[8px] font-black uppercase px-2 py-0.5 rounded ${shop.status === 'Open Now' ? 'bg-green-900/30 text-green-400' : 'bg-orange-900/30 text-orange-400'}`}>{shop.status}</span><span className="text-blue-400 text-[9px] font-black uppercase group-hover:underline">{T("View Details")}</span></div>
                         </div>
                       ))}
                     </div>
@@ -1474,43 +1762,43 @@ const CropDiseasePrediction = ({ handleNav }) => {
          <div className="fixed inset-0 z-[300] flex items-start justify-center bg-black/90 backdrop-blur-md p-4 sm:p-8 animate-in fade-in overflow-y-auto">
              <div className="w-full max-w-4xl bg-[#f8fafc] text-slate-900 rounded-2xl shadow-2xl relative my-auto flex flex-col shrink-0 overflow-hidden">
                  <div className="flex justify-between items-center bg-slate-200 p-4 border-b border-slate-300 print-hide">
-                    <h3 className="font-black text-slate-800 flex items-center gap-2 text-sm uppercase tracking-widest"><FileText size={18}/> Pathology Report Preview</h3>
+                    <h3 className="font-black text-slate-800 flex items-center gap-2 text-sm uppercase tracking-widest"><FileText size={18}/> {T("Pathology Report Preview")}</h3>
                     <div className="flex gap-3">
                        <button onClick={handleGeneratePDF} disabled={isDownloading} className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg font-bold text-xs uppercase tracking-widest flex items-center gap-2 transition-colors shadow-lg disabled:opacity-50">
-                           {isDownloading ? <Loader2 size={16} className="animate-spin"/> : <Download size={16}/>} {isDownloading ? "Downloading..." : "Download PDF"}
+                           {isDownloading ? <Loader2 size={16} className="animate-spin"/> : <Download size={16}/>} {isDownloading ? T("Downloading...") : T("Download PDF")}
                        </button>
                        <button onClick={() => setShowReportModal(false)} className="bg-slate-300 hover:bg-slate-400 text-slate-800 px-4 py-2.5 rounded-lg font-bold text-xs uppercase tracking-widest transition-colors"><X size={16}/></button>
                     </div>
                  </div>
                  <div id="printable-lab-report" className="p-10 md:p-14 relative bg-white">
                      <div className="flex justify-between items-start border-b-4 border-slate-800 pb-6 mb-8 relative z-10">
-                         <div className="flex items-center gap-4"><Microscope size={40} className="text-[#4CAF50]" /><div><h2 className="text-2xl font-black uppercase text-slate-900 tracking-wide">Agro Risk Intelligence Lab</h2><p className="text-slate-600 font-bold mt-1 text-sm">Botany Pathology Diagnostics</p><p className="text-slate-500 text-xs mt-0.5">{userLocation}</p></div></div>
-                         <div className="text-right"><p className="text-slate-500 text-xs font-bold uppercase tracking-widest">Date</p><p className="text-slate-800 font-black text-sm">{new Date().toLocaleDateString('en-GB')}</p><p className="text-slate-500 text-xs font-bold uppercase tracking-widest mt-2">Report ID</p><p className="text-slate-800 font-mono text-sm">#AGR-{Math.floor(100000 + Math.random() * 900000)}</p></div>
+                         <div className="flex items-center gap-4"><Microscope size={40} className="text-[#4CAF50]" /><div><h2 className="text-2xl font-black uppercase text-slate-900 tracking-wide">Agro Risk Intelligence Lab</h2><p className="text-slate-600 font-bold mt-1 text-sm">{T("Botany Pathology Diagnostics")}</p><p className="text-slate-500 text-xs mt-0.5">{userLocation}</p></div></div>
+                         <div className="text-right"><p className="text-slate-500 text-xs font-bold uppercase tracking-widest">{T("Date")}</p><p className="text-slate-800 font-black text-sm">{new Date().toLocaleDateString('en-GB')}</p><p className="text-slate-500 text-xs font-bold uppercase tracking-widest mt-2">{T("Report ID")}</p><p className="text-slate-800 font-mono text-sm">#AGR-{Math.floor(100000 + Math.random() * 900000)}</p></div>
                      </div>
-                     <div className="text-center mb-10"><h3 className="text-xl font-black text-slate-900 uppercase underline underline-offset-8 decoration-slate-300">Pathology Assessment Report</h3></div>
+                     <div className="text-center mb-10"><h3 className="text-xl font-black text-slate-900 uppercase underline underline-offset-8 decoration-slate-300">Pathology {T("Assessment Report")}</h3></div>
                      <div className="grid grid-cols-2 gap-8 mb-10 border border-slate-200 rounded-xl p-6 bg-slate-50">
-                         <div><p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">Detected Crop</p><p className="text-slate-900 font-black text-lg">{analysisResult.crop}</p></div>
-                         <div><p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">Diagnosis Result</p><p className={`font-black text-lg ${analysisResult.severity === 'NONE' ? 'text-green-600' : 'text-red-600'}`}>{analysisResult.name}</p></div>
-                         <div><p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">Severity / Status</p><p className="text-slate-800 font-bold text-sm">{analysisResult.severity}</p></div>
-                         <div><p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">AI Confidence Score</p><p className="text-slate-800 font-bold text-sm">{analysisResult.confidence}</p></div>
+                         <div><p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">{T("Detected Crop")}</p><p className="text-slate-900 font-black text-lg">{analysisResult.crop}</p></div>
+                         <div><p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">{T("Diagnosis Result")}</p><p className={`font-black text-lg ${analysisResult.severity === 'NONE' ? 'text-green-600' : 'text-red-600'}`}>{analysisResult.name}</p></div>
+                         <div><p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">{T("Severity / Status")}</p><p className="text-slate-800 font-bold text-sm">{analysisResult.severity}</p></div>
+                         <div><p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">{T("AI Confidence Score")}</p><p className="text-slate-800 font-bold text-sm">{analysisResult.confidence}</p></div>
                      </div>
                      <div className="mb-10">
-                         <h4 className="text-sm font-black text-slate-800 uppercase tracking-widest mb-4 border-b border-slate-200 pb-2">1. Analysis Details</h4>
+                         <h4 className="text-sm font-black text-slate-800 uppercase tracking-widest mb-4 border-b border-slate-200 pb-2">{T("1. Analysis Details")}</h4>
                          <p className="text-slate-700 text-sm leading-relaxed mb-4">{analysisResult.cause}</p>
                          <ul className="text-sm text-slate-700 space-y-2 list-disc pl-5">
-                             <li><strong>Weather Trigger:</strong> {analysisResult.weatherTrigger}</li>
-                             <li><strong>Water Issue:</strong> {analysisResult.waterIssue}</li>
-                             <li><strong>Nutrient Factors:</strong> {analysisResult.nutrient}</li>
+                             <li><strong>{T("Weather Trigger:")}</strong> {analysisResult.weatherTrigger}</li>
+                             <li><strong>{T("Water Issue:")}</strong> {analysisResult.waterIssue}</li>
+                             <li><strong>{T("Nutrient Factors:")}</strong> {analysisResult.nutrient}</li>
                          </ul>
                      </div>
                      {analysisResult.severity !== 'NONE' && (
                          <div className="mb-10">
-                             <h4 className="text-sm font-black text-slate-800 uppercase tracking-widest mb-4 border-b border-slate-200 pb-2">2. Prescribed Mitigation Plan</h4>
-                             <div className="mb-6"><h5 className="font-bold text-slate-900 mb-2">A: Chemical Intervention</h5><table className="w-full text-left text-sm border-collapse border border-slate-300"><tbody><tr className="border-b border-slate-300"><th className="p-2 bg-slate-100 border-r border-slate-300 w-1/3">Medicine</th><td className="p-2 font-bold text-red-600">{analysisResult.chemical.name}</td></tr><tr className="border-b border-slate-300"><th className="p-2 bg-slate-100 border-r border-slate-300">Dosage & Method</th><td className="p-2">{analysisResult.chemical.dosage} via {analysisResult.chemical.method}</td></tr><tr className="border-b border-slate-300"><th className="p-2 bg-slate-100 border-r border-slate-300">Pre-Harvest Interval</th><td className="p-2 font-bold">{analysisResult.chemical.phi}</td></tr><tr><th className="p-2 bg-slate-100 border-r border-slate-300">Safety Warnings</th><td className="p-2 text-red-600 italic">{analysisResult.chemical.safety}</td></tr></tbody></table></div>
-                             <div><h5 className="font-bold text-slate-900 mb-2">B: Organic / Bio-Control Option</h5><table className="w-full text-left text-sm border-collapse border border-slate-300"><tbody><tr className="border-b border-slate-300"><th className="p-2 bg-slate-100 border-r border-slate-300 w-1/3">Agent</th><td className="p-2 font-bold text-green-600">{analysisResult.organic.name}</td></tr><tr className="border-b border-slate-300"><th className="p-2 bg-slate-100 border-r border-slate-300">Dosage & Method</th><td className="p-2">{analysisResult.organic.dosage} via {analysisResult.organic.method}</td></tr><tr className="border-b border-slate-300"><th className="p-2 bg-slate-100 border-r border-slate-300">Pre-Harvest Interval</th><td className="p-2 font-bold">{analysisResult.organic.phi}</td></tr><tr><th className="p-2 bg-slate-100 border-r border-slate-300">Safety Warnings</th><td className="p-2 text-green-600 italic">{analysisResult.organic.safety}</td></tr></tbody></table></div>
+                             <h4 className="text-sm font-black text-slate-800 uppercase tracking-widest mb-4 border-b border-slate-200 pb-2">{T("2. Prescribed Mitigation Plan")}</h4>
+                             <div className="mb-6"><h5 className="font-bold text-slate-900 mb-2">A: Chemical Intervention</h5><table className="w-full text-left text-sm border-collapse border border-slate-300"><tbody><tr className="border-b border-slate-300"><th className="p-2 bg-slate-100 border-r border-slate-300 w-1/3">{T("Medicine")}</th><td className="p-2 font-bold text-red-600">{analysisResult.chemical.name}</td></tr><tr className="border-b border-slate-300"><th className="p-2 bg-slate-100 border-r border-slate-300">{T("Dosage & Method")}</th><td className="p-2">{analysisResult.chemical.dosage} via {analysisResult.chemical.method}</td></tr><tr className="border-b border-slate-300"><th className="p-2 bg-slate-100 border-r border-slate-300">{T("Pre-Harvest Interval")}</th><td className="p-2 font-bold">{analysisResult.chemical.phi}</td></tr><tr><th className="p-2 bg-slate-100 border-r border-slate-300">{T("Safety Warnings")}</th><td className="p-2 text-red-600 italic">{analysisResult.chemical.safety}</td></tr></tbody></table></div>
+                             <div><h5 className="font-bold text-slate-900 mb-2">B: Organic / Bio-Control Option</h5><table className="w-full text-left text-sm border-collapse border border-slate-300"><tbody><tr className="border-b border-slate-300"><th className="p-2 bg-slate-100 border-r border-slate-300 w-1/3">{T("Agent")}</th><td className="p-2 font-bold text-green-600">{analysisResult.organic.name}</td></tr><tr className="border-b border-slate-300"><th className="p-2 bg-slate-100 border-r border-slate-300">{T("Dosage & Method")}</th><td className="p-2">{analysisResult.organic.dosage} via {analysisResult.organic.method}</td></tr><tr className="border-b border-slate-300"><th className="p-2 bg-slate-100 border-r border-slate-300">{T("Pre-Harvest Interval")}</th><td className="p-2 font-bold">{analysisResult.organic.phi}</td></tr><tr><th className="p-2 bg-slate-100 border-r border-slate-300">{T("Safety Warnings")}</th><td className="p-2 text-green-600 italic">{analysisResult.organic.safety}</td></tr></tbody></table></div>
                          </div>
                      )}
-                     <div className="mt-16 flex justify-between items-end border-t border-slate-200 pt-6"><div className="text-slate-500 text-[10px]"><p>Computionally generated advisory report by AgroRisk AI Engine.</p><p>Requires field validation before large scale application.</p></div><div className="text-center"><div className="w-32 h-12 border-b border-slate-800 mb-1 flex items-end justify-center"><span className="text-xl font-black text-slate-800 opacity-50" style={{fontFamily: "cursive"}}>AI Verified</span></div><p className="text-[10px] font-black uppercase tracking-widest text-slate-600">Authorized Advisory Seal</p></div></div>
+                     <div className="mt-16 flex justify-between items-end border-t border-slate-200 pt-6"><div className="text-slate-500 text-[10px]"><p>{T("Computionally generated advisory report by AgroRisk AI Engine.")}</p><p>{T("Requires field validation before large scale application.")}</p></div><div className="text-center"><div className="w-32 h-12 border-b border-slate-800 mb-1 flex items-end justify-center"><span className="text-xl font-black text-slate-800 opacity-50" style={{fontFamily: "cursive"}}>AI Verified</span></div><p className="text-[10px] font-black uppercase tracking-widest text-slate-600">{T("Authorized Advisory Seal")}</p></div></div>
                  </div>
              </div>
          </div>
@@ -1561,7 +1849,7 @@ const CropDiseasePrediction = ({ handleNav }) => {
                      </div>
                      <div className="grid grid-cols-2 gap-4">
                          <div className="bg-[#0d120f] p-4 rounded-xl border border-white/5">
-                             <p className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">Dosage</p>
+                             <p className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">{T("Dosage")}</p>
                              <p className="text-white font-bold text-xs">{treatmentToSchedule.dosage}</p>
                          </div>
                          <div className="bg-[#0d120f] p-4 rounded-xl border border-white/5">
@@ -1697,15 +1985,15 @@ const WhatIfSimulator = ({ handleNav }) => {
       {/* HEADER & BADGES */}
       <div className="mb-10">
         <h2 className="text-3xl font-black text-white mb-2 flex items-center gap-3 tracking-tight uppercase">
-            <Globe className="text-blue-500 animate-pulse" size={32}/> AI Predictive Simulator
+            <Globe className="text-blue-500 animate-pulse" size={32}/> {T("AI Predictive Simulator")}
         </h2>
-        <p className="text-slate-400 font-bold text-sm">Enterprise-grade econometric and climatic stress modeling for agricultural risk assessment.</p>
+        <p className="text-slate-400 font-bold text-sm">{T("Enterprise-grade econometric and climatic stress modeling for agricultural risk assessment.")}</p>
         <div className="mt-5 flex flex-wrap items-center gap-3">
             <div className="inline-flex items-center gap-2 bg-[#0b1410] border border-[#4CAF50]/40 text-[#4CAF50] px-4 py-2 rounded-full font-black text-xs uppercase tracking-widest shadow-[0_0_15px_rgba(76,175,80,0.2)]">
-                <Cpu size={14}/> AI Confidence: {confidence}%
+                <Cpu size={14}/> {T("AI Confidence:")} {confidence}%
             </div>
             <div className="inline-flex items-center gap-2 bg-blue-950/40 border border-blue-500/40 text-blue-400 px-4 py-2 rounded-full font-black text-xs uppercase tracking-widest">
-                <Activity size={14}/> Model: V-3.0 (Quantum)
+                <Activity size={14}/> {T("Model: V-3.0 (Quantum)")}
             </div>
         </div>
       </div>
@@ -1713,7 +2001,7 @@ const WhatIfSimulator = ({ handleNav }) => {
       {/* AI SCENARIO PRESETS (🔥 FIXED: Drought, Flood only) */}
       <div className="bg-[#111613] p-6 rounded-3xl border border-white/5 shadow-lg mb-6 flex flex-col md:flex-row items-start md:items-center gap-4 relative overflow-hidden">
          <h4 className="text-white font-black uppercase text-xs tracking-widest whitespace-nowrap flex items-center gap-2">
-            <Target size={16} className="text-blue-400"/> Global Scenarios :
+            <Target size={16} className="text-blue-400"/> {T("Global Scenarios :")}
          </h4>
          <div className="flex flex-wrap gap-3 w-full relative z-10">
             {['Custom', 'Optimal Season', 'Drought', 'Flood', 'Market Crash'].map(preset => (
@@ -1735,18 +2023,18 @@ const WhatIfSimulator = ({ handleNav }) => {
                     <p className="text-blue-400 font-black tracking-widest uppercase text-xs animate-pulse">Running Neural Simulation...</p>
                 </div>
             )}
-            <h4 className="text-white font-black uppercase text-sm mb-6 tracking-widest flex items-center gap-2"><Settings size={18} className="text-orange-500"/> Micro-Stressors</h4>
+            <h4 className="text-white font-black uppercase text-sm mb-6 tracking-widest flex items-center gap-2"><Settings size={18} className="text-orange-500"/> {T("Micro-Stressors")}</h4>
             <div className="space-y-6">
-              <div><div className="flex justify-between text-xs font-black uppercase tracking-widest mb-3"><span className="text-slate-400 flex items-center gap-2"><CloudRain size={14} className="text-blue-400"/> Rainfall decrease</span><span className="text-white">{rainfallDrop}%</span></div><input type="range" min="0" max="50" value={rainfallDrop} onChange={e => handleSliderChange(setRainfallDrop, Number(e.target.value))} className="w-full appearance-none bg-transparent custom-range" /></div>
-              <div><div className="flex justify-between text-xs font-black uppercase tracking-widest mb-3"><span className="text-slate-400 flex items-center gap-2"><Thermometer size={14} className="text-red-400"/> Temperature increase</span><span className="text-white">+{tempIncrease}°C</span></div><input type="range" min="0" max="5" step="0.5" value={tempIncrease} onChange={e => handleSliderChange(setTempIncrease, Number(e.target.value))} className="w-full appearance-none bg-transparent custom-range" /></div>
-              <div><div className="flex justify-between text-xs font-black uppercase tracking-widest mb-3"><span className="text-slate-400 flex items-center gap-2"><Bug size={14} className="text-green-400"/> Disease pressure</span><span className="text-white">{diseaseInc}%</span></div><input type="range" min="0" max="50" value={diseaseInc} onChange={e => handleSliderChange(setDiseaseInc, Number(e.target.value))} className="w-full appearance-none bg-transparent custom-range" /></div>
-              <div><div className="flex justify-between text-xs font-black uppercase tracking-widest mb-3"><span className="text-slate-400 flex items-center gap-2"><TrendingDown size={14} className="text-orange-400"/> Market price drop</span><span className="text-white">{priceDrop}%</span></div><input type="range" min="0" max="50" value={priceDrop} onChange={e => handleSliderChange(setPriceDrop, Number(e.target.value))} className="w-full appearance-none bg-transparent custom-range" /></div>
+              <div><div className="flex justify-between text-xs font-black uppercase tracking-widest mb-3"><span className="text-slate-400 flex items-center gap-2"><CloudRain size={14} className="text-blue-400"/> {T("Rainfall decrease")}</span><span className="text-white">{rainfallDrop}%</span></div><input type="range" min="0" max="50" value={rainfallDrop} onChange={e => handleSliderChange(setRainfallDrop, Number(e.target.value))} className="w-full appearance-none bg-transparent custom-range" /></div>
+              <div><div className="flex justify-between text-xs font-black uppercase tracking-widest mb-3"><span className="text-slate-400 flex items-center gap-2"><Thermometer size={14} className="text-red-400"/> {T("Temperature increase")}</span><span className="text-white">+{tempIncrease}°C</span></div><input type="range" min="0" max="5" step="0.5" value={tempIncrease} onChange={e => handleSliderChange(setTempIncrease, Number(e.target.value))} className="w-full appearance-none bg-transparent custom-range" /></div>
+              <div><div className="flex justify-between text-xs font-black uppercase tracking-widest mb-3"><span className="text-slate-400 flex items-center gap-2"><Bug size={14} className="text-green-400"/> {T("Disease pressure")}</span><span className="text-white">{diseaseInc}%</span></div><input type="range" min="0" max="50" value={diseaseInc} onChange={e => handleSliderChange(setDiseaseInc, Number(e.target.value))} className="w-full appearance-none bg-transparent custom-range" /></div>
+              <div><div className="flex justify-between text-xs font-black uppercase tracking-widest mb-3"><span className="text-slate-400 flex items-center gap-2"><TrendingDown size={14} className="text-orange-400"/> {T("Market price drop")}</span><span className="text-white">{priceDrop}%</span></div><input type="range" min="0" max="50" value={priceDrop} onChange={e => handleSliderChange(setPriceDrop, Number(e.target.value))} className="w-full appearance-none bg-transparent custom-range" /></div>
             </div>
           </div>
 
           <div className="xl:col-span-7 bg-[#111613] p-8 rounded-3xl border border-white/5 shadow-lg flex flex-col">
              <div className="flex justify-between items-center mb-6">
-                 <h4 className="text-white font-black uppercase text-sm tracking-widest flex items-center gap-2"><BarChart2 size={18} className="text-[#4CAF50]"/> 6-Month Revenue Forecast</h4>
+                 <h4 className="text-white font-black uppercase text-sm tracking-widest flex items-center gap-2"><BarChart2 size={18} className="text-[#4CAF50]"/> {T("6-Month Revenue Forecast")}</h4>
                  <div className="flex items-center gap-4 text-[10px] font-black uppercase tracking-widest">
                      <span className="flex items-center gap-1"><div className="w-3 h-3 bg-[#4CAF50]/20 border border-[#4CAF50] rounded-sm"></div> Normal</span>
                      <span className="flex items-center gap-1"><div className="w-3 h-3 bg-red-500/20 border border-red-500 rounded-sm"></div> Simulated</span>
@@ -1778,26 +2066,26 @@ const WhatIfSimulator = ({ handleNav }) => {
       </div>
 
       <div className="bg-[#111613] p-8 rounded-3xl border border-white/5 shadow-lg mb-8">
-        <h4 className="text-white font-black text-sm uppercase tracking-widest mb-6">Updated Integrated Risk Matrix</h4>
-        <div className="flex justify-between items-center mb-3"><span className="text-slate-400 font-bold text-sm">System Risk Level</span><span className={`font-black uppercase tracking-widest text-sm ${riskColor}`}>{riskStatus}</span></div>
+        <h4 className="text-white font-black text-sm uppercase tracking-widest mb-6">{T("Updated Integrated Risk Matrix")}</h4>
+        <div className="flex justify-between items-center mb-3"><span className="text-slate-400 font-bold text-sm">{T("System Risk Level")}</span><span className={`font-black uppercase tracking-widest text-sm ${riskColor}`}>{riskStatus}</span></div>
         <div className="w-full h-4 bg-[#0d120f] rounded-full overflow-hidden mb-8 border border-white/5 shadow-inner"><div className={`${riskBg} h-full transition-all duration-500 shadow-[0_0_15px_currentColor]`} style={{width: `${Math.min(100, riskScore)}%`}}></div></div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="bg-[#0b1410] border border-[#4CAF50]/20 p-5 rounded-2xl relative overflow-hidden">
              <div className="absolute left-0 top-0 w-1 h-full bg-[#4CAF50]"></div>
-             <h5 className="text-white font-black text-xs uppercase tracking-widest mb-4">Worst Case Scenario</h5>
+             <h5 className="text-white font-black text-xs uppercase tracking-widest mb-4">{T("Worst Case Scenario")}</h5>
              <div className="space-y-3">
-                 <div className="flex justify-between"><span className="text-slate-400 text-xs font-bold">Estimated Yield Loss</span><span className="text-red-400 font-black">{yieldLossPercent}%</span></div>
-                 <div className="flex justify-between"><span className="text-slate-400 text-xs font-bold">Market Price Drop Impact</span><span className="text-orange-400 font-black">{priceDrop}%</span></div>
-                 <div className="flex justify-between pt-2 border-t border-white/5"><span className="text-slate-400 text-xs font-bold">Loan Repayment Stress</span><span className="text-yellow-400 font-black">{repaymentStress}%</span></div>
+                 <div className="flex justify-between"><span className="text-slate-400 text-xs font-bold">{T("Estimated Yield Loss")}</span><span className="text-red-400 font-black">{yieldLossPercent}%</span></div>
+                 <div className="flex justify-between"><span className="text-slate-400 text-xs font-bold">{T("Market Price Drop Impact")}</span><span className="text-orange-400 font-black">{priceDrop}%</span></div>
+                 <div className="flex justify-between pt-2 border-t border-white/5"><span className="text-slate-400 text-xs font-bold">{T("Loan Repayment Stress")}</span><span className="text-yellow-400 font-black">{repaymentStress}%</span></div>
              </div>
           </div>
           
           <div className="bg-[#0d120f] border border-blue-500/20 p-5 rounded-2xl relative overflow-hidden flex flex-col justify-center">
-             <h5 className="text-blue-400 font-black text-xs uppercase tracking-widest mb-4 flex items-center gap-2"><Droplets size={16}/> Geo-Resource Impact</h5>
+             <h5 className="text-blue-400 font-black text-xs uppercase tracking-widest mb-4 flex items-center gap-2"><Droplets size={16}/> {T("Geo-Resource Impact")}</h5>
              <div className="space-y-3">
-                 <div className="flex justify-between items-center"><span className="text-slate-300 text-xs font-bold">Groundwater Depletion</span><span className={`font-black text-sm ${groundwaterDepletion > 50 ? 'text-red-400' : 'text-blue-400'}`}>{groundwaterDepletion}%</span></div>
-                 <div className="flex justify-between items-center border-t border-white/5 pt-2"><span className="text-slate-300 text-xs font-bold">Soil Moisture Loss</span><span className={`font-black text-sm ${soilMoistureLoss > 50 ? 'text-red-400' : 'text-orange-400'}`}>{soilMoistureLoss}%</span></div>
+                 <div className="flex justify-between items-center"><span className="text-slate-300 text-xs font-bold">{T("Groundwater Depletion")}</span><span className={`font-black text-sm ${groundwaterDepletion > 50 ? 'text-red-400' : 'text-blue-400'}`}>{groundwaterDepletion}%</span></div>
+                 <div className="flex justify-between items-center border-t border-white/5 pt-2"><span className="text-slate-300 text-xs font-bold">{T("Soil Moisture Loss")}</span><span className={`font-black text-sm ${soilMoistureLoss > 50 ? 'text-red-400' : 'text-orange-400'}`}>{soilMoistureLoss}%</span></div>
              </div>
           </div>
 
@@ -1808,8 +2096,8 @@ const WhatIfSimulator = ({ handleNav }) => {
                      <span className="text-[9px] bg-green-900/30 text-green-400 px-2 py-1 rounded">PMFBY Prob: {insuranceClaimProb}%</span>
                  </h5>
                  <div className="space-y-2 mb-4">
-                     <div className="flex justify-between items-center"><span className="text-slate-400 text-xs font-bold">Est. Cost</span><span className="text-white font-black text-sm">₹{mitigationCost.toLocaleString()}</span></div>
-                     <div className="flex justify-between items-center"><span className="text-slate-400 text-xs font-bold">Revenue Saved</span><span className="text-[#4CAF50] font-black text-sm">₹{potentialSaved.toLocaleString()}</span></div>
+                     <div className="flex justify-between items-center"><span className="text-slate-400 text-xs font-bold">{T("Est. Cost")}</span><span className="text-white font-black text-sm">₹{mitigationCost.toLocaleString()}</span></div>
+                     <div className="flex justify-between items-center"><span className="text-slate-400 text-xs font-bold">{T("Revenue Saved")}</span><span className="text-[#4CAF50] font-black text-sm">₹{potentialSaved.toLocaleString()}</span></div>
                  </div>
              </div>
              <button onClick={() => handleNav('loan')} className="w-full bg-[#1a231d] text-white hover:text-black font-black py-2.5 rounded-xl uppercase tracking-widest text-[10px] hover:bg-[#4CAF50] transition-all border border-white/10 hover:border-[#4CAF50]">
@@ -1836,8 +2124,8 @@ const WhatIfSimulator = ({ handleNav }) => {
             </div>
             <div className="mt-auto space-y-3">
                 <div className="bg-[#0d120f] border border-red-500/20 p-4 rounded-xl">
-                    <p className="text-white font-black text-[10px] uppercase tracking-widest mb-1 flex items-center gap-1"><AlertTriangle size={12} className="text-red-500"/> Worst case</p>
-                    <p className="text-slate-400 text-xs font-bold flex justify-between items-center">Estimated loss: <span className="text-red-400 font-black text-sm">₹{Math.abs(crop.worstCaseLoss).toLocaleString()}</span></p>
+                    <p className="text-white font-black text-[10px] uppercase tracking-widest mb-1 flex items-center gap-1"><AlertTriangle size={12} className="text-red-500"/> {T("Worst case")}</p>
+                    <p className="text-slate-400 text-xs font-bold flex justify-between items-center">{T("Estimated loss:")} <span className="text-red-400 font-black text-sm">₹{Math.abs(crop.worstCaseLoss).toLocaleString()}</span></p>
                 </div>
                 <button onClick={() => handleNav(crop.navTarget)} className="w-full bg-[#1a231d] border border-white/10 hover:border-[#4CAF50] text-[#4CAF50] font-black text-[10px] uppercase tracking-widest py-3 rounded-xl transition-all flex items-center justify-center gap-2 group-hover:bg-[#4CAF50]/10">
                    {crop.actionBtn} <ArrowRight size={14}/>
@@ -1849,17 +2137,17 @@ const WhatIfSimulator = ({ handleNav }) => {
 
       {/* STRATEGY MODULE */}
       <div className="bg-[#111613] p-8 rounded-3xl border border-white/5 shadow-lg">
-        <h4 className="text-white font-black text-sm uppercase tracking-widest mb-6 flex items-center gap-2"><AlertTriangle className="text-orange-500" size={20}/> Early Risk Detection & Strategy</h4>
+        <h4 className="text-white font-black text-sm uppercase tracking-widest mb-6 flex items-center gap-2"><AlertTriangle className="text-orange-500" size={20}/> {T("Early Risk Detection & Strategy")}</h4>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2 space-y-4 flex flex-col">
-            {priceDrop >= 10 && (<div className="bg-[#0d120f] border border-orange-500/30 p-5 rounded-2xl relative overflow-hidden"><div className="absolute left-0 top-0 w-1 h-full bg-orange-500"></div><h5 className="text-white font-black text-sm uppercase tracking-widest mb-1">Market Volatility Spike</h5><p className="text-slate-400 text-xs font-bold mb-4">Trigger: Volatility band high + {priceDrop}% simulated price drop</p><div className="space-y-3"><div className="bg-orange-950/20 p-3 rounded-xl border border-orange-500/10"><p className="text-orange-400 font-black text-[10px] mb-1 uppercase tracking-widest">Recommended caution</p><p className="text-slate-300 text-xs font-bold leading-relaxed">Avoid forced selling; consider partial sell; explore storage/warehouse receipt options.</p></div></div></div>)}
-            {rainfallDrop >= 20 && (<div className="bg-[#0d120f] border border-blue-500/30 p-5 rounded-2xl relative overflow-hidden"><div className="absolute left-0 top-0 w-1 h-full bg-blue-500"></div><h5 className="text-white font-black text-sm uppercase tracking-widest mb-1">Severe Drought Warning</h5><p className="text-slate-400 text-xs font-bold mb-4">Trigger: {rainfallDrop}% reduction in expected rainfall</p><div className="space-y-3"><div className="bg-blue-950/20 p-3 rounded-xl border border-blue-500/10"><p className="text-blue-400 font-black text-[10px] mb-1 uppercase tracking-widest">Recommended caution</p><p className="text-slate-300 text-xs font-bold leading-relaxed">Activate drip irrigation systems immediately. Consider applying anti-transpirants.</p></div></div></div>)}
-            {tempIncrease >= 2.5 && (<div className="bg-[#0d120f] border border-red-500/30 p-5 rounded-2xl relative overflow-hidden"><div className="absolute left-0 top-0 w-1 h-full bg-red-500"></div><h5 className="text-white font-black text-sm uppercase tracking-widest mb-1">Heat Stress Alert</h5><p className="text-slate-400 text-xs font-bold mb-4">Trigger: {tempIncrease}°C unexpected temperature spike</p><div className="space-y-3"><div className="bg-red-950/20 p-3 rounded-xl border border-red-500/10"><p className="text-red-400 font-black text-[10px] mb-1 uppercase tracking-widest">Recommended caution</p><p className="text-slate-300 text-xs font-bold leading-relaxed">Increase evening irrigation cycles to cool soil. Risk of severe crop burning.</p></div></div></div>)}
-            {priceDrop < 10 && rainfallDrop < 20 && tempIncrease < 2.5 && (<div className="text-center py-10 px-6 bg-[#0d120f] rounded-2xl border border-white/5 h-full flex flex-col justify-center items-center"><ShieldCheck size={48} className="text-[#4CAF50] mx-auto mb-3 opacity-80" /><p className="text-white font-black uppercase tracking-widest text-sm mb-1">No Critical Alerts</p><p className="text-slate-500 text-xs font-bold">System metrics are currently within safe thresholds. Use Global Scenarios to simulate stress events.</p></div>)}
+            {priceDrop >= 10 && (<div className="bg-[#0d120f] border border-orange-500/30 p-5 rounded-2xl relative overflow-hidden"><div className="absolute left-0 top-0 w-1 h-full bg-orange-500"></div><h5 className="text-white font-black text-sm uppercase tracking-widest mb-1">{T("Market Volatility Spike")}</h5><p className="text-slate-400 text-xs font-bold mb-4">Trigger: Volatility band high + {priceDrop}% simulated price drop</p><div className="space-y-3"><div className="bg-orange-950/20 p-3 rounded-xl border border-orange-500/10"><p className="text-orange-400 font-black text-[10px] mb-1 uppercase tracking-widest">Recommended caution</p><p className="text-slate-300 text-xs font-bold leading-relaxed">Avoid forced selling; consider partial sell; explore storage/warehouse receipt options.</p></div></div></div>)}
+            {rainfallDrop >= 20 && (<div className="bg-[#0d120f] border border-blue-500/30 p-5 rounded-2xl relative overflow-hidden"><div className="absolute left-0 top-0 w-1 h-full bg-blue-500"></div><h5 className="text-white font-black text-sm uppercase tracking-widest mb-1">{T("Severe Drought Warning")}</h5><p className="text-slate-400 text-xs font-bold mb-4">Trigger: {rainfallDrop}% reduction in expected rainfall</p><div className="space-y-3"><div className="bg-blue-950/20 p-3 rounded-xl border border-blue-500/10"><p className="text-blue-400 font-black text-[10px] mb-1 uppercase tracking-widest">Recommended caution</p><p className="text-slate-300 text-xs font-bold leading-relaxed">Activate drip irrigation systems immediately. Consider applying anti-transpirants.</p></div></div></div>)}
+            {tempIncrease >= 2.5 && (<div className="bg-[#0d120f] border border-red-500/30 p-5 rounded-2xl relative overflow-hidden"><div className="absolute left-0 top-0 w-1 h-full bg-red-500"></div><h5 className="text-white font-black text-sm uppercase tracking-widest mb-1">{T("Heat Stress Alert")}</h5><p className="text-slate-400 text-xs font-bold mb-4">Trigger: {tempIncrease}°C unexpected temperature spike</p><div className="space-y-3"><div className="bg-red-950/20 p-3 rounded-xl border border-red-500/10"><p className="text-red-400 font-black text-[10px] mb-1 uppercase tracking-widest">Recommended caution</p><p className="text-slate-300 text-xs font-bold leading-relaxed">Increase evening irrigation cycles to cool soil. Risk of severe crop burning.</p></div></div></div>)}
+            {priceDrop < 10 && rainfallDrop < 20 && tempIncrease < 2.5 && (<div className="text-center py-10 px-6 bg-[#0d120f] rounded-2xl border border-white/5 h-full flex flex-col justify-center items-center"><ShieldCheck size={48} className="text-[#4CAF50] mx-auto mb-3 opacity-80" /><p className="text-white font-black uppercase tracking-widest text-sm mb-1">{T("No Critical Alerts")}</p><p className="text-slate-500 text-xs font-bold">{T("System metrics are currently within safe thresholds. Use Global Scenarios to simulate stress events.")}</p></div>)}
           </div>
           <div className={`p-6 rounded-2xl border ${strategyCard.border} ${strategyCard.bg} flex flex-col h-full relative overflow-hidden`}>
              <div className="absolute -bottom-4 -right-4 opacity-5 pointer-events-none"><Target size={150}/></div>
-             <div className="flex items-center gap-3 mb-5 relative z-10"><div className={`p-2.5 rounded-full bg-[#0d120f] shadow-inner border border-white/5 ${strategyCard.color}`}><Cpu size={20}/></div><h5 className="text-white font-black text-sm uppercase tracking-widest">AI Action Plan</h5></div>
+             <div className="flex items-center gap-3 mb-5 relative z-10"><div className={`p-2.5 rounded-full bg-[#0d120f] shadow-inner border border-white/5 ${strategyCard.color}`}><Cpu size={20}/></div><h5 className="text-white font-black text-sm uppercase tracking-widest">{T("AI Action Plan")}</h5></div>
              <div className="relative z-10 flex-1 flex flex-col"><h6 className={`${strategyCard.color} font-black text-sm mb-3 uppercase tracking-widest`}>{strategyCard.title}</h6><p className="text-slate-300 text-sm font-bold leading-relaxed mb-8">{strategyCard.text}</p>
              </div>
           </div>
@@ -2086,7 +2374,7 @@ const AutocompleteInput = ({ label, placeholder, value, onChange, options }) => 
         <div className="relative">
             <label className="text-slate-400 font-bold block mb-2 text-[10px] uppercase tracking-widest flex items-center gap-2">{label}</label>
             <input 
-                type="text" required placeholder={placeholder} value={value}
+                type="text" required placeholder={T(placeholder)} value={value}
                 onChange={e => { onChange(e.target.value); setShow(true); }}
                 onFocus={() => setShow(true)}
                 onBlur={() => setTimeout(() => setShow(false), 200)}
@@ -2168,10 +2456,10 @@ const Marketplace = ({ handleNav, currentUser }) => {
       {/* ----------------- MARKETPLACE HUB ----------------- */}
       {view === 'hub' && (
         <div className="bg-[#151a17] p-10 rounded-[2rem] border border-white/5 shadow-2xl">
-          <div className="flex justify-between items-center mb-8 border-b border-white/10 pb-6"><h3 className="font-black text-3xl text-white uppercase tracking-tight flex items-center gap-3"><ShoppingBag className="text-[#4CAF50]" size={36}/> Agri Marketplace</h3><button onClick={() => setView('cart')} className="relative bg-[#1a231d] p-3 rounded-xl hover:bg-[#4CAF50] hover:text-black transition-colors text-white border border-white/5"><ShoppingCart size={24}/>{cart.length > 0 && <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-black w-6 h-6 flex items-center justify-center rounded-full border-2 border-[#151a17]">{cart.length}</span>}</button></div>
+          <div className="flex justify-between items-center mb-8 border-b border-white/10 pb-6"><h3 className="font-black text-3xl text-white uppercase tracking-tight flex items-center gap-3"><ShoppingBag className="text-[#4CAF50]" size={36}/> {T("Agri Marketplace")}</h3><button onClick={() => setView('cart')} className="relative bg-[#1a231d] p-3 rounded-xl hover:bg-[#4CAF50] hover:text-black transition-colors text-white border border-white/5"><ShoppingCart size={24}/>{cart.length > 0 && <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-black w-6 h-6 flex items-center justify-center rounded-full border-2 border-[#151a17]">{cart.length}</span>}</button></div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6">
-            <div className="bg-[#0b1410] p-10 rounded-3xl border border-white/5 hover:border-[#4CAF50]/50 transition-all text-center flex flex-col items-center justify-center group cursor-pointer shadow-lg" onClick={() => setView('sell')}><div className="bg-[#4CAF50]/10 p-6 rounded-full mb-6 group-hover:scale-110 transition-transform"><Truck size={48} className="text-[#4CAF50]"/></div><h4 className="text-3xl font-black text-white uppercase mb-3">Sell Produce</h4><p className="text-slate-400 font-bold text-sm max-w-xs leading-relaxed mb-8">List your fresh harvest directly to verified buyers. Manage stock, quality grades, and logistics.</p><button className="bg-[#4CAF50] text-black font-black w-full py-4 rounded-xl uppercase hover:bg-green-500 transition-colors shadow-[0_0_20px_rgba(76,175,80,0.3)] flex justify-center items-center gap-2"><ListPlus size={20}/> Create Listing</button></div>
-            <div className="bg-[#0b1410] p-10 rounded-3xl border border-white/5 hover:border-[#4CAF50]/50 transition-all text-center flex flex-col items-center justify-center group cursor-pointer shadow-lg" onClick={() => setView('buy')}><div className="bg-[#4CAF50]/10 p-6 rounded-full mb-6 group-hover:scale-110 transition-transform"><Package size={48} className="text-[#4CAF50]"/></div><h4 className="text-3xl font-black text-white uppercase mb-3">Buy Inputs</h4><p className="text-slate-400 font-bold text-sm max-w-xs leading-relaxed mb-8">Purchase high-quality seeds, organic fertilizers, and farming tools at wholesale prices.</p><button className="bg-[#4CAF50] text-black font-black w-full py-4 rounded-xl uppercase hover:bg-green-500 transition-colors shadow-[0_0_20px_rgba(76,175,80,0.3)] flex justify-center items-center gap-2"><ShoppingCart size={20}/> Shop Now</button></div>
+            <div className="bg-[#0b1410] p-10 rounded-3xl border border-white/5 hover:border-[#4CAF50]/50 transition-all text-center flex flex-col items-center justify-center group cursor-pointer shadow-lg" onClick={() => setView('sell')}><div className="bg-[#4CAF50]/10 p-6 rounded-full mb-6 group-hover:scale-110 transition-transform"><Truck size={48} className="text-[#4CAF50]"/></div><h4 className="text-3xl font-black text-white uppercase mb-3">{T("Sell Produce")}</h4><p className="text-slate-400 font-bold text-sm max-w-xs leading-relaxed mb-8">{T("List your fresh harvest directly to verified buyers. Manage stock, quality grades, and logistics.")}</p><button className="bg-[#4CAF50] text-black font-black w-full py-4 rounded-xl uppercase hover:bg-green-500 transition-colors shadow-[0_0_20px_rgba(76,175,80,0.3)] flex justify-center items-center gap-2"><ListPlus size={20}/> {T("Create Listing")}</button></div>
+            <div className="bg-[#0b1410] p-10 rounded-3xl border border-white/5 hover:border-[#4CAF50]/50 transition-all text-center flex flex-col items-center justify-center group cursor-pointer shadow-lg" onClick={() => setView('buy')}><div className="bg-[#4CAF50]/10 p-6 rounded-full mb-6 group-hover:scale-110 transition-transform"><Package size={48} className="text-[#4CAF50]"/></div><h4 className="text-3xl font-black text-white uppercase mb-3">{T("Buy Inputs")}</h4><p className="text-slate-400 font-bold text-sm max-w-xs leading-relaxed mb-8">{T("Purchase high-quality seeds, organic fertilizers, and farming tools at wholesale prices.")}</p><button className="bg-[#4CAF50] text-black font-black w-full py-4 rounded-xl uppercase hover:bg-green-500 transition-colors shadow-[0_0_20px_rgba(76,175,80,0.3)] flex justify-center items-center gap-2"><ShoppingCart size={20}/> {T("Shop Now")}</button></div>
           </div>
         </div>
       )}
@@ -2179,12 +2467,12 @@ const Marketplace = ({ handleNav, currentUser }) => {
       {/* ----------------- SELLER DASHBOARD ----------------- */}
       {view === 'sell' && (
         <div className="bg-[#151a17] p-8 md:p-12 rounded-[2rem] border border-white/5 shadow-2xl animate-in zoom-in-95">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-10 border-b border-white/10 pb-6"><div className="flex items-center gap-4"><button onClick={() => setView('hub')} className="p-2.5 bg-[#1a231d] rounded-xl text-slate-400 hover:text-white transition-colors"><X size={24}/></button><div><h3 className="font-black text-2xl text-white uppercase tracking-tight flex items-center gap-2">Seller Dashboard</h3><p className="text-slate-400 text-xs font-bold mt-1 tracking-widest uppercase">Create Comprehensive Product Listing</p></div></div></div>
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-10 border-b border-white/10 pb-6"><div className="flex items-center gap-4"><button onClick={() => setView('hub')} className="p-2.5 bg-[#1a231d] rounded-xl text-slate-400 hover:text-white transition-colors"><X size={24}/></button><div><h3 className="font-black text-2xl text-white uppercase tracking-tight flex items-center gap-2">{T("Seller Dashboard")}</h3><p className="text-slate-400 text-xs font-bold mt-1 tracking-widest uppercase">{T("Create Comprehensive Product Listing")}</p></div></div></div>
           <form onSubmit={handleSellSubmit} className="space-y-8">
-            <div className="bg-gradient-to-r from-[#0b1410] to-[#111613] p-6 rounded-2xl border border-[#4CAF50]/30 flex flex-wrap justify-between items-center gap-6 shadow-inner"><div className="flex items-center gap-4"><div className="bg-[#1a231d] p-4 rounded-full border border-white/10"><User size={28} className="text-[#4CAF50]"/></div><div><h4 className="text-white font-black text-lg uppercase flex items-center gap-2">{currentUser || "Aravinth"} <BadgeCheck size={18} className="text-blue-500"/></h4><p className="text-slate-400 text-xs font-bold mt-1">Verified Digital Twin Farmer</p></div></div><div className="flex gap-6 text-center"><div><p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">Seller Rating</p><p className="text-yellow-500 font-black text-lg flex items-center justify-center gap-1">4.8 <Star size={14} fill="currentColor"/></p></div><div><p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">Orders Done</p><p className="text-white font-black text-lg">124</p></div></div></div>
+            <div className="bg-gradient-to-r from-[#0b1410] to-[#111613] p-6 rounded-2xl border border-[#4CAF50]/30 flex flex-wrap justify-between items-center gap-6 shadow-inner"><div className="flex items-center gap-4"><div className="bg-[#1a231d] p-4 rounded-full border border-white/10"><User size={28} className="text-[#4CAF50]"/></div><div><h4 className="text-white font-black text-lg uppercase flex items-center gap-2">{currentUser || "Aravinth"} <BadgeCheck size={18} className="text-blue-500"/></h4><p className="text-slate-400 text-xs font-bold mt-1">{T("Verified Digital Twin Farmer")}</p></div></div><div className="flex gap-6 text-center"><div><p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">{T("Seller Rating")}</p><p className="text-yellow-500 font-black text-lg flex items-center justify-center gap-1">4.8 <Star size={14} fill="currentColor"/></p></div><div><p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">{T("Orders Done")}</p><p className="text-white font-black text-lg">124</p></div></div></div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               <div className="bg-[#0b1410] border border-white/5 p-6 rounded-2xl space-y-5">
-                <h4 className="text-[#4CAF50] font-black text-xs uppercase tracking-widest border-b border-white/5 pb-3 flex items-center gap-2"><Tag size={16}/> 1. Basic Product Details</h4>
+                <h4 className="text-[#4CAF50] font-black text-xs uppercase tracking-widest border-b border-white/5 pb-3 flex items-center gap-2"><Tag size={16}/> {T("1. Basic Product Details")}</h4>
                 <AutocompleteInput label={<span className="flex gap-2 items-center">Produce Name</span>} placeholder="e.g. Fresh Red Tomatoes" value={sellData.name} onChange={(v) => setSellData({...sellData, name: v})} options={ALL_PRODUCE_NAMES} />
                 <div><label className={labelClass}>Category</label><select value={sellData.category} onChange={e => setSellData({...sellData, category: e.target.value})} className={inputClass}><option>Vegetables</option><option>Fruits</option><option>Seeds</option><option>Fertilizers</option></select></div>
                 <div className="flex gap-4"><div className="w-1/2"><label className={labelClass}>Quantity</label><input required type="number" placeholder="e.g. 500" value={sellData.qty} onChange={e => setSellData({...sellData, qty: e.target.value})} className={inputClass} /></div><div className="w-1/2"><label className={labelClass}>Unit</label><select value={sellData.unit} onChange={e => setSellData({...sellData, unit: e.target.value})} className={inputClass}><option>Kg</option><option>Quintal</option><option>Ton</option><option>Pieces</option><option>Bags</option></select></div></div>
@@ -2571,32 +2859,32 @@ const GlobalMarketIntelligence = ({ handleNav }) => {
             <div className="bg-[#1a231d] w-full max-w-2xl rounded-3xl border border-red-500/30 shadow-2xl flex flex-col overflow-hidden">
                 <div className="p-4 border-b border-white/10 flex justify-between items-center bg-[#111613]">
                     <h3 className="text-white font-black uppercase flex items-center gap-2 tracking-widest">
-                        <AlertTriangle className="text-red-500"/> Macro Policy Desk
+                        <AlertTriangle className="text-red-500"/> {T("Macro Policy Desk")}
                     </h3>
                     <button onClick={() => setShowAlertDesk(false)} className="text-slate-400 hover:text-white"><X size={24}/></button>
                 </div>
                 <div className="p-8 bg-[#0b1410]">
                     <div className="bg-red-950/20 border border-red-500/20 p-6 rounded-2xl mb-6">
-                        <p className="text-red-400 font-black text-xs uppercase tracking-widest mb-2">Active Alert Directive</p>
+                        <p className="text-red-400 font-black text-xs uppercase tracking-widest mb-2">{T("Active Alert Directive")}</p>
                         <h2 className="text-xl font-bold text-white leading-relaxed">{compareResult.arbitrage.policyAlert}</h2>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                         <div className="bg-[#111613] border border-white/5 p-4 rounded-xl">
-                            <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">Estimated Market Impact</p>
+                            <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">{T("Estimated Market Impact")}</p>
                             <h4 className="text-red-400 font-black text-lg">-4.5% to +2.1% Volatility</h4>
                         </div>
                         <div className="bg-[#111613] border border-white/5 p-4 rounded-xl">
-                            <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">Affected Commodity</p>
+                            <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">{T("Affected Commodity")}</p>
                             <h4 className="text-white font-black text-lg">{crop.toUpperCase()}</h4>
                         </div>
                         <div className="bg-[#111613] border border-white/5 p-4 rounded-xl col-span-2">
-                            <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">AI Recommendation</p>
+                            <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">{T("AI Recommendation")}</p>
                             <p className="text-slate-300 text-sm font-bold mt-1">Review your holding strategy. If export bans or tariff cuts are active, domestic supply will surge, depressing prices. Consider immediate liquidation or hedging via futures contracts.</p>
                         </div>
                     </div>
                 </div>
                 <div className="p-6 border-t border-white/10 bg-[#111613] flex justify-end gap-4">
-                    <button onClick={() => setShowAlertDesk(false)} className="bg-red-500/10 text-red-400 px-8 py-3 rounded-xl font-black uppercase text-xs tracking-widest hover:bg-red-500 hover:text-white transition-colors border border-red-500/20 shadow-lg">Acknowledge & Close</button>
+                    <button onClick={() => setShowAlertDesk(false)} className="bg-red-500/10 text-red-400 px-8 py-3 rounded-xl font-black uppercase text-xs tracking-widest hover:bg-red-500 hover:text-white transition-colors border border-red-500/20 shadow-lg">{T("Acknowledge & Close")}</button>
                 </div>
             </div>
         </div>
@@ -2605,7 +2893,7 @@ const GlobalMarketIntelligence = ({ handleNav }) => {
       {showPdfModal && (
         <div className="fixed inset-0 z-[200] bg-black/90 backdrop-blur-md flex flex-col items-center justify-center p-4 animate-in fade-in">
             <div className="bg-[#1a231d] w-full max-w-4xl h-[85vh] rounded-3xl border border-[#4CAF50]/30 shadow-2xl flex flex-col overflow-hidden">
-                <div className="p-4 border-b border-white/10 flex justify-between items-center bg-[#111613]"><h3 className="text-white font-black uppercase flex items-center gap-2 tracking-widest"><FileText className="text-[#4CAF50]"/> Intelligence Report</h3><button onClick={() => setShowPdfModal(false)} className="text-slate-400 hover:text-white"><X size={24}/></button></div>
+                <div className="p-4 border-b border-white/10 flex justify-between items-center bg-[#111613]"><h3 className="text-white font-black uppercase flex items-center gap-2 tracking-widest"><FileText className="text-[#4CAF50]"/> {T("Intelligence Report")}</h3><button onClick={() => setShowPdfModal(false)} className="text-slate-400 hover:text-white"><X size={24}/></button></div>
                 <div className="flex-1 bg-slate-800 relative"><iframe src={pdfUrl} width="100%" height="100%" className="border-none" title="PDF Preview"></iframe></div>
                 <div className="p-6 border-t border-white/10 bg-[#111613] flex justify-end gap-4"><button onClick={() => setShowPdfModal(false)} className="px-6 py-3 rounded-xl font-bold text-slate-400 hover:text-white uppercase text-xs tracking-widest border border-white/10">Close</button><button onClick={() => generatePDF('download')} className="bg-[#4CAF50] text-black px-8 py-3 rounded-xl font-black uppercase text-xs tracking-widest hover:scale-105 transition-transform flex items-center gap-2 shadow-lg"><Download size={16}/> Download PDF</button></div>
             </div>
@@ -2614,26 +2902,26 @@ const GlobalMarketIntelligence = ({ handleNav }) => {
 
       <div className="mb-8 px-4 flex justify-between items-end border-b border-white/5 pb-6 mt-6">
         <div>
-           <h2 className="text-3xl font-black mb-2 flex items-center gap-3 uppercase tracking-tighter"><Globe className="text-[#4CAF50]" size={32}/> Smart Market Compare</h2>
-           <p className="text-slate-400 text-sm font-bold uppercase tracking-widest">Enterprise Commodity Trading Terminal</p>
+           <h2 className="text-3xl font-black mb-2 flex items-center gap-3 uppercase tracking-tighter"><Globe className="text-[#4CAF50]" size={32}/> {T("Smart Market Compare")}</h2>
+           <p className="text-slate-400 text-sm font-bold uppercase tracking-widest">{T("Enterprise Commodity Trading Terminal")}</p>
         </div>
         <div className="hidden md:flex flex-col items-end gap-2">
-            <div className="flex items-center gap-2 bg-[#1a231d] border border-[#4CAF50]/30 px-4 py-2 rounded-full"><div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div><span className="text-[10px] font-black uppercase text-[#4CAF50] tracking-widest">Live Exchange Sync</span></div>
+            <div className="flex items-center gap-2 bg-[#1a231d] border border-[#4CAF50]/30 px-4 py-2 rounded-full"><div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div><span className="text-[10px] font-black uppercase text-[#4CAF50] tracking-widest">{T("Live Exchange Sync")}</span></div>
             <span className="text-[9px] text-slate-500 font-bold tracking-widest uppercase">Nodes: NCDEX, E-NAM, CBOT</span>
         </div>
       </div>
 
       <div className="bg-[#111613] p-8 rounded-[2rem] border border-[#4CAF50]/20 shadow-2xl mb-8">
         <div className="grid grid-cols-1 md:grid-cols-8 gap-6 items-end">
-          <div className="md:col-span-2"><label className="text-slate-500 text-[10px] font-black uppercase tracking-widest block mb-2">Target Commodity</label><div className="relative"><Sprout size={16} className="absolute left-4 top-4 text-slate-500"/><input type="text" value={crop} onChange={(e) => setCrop(e.target.value)} placeholder="Ex: Paddy" className="w-full bg-[#0d120f] border border-white/10 p-4 pl-12 rounded-xl outline-none focus:border-[#4CAF50] text-sm font-bold text-white transition-all"/></div></div>
-          <div className="md:col-span-1"><label className="text-[#4CAF50] text-[10px] font-black uppercase tracking-widest block mb-2">Volume (KG)</label><div className="relative"><Package size={16} className="absolute left-4 top-4 text-[#4CAF50]"/><input type="number" value={qty} onChange={(e) => setQty(e.target.value)} placeholder="100" className="w-full bg-[#0d120f] border border-[#4CAF50]/30 p-4 pl-12 rounded-xl outline-none focus:border-[#4CAF50] text-sm font-bold text-white transition-all shadow-[0_0_10px_rgba(76,175,80,0.1)]"/></div></div>
-          <div className="md:col-span-2"><label className="text-slate-500 text-[10px] font-black uppercase tracking-widest block mb-2">Origin Node</label><div className="relative"><MapPin size={16} className="absolute left-4 top-4 text-slate-500"/><input type="text" value={locA} onChange={(e) => setLocA(e.target.value)} placeholder="Origin" className="w-full bg-[#0d120f] border border-white/10 p-4 pl-12 rounded-xl outline-none focus:border-[#4CAF50] text-sm font-bold text-white transition-all"/></div></div>
+          <div className="md:col-span-2"><label className="text-slate-500 text-[10px] font-black uppercase tracking-widest block mb-2">{T("Target Commodity")}</label><div className="relative"><Sprout size={16} className="absolute left-4 top-4 text-slate-500"/><input type="text" value={crop} onChange={(e) => setCrop(e.target.value)} placeholder="Ex: Paddy" className="w-full bg-[#0d120f] border border-white/10 p-4 pl-12 rounded-xl outline-none focus:border-[#4CAF50] text-sm font-bold text-white transition-all"/></div></div>
+          <div className="md:col-span-1"><label className="text-[#4CAF50] text-[10px] font-black uppercase tracking-widest block mb-2">{T("Volume (KG)")}</label><div className="relative"><Package size={16} className="absolute left-4 top-4 text-[#4CAF50]"/><input type="number" value={qty} onChange={(e) => setQty(e.target.value)} placeholder="100" className="w-full bg-[#0d120f] border border-[#4CAF50]/30 p-4 pl-12 rounded-xl outline-none focus:border-[#4CAF50] text-sm font-bold text-white transition-all shadow-[0_0_10px_rgba(76,175,80,0.1)]"/></div></div>
+          <div className="md:col-span-2"><label className="text-slate-500 text-[10px] font-black uppercase tracking-widest block mb-2">{T("Origin Node")}</label><div className="relative"><MapPin size={16} className="absolute left-4 top-4 text-slate-500"/><input type="text" value={locA} onChange={(e) => setLocA(e.target.value)} placeholder="Origin" className="w-full bg-[#0d120f] border border-white/10 p-4 pl-12 rounded-xl outline-none focus:border-[#4CAF50] text-sm font-bold text-white transition-all"/></div></div>
           <div className="md:col-span-1 flex justify-center pb-4 text-slate-500 font-black italic">VS</div>
-          <div className="md:col-span-2"><label className="text-slate-500 text-[10px] font-black uppercase tracking-widest block mb-2">Destination Node</label><div className="relative"><MapPin size={16} className="absolute left-4 top-4 text-slate-500"/><input type="text" value={locB} onChange={(e) => setLocB(e.target.value)} placeholder="Destination" className="w-full bg-[#0d120f] border border-white/10 p-4 pl-12 rounded-xl outline-none focus:border-[#4CAF50] text-sm font-bold text-white transition-all"/></div></div>
+          <div className="md:col-span-2"><label className="text-slate-500 text-[10px] font-black uppercase tracking-widest block mb-2">{T("Destination Node")}</label><div className="relative"><MapPin size={16} className="absolute left-4 top-4 text-slate-500"/><input type="text" value={locB} onChange={(e) => setLocB(e.target.value)} placeholder="Destination" className="w-full bg-[#0d120f] border border-white/10 p-4 pl-12 rounded-xl outline-none focus:border-[#4CAF50] text-sm font-bold text-white transition-all"/></div></div>
         </div>
         <div className="mt-8 flex justify-center">
           <button onClick={runComparison} disabled={isComparing || !locA || !locB || !crop || !qty} className="bg-[#4CAF50] text-black font-black px-12 py-4 rounded-xl uppercase text-sm hover:scale-[1.02] transition-transform shadow-[0_0_30px_rgba(76,175,80,0.3)] flex items-center gap-3 disabled:opacity-50">
-            {isComparing ? <Loader2 size={20} className="animate-spin"/> : <Sparkles size={20}/>} {isComparing ? 'Compiling Neural Data...' : 'Execute Intelligence Scan'}
+            {isComparing ? <Loader2 size={20} className="animate-spin"/> : <Sparkles size={20}/>} {isComparing ? T('Compiling Neural Data...') : T('Execute Intelligence Scan')}
           </button>
         </div>
       </div>
@@ -3637,6 +3925,7 @@ export default function App() {
   const [currentUser, setCurrentUser] = useState(null);
   const [currentPage, setCurrentPage] = useState('home');
   const [lang, setLang] = useState('en');
+  currentAppLang = lang;
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [authView, setAuthView] = useState('hidden'); 
@@ -3721,28 +4010,12 @@ export default function App() {
   return (
     <div className={`h-screen w-screen relative overflow-hidden font-sans flex ${isDarkMode ? 'bg-[#0d120f]' : 'light-mode-app'}`}>
       
-      {!isDarkMode && (
-        <style>{`
-          @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
-          .light-mode-app { background-color: #f8fafc !important; color: #0f172a !important; }
-          .light-mode-app .bg-\\[\\#0d120f\\] { background-color: #f1f5f9 !important; border-color: #cbd5e1 !important; box-shadow: none !important;}
-          .light-mode-app .bg-\\[\\#111613\\], .light-mode-app .bg-\\[\\#151a17\\], .light-mode-app .bg-\\[\\#1a1a1a\\], .light-mode-app .bg-\\[\\#1f2922\\], .light-mode-app .bg-\\[\\#252525\\] { background-color: #ffffff !important; border-color: #e2e8f0 !important; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1) !important; }
-          .light-mode-app .text-white { color: #0f172a !important; }
-          .light-mode-app .text-slate-400, .light-mode-app .text-slate-300, .light-mode-app .text-slate-500 { color: #475569 !important; }
-          .light-mode-app .border-white\\/5, .light-mode-app .border-white\\/10 { border-color: #e2e8f0 !important; }
-          .light-mode-app .bg-black\\/80 { background-color: rgba(255, 255, 255, 0.8) !important; }
-          .light-mode-app .bg-black\\/40 { background-color: rgba(255, 255, 255, 0.4) !important; }
-          .light-mode-app .bg-black\\/90 { background-color: rgba(255, 255, 255, 0.95) !important; }
-          .light-mode-app input, .light-mode-app select, .light-mode-app textarea { background-color: #f8fafc !important; color: #0f172a !important; border-color: #cbd5e1 !important; }
-          .light-mode-app input::placeholder, .light-mode-app textarea::placeholder { color: #94a3b8 !important; }
-        `}</style>
-      )}
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');`}</style>
 
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
           <img src="/agriculture.jpeg" alt="BG" className="w-full h-full object-cover" onError={(e) => { e.target.src = "https://images.unsplash.com/photo-1500382017468-9049fee74a52"; }} />
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px]" />
+          <div className={`absolute inset-0 backdrop-blur-[2px] ${isDarkMode ? 'bg-black/60' : 'bg-white/80'}`} />
       </div>
       
       {currentUser && (

@@ -122,3 +122,91 @@ code {
         border-bottom-color: inherit;
     }
 }
+
+/* ==========================================
+   LIGHT MODE OVERRIDES FOR AGRO RISK APP
+   ========================================== */
+.light-mode-app {
+    background-color: #f8fafc !important;
+    color: #0f172a !important;
+}
+
+.light-mode-app .bg-\[\#0d120f\] {
+    background-color: #f1f5f9 !important;
+    border-color: #cbd5e1 !important;
+    box-shadow: none !important;
+}
+
+.light-mode-app .bg-\[\#111613\],
+.light-mode-app .bg-\[\#111814\],
+.light-mode-app .bg-\[\#151a17\],
+.light-mode-app .bg-\[\#1a1a1a\],
+.light-mode-app .bg-\[\#1f2922\],
+.light-mode-app .bg-\[\#252525\],
+.light-mode-app .bg-\[\#1a231d\] {
+    background-color: #ffffff !important;
+    border-color: #e2e8f0 !important;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1) !important;
+}
+
+/* Opacity modifier cards & panels */
+.light-mode-app .bg-\[\#1a1a1a\]\/90,
+.light-mode-app .bg-\[\#1f2922\]\/80,
+.light-mode-app .bg-\[\#111814\]\/95,
+.light-mode-app .bg-\[\#0d120f\]\/80,
+.light-mode-app .bg-\[\#0d120f\]\/90,
+.light-mode-app .bg-\[\#0d120f\]\/50,
+.light-mode-app .bg-\[\#111613\]\/80,
+.light-mode-app .bg-\[\#1a231d\]\/90 {
+    background-color: #ffffff !important;
+    border-color: #e2e8f0 !important;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1) !important;
+}
+
+/* Overriding text-white and text-slate to be clearly visible on light bg */
+.light-mode-app .text-white {
+    color: #0f172a !important;
+}
+
+.light-mode-app .text-slate-400,
+.light-mode-app .text-slate-300,
+.light-mode-app .text-slate-500 {
+    color: #475569 !important;
+}
+
+.light-mode-app .border-white\/5,
+.light-mode-app .border-white\/10 {
+    border-color: #e2e8f0 !important;
+}
+
+/* Black overlays on background images */
+.light-mode-app .bg-black\/80 {
+    background-color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.light-mode-app .bg-black\/40 {
+    background-color: rgba(255, 255, 255, 0.4) !important;
+}
+
+.light-mode-app .bg-black\/60 {
+    background-color: rgba(255, 255, 255, 0.8) !important;
+}
+
+.light-mode-app .bg-black\/90 {
+    background-color: rgba(255, 255, 255, 0.95) !important;
+}
+
+/* Form inputs & interactive widgets */
+.light-mode-app input,
+.light-mode-app select,
+.light-mode-app textarea {
+    background-color: #f8fafc !important;
+    color: #0f172a !important;
+    border-color: #cbd5e1 !important;
+}
+
+.light-mode-app input::placeholder,
+.light-mode-app textarea::placeholder {
+    color: #94a3b8 !important;
+}
+
