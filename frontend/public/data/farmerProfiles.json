@@ -1,0 +1,24 @@
+{
+  "districts": ["Thanjavur", "Tiruchirappalli", "Coimbatore"],
+  "soil_types": [
+    {"key": "soil.alluvial"},
+    {"key": "soil.red"},
+    {"key": "soil.black"},
+    {"key": "soil.sandy"}
+  ],
+  "crop_history": [
+    {"key": "crop.paddy"},
+    {"key": "crop.groundnut"},
+    {"key": "crop.millet"}
+  ],
+  "defaults": {
+    "name": "",
+    "location": "Thanjavur",
+    "landSizeAcres": 2,
+    "soilType": "soil.alluvial",
+    "cropHistory": "crop.paddy",
+    "riskTolerance": "low",
+    "financialBuffer": 60000,
+    "existingLoans": 30000
+  }
+}

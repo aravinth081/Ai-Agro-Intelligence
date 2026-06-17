@@ -1,0 +1,28 @@
+{
+  "districts": {
+    "Thanjavur": {
+      "pressure_pct": {"min": 18, "max": 42, "confidence": 63},
+      "top_risks": [
+        {"key": "blast", "weight": 0.55},
+        {"key": "leaf_folder", "weight": 0.45}
+      ]
+    },
+    "Tiruchirappalli": {
+      "pressure_pct": {"min": 22, "max": 50, "confidence": 60},
+      "top_risks": [
+        {"key": "bollworm", "weight": 0.52},
+        {"key": "leaf_spot", "weight": 0.48}
+      ]
+    },
+    "Coimbatore": {
+      "pressure_pct": {"min": 16, "max": 38, "confidence": 61},
+      "top_risks": [
+        {"key": "stem_borer", "weight": 0.54},
+        {"key": "rust", "weight": 0.46}
+      ]
+    }
+  },
+  "defaults": {
+    "district": "Thanjavur"
+  }
+}

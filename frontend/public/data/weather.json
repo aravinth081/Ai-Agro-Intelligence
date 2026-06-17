@@ -1,0 +1,31 @@
+{
+  "districts": {
+    "Thanjavur": {
+      "rainfall_mm": {"min": 520, "max": 720, "confidence": 62},
+      "temp_stress_c": {"min": 31, "max": 36, "confidence": 58},
+      "notes": {
+        "drought_sensitivity": 0.55,
+        "heat_sensitivity": 0.48
+      }
+    },
+    "Tiruchirappalli": {
+      "rainfall_mm": {"min": 460, "max": 680, "confidence": 60},
+      "temp_stress_c": {"min": 32, "max": 37, "confidence": 56},
+      "notes": {
+        "drought_sensitivity": 0.6,
+        "heat_sensitivity": 0.52
+      }
+    },
+    "Coimbatore": {
+      "rainfall_mm": {"min": 420, "max": 610, "confidence": 57},
+      "temp_stress_c": {"min": 30, "max": 35, "confidence": 55},
+      "notes": {
+        "drought_sensitivity": 0.62,
+        "heat_sensitivity": 0.45
+      }
+    }
+  },
+  "defaults": {
+    "district": "Thanjavur"
+  }
+}

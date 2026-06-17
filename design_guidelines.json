@@ -1,0 +1,168 @@
+{
+  "identity": {
+    "persona": "E1",
+    "philosophy": "Fusion over Imitation. Emotion First. Content is King.",
+    "anti_patterns": [
+      "Generic 'SaaS Blue' or 'Bootstrap' layouts",
+      "Center-aligned everything",
+      "Gradient overload",
+      "Single-recommendation AI outputs (Must show ranges)"
+    ]
+  },
+  "typography": {
+    "primary_font": "Manrope, sans-serif",
+    "secondary_font": "Noto Sans Tamil, sans-serif",
+    "heading_font": "Outfit, sans-serif",
+    "scale": {
+      "h1": "text-4xl md:text-5xl font-bold tracking-tight",
+      "h2": "text-3xl md:text-4xl font-semibold tracking-tight",
+      "h3": "text-2xl md:text-3xl font-semibold",
+      "body": "text-base md:text-lg leading-relaxed",
+      "small": "text-sm font-medium tracking-wide uppercase"
+    },
+    "rules": [
+      "Use 'Noto Sans Tamil' for all Tamil text content.",
+      "Headings must be bold and expressive.",
+      "Body text must have relaxed line-height for readability.",
+      "Avoid 'Inter' for headings."
+    ]
+  },
+  "colors": {
+    "palette": {
+      "primary": "#1B5E20",
+      "secondary": "#4CAF50",
+      "accent": "#795548",
+      "background": "#F1F8E9",
+      "surface": "#FFFFFF",
+      "text_primary": "#0A0A0A",
+      "text_secondary": "#525252",
+      "border": "#E0E0E0"
+    },
+    "risk_levels": {
+      "low": "#2E7D32",
+      "medium": "#F57C00",
+      "high": "#D32F2F"
+    },
+    "usage": {
+      "primary": "Primary actions, active states, key branding elements",
+      "secondary": "Success states, growth indicators, secondary buttons",
+      "accent": "Earthy elements, soil data, grounding visuals",
+      "background": "Main app background (soft tint)",
+      "surface": "Cards, panels, modals"
+    }
+  },
+  "layout": {
+    "grid_system": {
+      "dashboard": "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6",
+      "marketplace": "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6",
+      "detail_page": "grid grid-cols-1 lg:grid-cols-12 gap-8"
+    },
+    "spacing": {
+      "container_padding": "p-4 md:p-8 lg:p-12",
+      "section_gap": "gap-8 md:gap-12",
+      "card_padding": "p-6"
+    },
+    "strategies": [
+      "Mobile-First: Design for small screens first, then expand.",
+      "Bento Grid: Use varied span sizes for dashboard widgets (1x1, 2x1, 2x2).",
+      "Card-Based: Use distinct cards for data isolation.",
+      "High Contrast: Ensure text is readable outdoors (sunlight)."
+    ]
+  },
+  "components": {
+    "library": "shadcn/ui",
+    "customization": {
+      "radius": "rounded-lg",
+      "shadows": "shadow-sm hover:shadow-md transition-shadow",
+      "borders": "border border-border/60"
+    },
+    "specifics": {
+      "buttons": "Pill-shaped or rounded-md. High contrast text.",
+      "cards": "White background, subtle border, soft shadow.",
+      "inputs": "Large touch targets (min 48px height).",
+      "charts": "Recharts with custom earthy color palette."
+    },
+    "interactive_elements": "MUST include data-testid attribute for all interactive elements."
+  },
+  "visual_enhancers": {
+    "textures": "Subtle grain or noise overlay on backgrounds to reduce digital flatness.",
+    "icons": "Lucide React (default). Use Phosphor Icons for specific agri-needs if available.",
+    "motion": "Framer Motion for smooth transitions. Staggered entrance for lists.",
+    "glassmorphism": "Use sparingly for overlays/modals (backdrop-blur-md bg-white/80)."
+  },
+  "media": {
+    "image_urls": {
+      "farmers": [
+        {
+          "url": "https://images.unsplash.com/photo-1627829382469-f4bce7df99ba",
+          "alt": "Indian farmer in field",
+          "category": "profile"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1708417143820-6b1d57264228",
+          "alt": "Woman farmer in field",
+          "category": "profile_secondary"
+        }
+      ],
+      "crops": {
+        "paddy": "https://images.unsplash.com/photo-1695666181238-1b69e2462899",
+        "groundnut": "https://images.unsplash.com/photo-1671769195150-2638e793a50c",
+        "millet": "https://images.unsplash.com/photo-1679563586288-09bb77c17672"
+      },
+      "marketplace": [
+        {
+          "url": "https://images.unsplash.com/photo-1756158450046-24e51d854f71",
+          "alt": "Grain bags",
+          "category": "supplies"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1644864449974-c89ee281e358",
+          "alt": "Baskets of produce",
+          "category": "produce"
+        }
+      ]
+    }
+  },
+  "accessibility": {
+    "contrast": "Ensure WCAG AA compliance. High contrast for outdoor usage.",
+    "touch_targets": "Minimum 44x44px for all interactive elements.",
+    "text_scaling": "Support dynamic text resizing.",
+    "screen_readers": "Use semantic HTML and aria-labels."
+  },
+  "multilingual": {
+    "strategy": "Centralized translations.json file.",
+    "font_switching": "Dynamically switch font-family based on selected language (Manrope for EN, Noto Sans Tamil for TA).",
+    "layout_adaptation": "Account for text expansion in Tamil (approx 20-30% longer)."
+  },
+  "risk_communication": {
+    "rules": [
+      "NEVER show a single prediction value.",
+      "ALWAYS show a probability range (e.g., '70-85%').",
+      "ALWAYS include a 'Worst Case' scenario explanation.",
+      "Use color coding (Green/Orange/Red) to reinforce risk levels.",
+      "Provide 2-3 options, never a single recommendation."
+    ]
+  },
+  "instructions_to_main_agent": [
+    "Implement the 'AgroRisk AI+ Marketplace' as a React SPA.",
+    "Use the provided color palette and typography.",
+    "Ensure all text is translatable via translations.json.",
+    "Build the 10 modules as distinct components/pages.",
+    "Use the 'Bento' grid for the main dashboard.",
+    "Integrate the risk communication rules into every data display.",
+    "Use the provided image URLs for mock data.",
+    "Add data-testid to all interactive elements.",
+    "Do not use backend APIs; mock all data locally.",
+    "Ensure the app is mobile-responsive and touch-friendly."
+  ],
+  "UNIVERSAL_GUIDELINES_FOR_MAIN_AGENT": [
+    "Avoid generic 'AI slop' aesthetics.",
+    "Create depth through layered design elements.",
+    "Use micro-animations for interactions.",
+    "Use 2-3x more spacing than typical designs.",
+    "Never use AI assistant emojis.",
+    "Prioritize component reuse from shadcn/ui.",
+    "Use named exports for components and default exports for pages.",
+    "Use 'sonner' for toast notifications."
+  ]
+}

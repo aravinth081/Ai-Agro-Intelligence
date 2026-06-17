@@ -1,0 +1,3817 @@
+ import React, { useState, useRef, useEffect } from 'react';
+import { 
+  CloudRain, Sun, Droplets, Thermometer, Wind, 
+  Leaf, Sprout, Droplet, Tractor, Bug, 
+  Home, Menu, X, Moon, ChevronRight, Search, MapPin, 
+  ArrowRight, ArrowUpRight, TrendingUp, TrendingDown,
+  User, Lock, LogOut, ShieldCheck, ShieldAlert, Users,
+  CheckCircle2, AlertCircle, AlertTriangle,
+  Activity, BarChart2, Globe, Cpu, Layers, Target, 
+  Percent, Clock, Loader2, Sparkles,
+  Camera, Upload, Scan, Microscope, FlaskConical, 
+  Settings, Save, Download, Eye, Map, Wifi, Bell, Lightbulb, Database,
+  Banknote, ShoppingBag, ShoppingCart, CreditCard, Package, 
+  Receipt, Truck, Building2, Landmark, Tag, Star, BadgeCheck, Box,
+  MessageSquare, MessageCircle, Send, FileText, FileStack,
+  Check, Plus, Minus, Calendar, ListPlus, Mic, MicOff, Volume2, 
+  Satellite, Navigation, RefreshCcw, Image, Paperclip, CalendarCheck 
+} from 'lucide-react';
+
+ import { 
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
+  LineChart, Line, AreaChart, Area 
+} from 'recharts';
+
+import jsPDF from 'jspdf';
+
+// ==========================================
+// TRANSLATION DICTIONARY & CONSTANTS
+// ==========================================
+const translations = {
+  en: {
+    welcome: "Welcome", subtext: "Your agricultural command center is ready.", homeGrid: "Home Grid", mainMenu: "Main Menu", logout: "Logout", menu: "Menu", getStarted: "Get Started", f_digitalTwin: "Digital Twin Setup", f_dashboard: "Dashboard", f_whatIf: "What-If Simulator", f_marketplace: "Marketplace", f_market: "Market Intelligence", f_loan: "Loan Access", f_cropDoctor: "AI Crop Doctor", f_feedback: "Feedback", farmersAssist: "FARMERS ASSISTANCE", connectFarmers: "Connecting Farmers with Future Tech", loginBtn: "Login", registerBtn: "Registration", createAcc: "Initialize Account", joinNetwork: "Join the Agri-Intelligence Network", secureLogin: "Secure Terminal Access", welcomeBack: "Welcome back, Operator.", userPlace: "Enter Username", passPlace: "Enter Password", close: "Close", back: "← Go Back", connect: "Authenticate", createUsername: "Create Username", createPassword: "Create Password", fbCategory: "Feedback Category", catCrop: "Crop & Soil", catMarket: "Market & Price", catLoan: "Loans & Finance", catGeneral: "General", submitBtn: "Submit Log",
+    landingHeadline: "Smart Farming Ecosystem", landingSubtext: "Connecting agriculture with next-gen technology."
+  },
+  ta: {
+    welcome: "வரவேற்கிறோம்", subtext: "உங்கள் விவசாயக் கட்டுப்பாட்டு மையம் தயாராக உள்ளது.", homeGrid: "முகப்பு", mainMenu: "முதன்மை மெனு", logout: "வெளியேறு", menu: "மெனு", getStarted: "தொடங்குங்கள்", f_digitalTwin: "டிஜிட்டல் இரட்டை அமைப்பு", f_dashboard: "கட்டுப்பாட்டு அறை", f_whatIf: "சிமுலேட்டர்", f_marketplace: "சந்தை இடம்", f_market: "சந்தை நுண்ணறிவு", f_loan: "கடன் சேவை தளம்", f_cropDoctor: "AI பயிர் மருத்துவர்", f_feedback: "கருத்துக்கள்", farmersAssist: "உழவர் உதவி மையம்", connectFarmers: "எதிர்கால தொழில்நுட்பத்துடன் இணைப்பு", loginBtn: "உள்நுழைக", registerBtn: "பதிவு செய்க", createAcc: "கணக்கை உருவாக்குதல்", joinNetwork: "வேளாண் அறிவு வலையமைப்பில் சேரவும்", secureLogin: "பாதுகாப்பான நுழைவு", welcomeBack: "மீண்டும் வருக, இயக்குனரே.", userPlace: "பயனர் பெயர்", passPlace: "கடவுச்சொல்", close: "மூடு", back: "← பின்செல்", connect: "அங்கீகரி", createUsername: "புதிய பயனர் பெயர்", createPassword: "புதிய கடவுச்சொல்", fbCategory: "கருத்து வகை", catCrop: "பயிர் & மண்", catMarket: "சந்தை & விலை", catLoan: "கடன் & நிதி", catGeneral: "பொதுவானவை", submitBtn: "பதிவேற்று",
+    landingHeadline: "ஸ்மார்ட் விவசாய கட்டமைப்பு", landingSubtext: "எதிர்கால தொழில்நுட்பத்துடன் விவசாயத்தை இணைத்தல்."
+  }
+};
+
+const CROP_LIST = [{ en: "Paddy", ta: "நெல்" }, { en: "Sugarcane", ta: "கரும்பு" }, { en: "Turmeric", ta: "மஞ்சள்" }, { en: "Vegetables", ta: "காய்கறிகள்" }, { en: "Cotton", ta: "பருத்தி" }, { en: "Maize", ta: "மக்காச்சோளம்" }, { en: "Banana", ta: "வாழை" }, { en: "Groundnut", ta: "நிலக்கடலை" }];
+const BANK_LIST = ["State Bank of India (SBI)", "Indian Bank", "Canara Bank", "Punjab National Bank", "NABARD", "Cooperative Banks (PACS)", "Regional Rural Bank"];
+
+// ==========================================
+// 100 Q&A BOT DATA
+// ==========================================
+const FAQ_DATA = [
+  { q: "What is AgroRisk AI+ Marketplace?", a: "AgroRisk AI+ Marketplace is a frontend-only, rule-based agricultural risk intelligence and financial access platform for smallholder farmers in India." },
+  { q: "What problem does it solve?", a: "It addresses climate uncertainty, disease risk, market volatility, and loan repayment stress in one unified explainable system." },
+  { q: "Does it use machine learning?", a: "No. It uses rule-based logic to ensure transparency and explainability." },
+  { q: "Why avoid machine learning?", a: "Because black-box models reduce trust. Farmers and lenders need clarity." },
+  { q: "What is the core philosophy?", a: "Explainability over prediction accuracy." },
+  { q: "Does it guarantee profits?", a: "No. It always shows probability ranges and downside risk." },
+  { q: "Is there a backend?", a: "No. Fully frontend demo-ready architecture." },
+  { q: "What is Farmer Digital Twin?", a: "A stored profile including land size, soil type, crop history, risk tolerance, financial buffer, and existing loans." },
+  { q: "What is Integrated Risk Engine?", a: "It combines climate, disease, market, and financial exposure into a unified risk score." },
+  { q: "Why show ranges instead of exact numbers?", a: "Agriculture is uncertain; exact numbers create false confidence." },
+  { q: "What is What-If Simulator?", a: "A tool allowing farmers to simulate rainfall decrease, disease increase, or price drop." },
+  { q: "What is the Marketplace module?", a: "A Flipkart-style agricultural product marketplace with risk-aware suggestions." },
+  { q: "How is EMI range calculated?", a: "Based on loan amount range, interest range, and repayment duration range." },
+  { q: "How is loan approval probability calculated?", a: "Rule-based scoring from document completeness and financial stress." },
+  { q: "Can farmer change language?", a: "Yes. Real-time English ↔ Tamil switching without reload." },
+  { q: "Is the system auditable?", a: "Yes. All logic is transparent, math-based, and explainable." },
+  { q: "Can lenders use this?", a: "Yes, for explainable loan stress evaluation and credit rating." },
+  { q: "What is your revenue model?", a: "Marketplace commission, loan referral commission, or SaaS for banks." },
+  { q: "What is biggest strength?", a: "Absolute explainability and integrated risk logic." },
+  { q: "One-line pitch?", a: "AgroRisk AI+ doesn’t predict the future; it prepares farmers for uncertainty." }
+];
+
+// ==========================================
+// MASSIVE PRODUCT GENERATOR (2500 items)
+// ==========================================
+const generateProducts = () => {
+  const products = [];
+  let id = 1;
+
+  const seedNames = ["Paddy (IR20)", "Paddy (ADT36)", "Basmati Rice", "Hybrid Rice", "Wheat HD2967", "Durum Wheat", "Maize Hybrid 900M", "Sweet Corn", "Ragi", "Barley", "Black Gram", "Green Gram", "Red Gram", "Bengal Gram", "Cowpea", "Groundnut TMV7", "Sunflower Hybrid", "Mustard", "Sesame", "Tomato Hybrid", "Brinjal", "Chilli", "Okra", "Cabbage", "Marigold", "Jasmine", "Rose Seeds", "CO-4 Fodder Grass"];
+  const seedImgs = [
+    "https://images.unsplash.com/photo-1593368858342-99520b92dbcb?w=300&h=300&fit=crop",
+    "https://images.unsplash.com/photo-1586771107445-d3afeb0de06e?w=300&h=300&fit=crop",
+    "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=300&h=300&fit=crop",
+    "https://images.unsplash.com/photo-1582284540020-8acbe03f4924?w=300&h=300&fit=crop",
+    "https://images.unsplash.com/photo-1587049352847-4d4b126a51ce?w=300&h=300&fit=crop"
+  ];
+  for(let i=0; i<400; i++) {
+    products.push({ id: id++, name: `${seedNames[i % seedNames.length]} (Batch-${i+1})`, category: "Seeds", price: Math.floor(Math.random() * (1200 - 150 + 1)) + 150, image: seedImgs[i % seedImgs.length], unit: "per packet", desc: "High-yield, climate-resilient premium seeds." });
+  }
+
+  const fertNames = ["Urea", "DAP", "MOP", "SSP", "19:19:19 NPK", "Vermicompost", "Neem Cake", "Panchagavya", "Farm Yard Manure", "Azospirillum", "Rhizobium", "Phosphate Bacteria", "Zinc Sulphate", "Boron", "Ferrous Sulphate"];
+  const fertImgs = [
+    "https://images.unsplash.com/photo-1628352081506-83c43123ed6d?w=300&h=300&fit=crop",
+    "https://images.unsplash.com/photo-1585314062340-f1a5a7c9328d?w=300&h=300&fit=crop",
+    "https://images.unsplash.com/photo-1605000797499-95a51c5269ae?w=300&h=300&fit=crop",
+    "https://images.unsplash.com/photo-1625244724120-1fd1d34d00f6?w=300&h=300&fit=crop"
+  ];
+  for(let i=0; i<200; i++) {
+    products.push({ id: id++, name: `${fertNames[i % fertNames.length]} (Grade A)`, category: "Fertilizers", price: Math.floor(Math.random() * (2500 - 200 + 1)) + 200, image: fertImgs[i % fertImgs.length], unit: "per 50kg bag", desc: "Ensures rapid crop growth and soil health." });
+  }
+
+  const fruitNames = ["Alphonso Mango", "Banganapalli Mango", "Neelum Mango", "Robusta Banana", "Nendran Banana", "Guava Allahabad", "Sapota", "Papaya", "Red Delicious Apple", "Granny Smith", "Bartlett Pear", "Plum Santa Rosa", "Nagpur Orange", "Mosambi", "Lemon", "Mandarin", "Cashew", "Almond", "Pistachio", "Walnut", "Dragon Fruit", "Kiwi", "Avocado", "Blueberry"];
+  const fruitImgs = [
+    "https://images.unsplash.com/photo-1553279768-865429fa0078?w=300&h=300&fit=crop", 
+    "https://images.unsplash.com/photo-1571501679680-de32f1e7aad4?w=300&h=300&fit=crop", 
+    "https://images.unsplash.com/photo-1560806887-1e4cd0b6faa6?w=300&h=300&fit=crop", 
+    "https://images.unsplash.com/photo-1610832958506-aa56368176cf?w=300&h=300&fit=crop", 
+    "https://images.unsplash.com/photo-1614812513172-567d2fe9fb7e?w=300&h=300&fit=crop"
+  ];
+  for(let i=0; i<1000; i++) {
+    products.push({ id: id++, name: `${fruitNames[i % fruitNames.length]} (Lot-${i+1})`, category: "Fruits", price: Math.floor(Math.random() * (350 - 40 + 1)) + 40, image: fruitImgs[i % fruitImgs.length], unit: "per kg", desc: "Naturally ripened, sweet and export quality fresh fruits." });
+  }
+
+  const vegNames = ["Spinach", "Amaranthus", "Coriander", "Mint", "Carrot", "Beetroot", "Radish", "Turnip", "Bottle Gourd", "Bitter Gourd", "Ridge Gourd", "Pumpkin", "French Beans", "Cluster Beans", "Broad Beans", "Broccoli", "Zucchini", "Cherry Tomato", "Red Onion", "Potato"];
+  const vegImgs = [
+    "https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=300&h=300&fit=crop", 
+    "https://images.unsplash.com/photo-1561136594-7f68413baa99?w=300&h=300&fit=crop", 
+    "https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=300&h=300&fit=crop", 
+    "https://images.unsplash.com/photo-1596265371388-43edbaadab94?w=300&h=300&fit=crop", 
+    "https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?w=300&h=300&fit=crop"
+  ];
+  for(let i=0; i<900; i++) {
+    products.push({ id: id++, name: `Organic ${vegNames[i % vegNames.length]} (Lot-${i+1})`, category: "Vegetables", price: Math.floor(Math.random() * (120 - 15 + 1)) + 15, image: vegImgs[i % vegImgs.length], unit: "per kg", desc: "Direct from farm, fresh organic and pesticide-free vegetables." });
+  }
+
+  return products.sort(() => Math.random() - 0.5);
+};
+const ALL_PRODUCTS = generateProducts();
+
+// ==========================================
+// SUGGESTION DATA & COMPONENT FOR DIGITAL TWIN / MARKETPLACE
+// ==========================================
+const SUGGESTIONS = {
+  districts: [
+    "Ariyalur", "Chennai", "Coimbatore", "Cuddalore", "Dharmapuri", "Dindigul", 
+    "Erode", "Kallakurichi", "Kanchipuram", "Kanyakumari", "Karur", "Krishnagiri", 
+    "Madurai", "Nagapattinam", "Namakkal", "Nilgiris", "Perambalur", "Pudukkottai", 
+    "Ramanathapuram", "Ranipet", "Salem", "Sivaganga", "Tenkasi", "Thanjavur", 
+    "Theni", "Thoothukudi", "Tiruchirappalli", "Tirunelveli", "Tirupathur", 
+    "Tiruppur", "Tiruvallur", "Tiruvannamalai", "Tiruvarur", "Vellore", "Viluppuram", "Virudhunagar"
+  ],
+  soils: ["Alluvial Soil", "Black Soil", "Red Soil", "Laterite Soil", "Sandy Coastal Soil", "Clayey Soil"],
+  crops: ["Paddy (Rice)", "Sugarcane", "Groundnut", "Cotton", "Maize", "Millets (Kambu/Ragi)", "Banana", "Turmeric"],
+  risk: ["Low", "Medium", "High"]
+};
+
+const SuggestionInput = ({ label, value, onChange, placeholder, options, type = "text" }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [filtered, setFiltered] = useState(options || []);
+
+  const handleSearch = (e) => {
+    const val = e.target.value;
+    onChange(val);
+    if (options) {
+      setFiltered(options.filter(opt => opt.toLowerCase().includes(val.toLowerCase())));
+      setIsOpen(true);
+    }
+  };
+
+  return (
+    <div className="relative flex flex-col gap-2">
+      <label className="text-slate-500 text-[10px] font-black uppercase tracking-widest block">{label}</label>
+      <input
+        type={type}
+        value={value}
+        onChange={handleSearch}
+        onFocus={() => { if(options) { setIsOpen(true); setFiltered(options); } }}
+        onBlur={() => setTimeout(() => setIsOpen(false), 200)} 
+        className="w-full bg-[#0d120f] border border-white/10 p-3.5 rounded-xl text-white outline-none focus:border-[#4CAF50] font-bold text-sm transition-colors placeholder:text-slate-600 relative z-10"
+        placeholder={placeholder}
+        required
+      />
+      {isOpen && options && filtered.length > 0 && (
+        <div className="absolute z-50 w-full mt-16 bg-[#1f2922] border border-[#4CAF50]/50 rounded-xl shadow-2xl max-h-48 overflow-y-auto custom-scrollbar">
+          {filtered.map(opt => (
+            <div
+              key={opt}
+              onMouseDown={() => { onChange(opt); setIsOpen(false); }}
+              className="p-3 text-slate-300 font-bold hover:bg-[#4CAF50] hover:text-black cursor-pointer border-b border-white/5 text-sm transition-colors"
+            >
+              {opt}
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+ // ==========================================
+// MEGA FAQ DATABASE (BILINGUAL SMART OFFLINE ENGINE)
+// ==========================================
+const MEGA_FAQ = [
+  {
+    tags: ["who", "creator", "developed", "made", "build", "aravinth", "student", "college", "உருவாக்கியது", "யார்", "name", "yaru", "yar"],
+    q: "Who created this platform?",
+    a_en: "I am Agro Intelligence! I was created by **Aravinth**.\n\n He designed this platform to empower smallholder farmers.",
+    a_ta: "நான் Agro Intelligence! என்னை உருவாக்கியவர் **அரவிந்த்**.\n\n விவசாயிகளின் நலனுக்காக இந்த தொழில்நுட்பத்தை அவர் வடிவமைத்துள்ளார்."
+  },
+  {
+    tags: ["what", "agro", "intelligence", "platform", "about", "project", "details", "விவசாயம்", "பற்றி", "explain", "pathi", "sollu", "enna"],
+    q: "What is Agro Intelligence?",
+    a_en: "**Agro Intelligence** is a complete 'Smart Farming Ecosystem' for farmers.\n\n**Main Goals:**\n1. Predict Climate uncertainty\n2. Detect Disease risk\n3. Manage Market volatility\n4. Reduce Loan repayment stress\n\nIt uses 100% transparent 'Rule-based Logic'.",
+    a_ta: "**Agro Intelligence** என்பது சிறு விவசாயிகளுக்கான ஒரு முழுமையான 'Smart Farming Ecosystem' ஆகும்.\n\n**இதன் முக்கிய நோக்கங்கள்:**\n1. காலநிலை மாற்றம்\n2. நோய் தாக்குதல்\n3. சந்தை விலை வீழ்ச்சி\n4. கடன் சுமை\nஆகியவற்றை கணித்து உதவுவதாகும்."
+  },
+  {
+    tags: ["digital", "twin", "profile", "farmer", "data", "டிஜிட்டல்", "விவசாயி"],
+    q: "What is Farmer Digital Twin?",
+    a_en: "**Farmer Digital Twin:**\n\nIt is a complete digital record of the farmer's land and economy. It securely stores:\n• Land size (in acres)\n• Soil type & Crop history\n• Financial buffer & Pending loans",
+    a_ta: "**Farmer Digital Twin:**\n\nஇது விவசாயியின் நிலம் மற்றும் பொருளாதாரம் சார்ந்த முழுமையான டிஜிட்டல் ஆவணமாகும். இதில் சேமிக்கப்படும் தகவல்கள்:\n• நிலத்தின் அளவு மற்றும் மண் வகை\n• பயிர் வரலாறு\n• விவசாயியின் நிதி நிலை மற்றும் கடன்கள்."
+  },
+  {
+    tags: ["crop", "doctor", "disease", "leaf", "health", "மருத்துவர்", "நோய்", "பயிர்", "இலை", "pest", "பூச்சி", "epdi"],
+    q: "How does the AI Crop Doctor work?",
+    a_en: "**AI Crop Doctor:**\n\nSimply upload a photo of a diseased leaf, and it provides a comprehensive pathology report.\n\n**How it works:**\n• Disease Type: Identifies if it's Fungal, Bacterial, or Viral.\n• Damage & Loss: Calculates the affected area % and predicts potential yield/financial loss.",
+    a_ta: "**AI Crop Doctor:**\n\nபயிரில் நோய் தாக்கிய இலையின் புகைப்படத்தை பதிவேற்றம் செய்தால் இது விரிவான ரிப்போர்ட்டை தரும்.\n\n**எப்படி வேலை செய்கிறது?**\n• நோய் வகை: பூஞ்சை, பாக்டீரியா அல்லது வைரஸ் என கண்டறியும்.\n• பாதிப்பு அளவு: இலை எவ்வளவு சதவீதம் பாதிக்கப்பட்டுள்ளது என்பதை காட்டும்."
+  },
+  {
+    tags: ["simulator", "what-if", "risk", "rainfall", "temperature", "சிமுலேட்டர்", "மழை", "வெப்பம்", "score"],
+    q: "What is the What-If Simulator?",
+    a_en: "**What-If Simulator:**\n\nAn interactive tool that helps farmers foresee and prepare for future risks.\n\nFarmers can adjust sliders for rainfall drops, temperature spikes, disease pressure, and market price crashes.",
+    a_ta: "**What-If Simulator:**\n\nவிவசாயிகளுக்கு வரக்கூடிய ஆபத்துகளை முன்கூட்டியே கணிக்க உதவும் டூல்.\n\nமழையளவு குறைவு, வெப்பநிலை அதிகரிப்பு, நோய் தாக்கம் போன்றவற்றை Slider மூலம் மாற்றினால், உடனடியாக Risk Score மாறும்."
+  },
+  {
+    tags: ["market", "marketplace", "buy", "sell", "product", "upi", "சந்தை", "விற்பனை", "வாங்கு", "ecommerce"],
+    q: "Tell me about the Agri Marketplace.",
+    a_en: "**Agri Marketplace:**\n\nA dedicated E-commerce platform integrated for farmers.\n\n• Sell harvest directly to buyers.\n• Buy high-quality seeds, tools, and fertilizers.\n• Supports UPI, Bank Transfers, and Cash on Pickup.",
+    a_ta: "**Agri Marketplace:**\n\nஇது விவசாயிகளுக்கான பிரத்யேக E-commerce தளமாகும்.\n\n• விவசாயிகள் தங்கள் விளைபொருட்களை நேரடியாக விற்கலாம்.\n• தரமான விதைகள் மற்றும் உரங்களை வாங்கலாம்.\n• பணம் செலுத்துதல்: UPI, Bank Transfer வசதிகள் உள்ளன."
+  },
+  {
+    tags: ["loan", "finance", "bank", "kcc", "interest", "documents", "கடன்", "வங்கி", "வட்டி", "apply"],
+    q: "How does the Loan Portal work?",
+    a_en: "**Loan Access Portal:**\n\nDesigned to help farmers secure bank loans effortlessly.\n\n• **Loan Types:** Short-Term Crop Loans and Long-Term Tractor Loans.\n• **Verification:** Digitally checks 8 key documents.",
+    a_ta: "**Loan Access Portal:**\n\nவிவசாயிகளுக்கு எளிதாக வங்கி கடன் கிடைக்க இது உதவுகிறது.\n\n• **கடன் வகைகள்:** குறுகிய கால பயிர் கடன் மற்றும் நீண்ட கால டிராக்டர் கடன்.\n• **ஆவணங்கள்:** ஆதார், பான், பட்டா/சிட்டா போன்ற 8 முக்கிய ஆவணங்களை சரிபார்க்கும்."
+  }
+];
+
+// ==========================================
+// CHATBOT COMPONENT (VOICE, FAQ, GEMINI AI & ROBUST TTS)
+// ==========================================
+const AgroBot = ({ lang: appLang }) => {
+  // ✅ UNGA GEMINI API KEY
+  const GEMINI_API_KEY = "AIzaSyDBT-IhmZm3CAIG3_zcmnAznGGZtQj_zk0"; 
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [localLang, setLocalLang] = useState(appLang || 'en');
+  const [messages, setMessages] = useState([]);
+  const [input, setInput] = useState('');
+  const [isListening, setIsListening] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
+  const messagesEndRef = useRef(null);
+
+  // ✅ Quick Action Buttons Data
+  const SUGGESTIONS = [
+    { id: 1, en: "🌾 What is Agro Intelligence?", ta: "🌾 Agro Intelligence என்றால் என்ன?" },
+    { id: 2, en: "👨‍💻 Who created you?", ta: "👨‍💻 உன்னை உருவாக்கியது யார்?" },
+    { id: 3, en: "🩺 AI Crop Doctor", ta: "🩺 AI பயிர் மருத்துவர்" },
+    { id: 4, en: "💰 Loan Details", ta: "💰 கடன் விவரங்கள்" },
+    { id: 5, en: "🛒 Marketplace", ta: "🛒 வேளாண் சந்தை" }
+  ];
+
+  // Dynamic Greeting Logic
+  useEffect(() => {
+    const hour = new Date().getHours();
+    let timeGreetingEn = 'Hello';
+    let timeGreetingTa = 'வணக்கம்';
+
+    if (hour < 12) { timeGreetingEn = 'Good Morning 🌅'; timeGreetingTa = 'காலை வணக்கம் 🌅'; }
+    else if (hour < 17) { timeGreetingEn = 'Good Afternoon ☀️'; timeGreetingTa = 'மதிய வணக்கம் ☀️'; }
+    else { timeGreetingEn = 'Good Evening 🌙'; timeGreetingTa = 'மாலை வணக்கம் 🌙'; }
+
+    const initialEn = `${timeGreetingEn}! I am Agro Intelligence. Ask me anything in detail about farming, crops, or platform features.`;
+    const initialTa = `${timeGreetingTa}! நான் Agro Intelligence. விவசாயம் மற்றும் செயலியின் அம்சங்கள் பற்றி நீங்கள் என்னிடம் விரிவாக கேட்கலாம்.`;
+
+    setMessages([
+      { sender: 'bot', text: localLang === 'ta' ? initialTa : initialEn }
+    ]);
+  }, [localLang]);
+
+  const scrollToBottom = () => { messagesEndRef.current?.scrollIntoView({ behavior: "smooth" }); };
+  useEffect(() => { scrollToBottom(); }, [messages]);
+
+  useEffect(() => { if(appLang) setLocalLang(appLang); }, [appLang]);
+
+  // ✅ Force Load Voices for Chrome / Edge
+  useEffect(() => {
+    if ('speechSynthesis' in window) {
+        window.speechSynthesis.getVoices();
+        window.speechSynthesis.onvoiceschanged = () => {
+            window.speechSynthesis.getVoices();
+        };
+    }
+  }, []);
+
+  const toggleListening = () => {
+    if (isListening) { setIsListening(false); return; }
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) { alert("Sorry, your browser doesn't support voice typing."); return; }
+    const recognition = new SpeechRecognition();
+    recognition.lang = localLang === 'ta' ? 'ta-IN' : 'en-US'; 
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.onstart = () => setIsListening(true);
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      setInput((prev) => prev + (prev ? " " : "") + transcript);
+    };
+    recognition.onerror = () => setIsListening(false);
+    recognition.onend = () => setIsListening(false);
+    recognition.start();
+  };
+
+  // --- 🔥 100% WORKING ROBUST TTS LOGIC (WITH CHUNKING) 🔥 ---
+  const speakMessage = (text) => {
+    if (!('speechSynthesis' in window)) {
+        alert("Sorry, your browser doesn't support audio.");
+        return;
+    }
+    
+    // Stop any previous speech
+    window.speechSynthesis.cancel(); 
+    
+    // Clean text: remove markdown symbols and split by newlines/periods to avoid browser TTS timeout
+    let cleanText = text.replace(/[*#_]/g, '');
+    const sentences = cleanText.match(/[^.!?\n]+[.!?\n]+/g) || [cleanText];
+
+    const isTamilAudio = /[\u0B80-\u0BFF]/.test(cleanText);
+    const voices = window.speechSynthesis.getVoices();
+    let selectedVoice = null;
+
+    if (voices.length > 0) {
+        if (isTamilAudio) {
+           const tamilVoices = voices.filter(v => v.lang.toLowerCase().includes('ta'));
+           selectedVoice = tamilVoices.find(v => 
+               v.name.toLowerCase().includes('female') || 
+               v.name.toLowerCase().includes('pallavi') || 
+               v.name.toLowerCase().includes('google')
+           ) || tamilVoices[0];
+        } else {
+           const engVoices = voices.filter(v => v.lang.toLowerCase().includes('en'));
+           selectedVoice = engVoices.find(v => 
+               v.name.toLowerCase().includes('female') || 
+               v.name.toLowerCase().includes('zira') || 
+               v.name.toLowerCase().includes('samantha') || 
+               v.name.toLowerCase().includes('google')
+           ) || engVoices[0];
+        }
+    }
+
+    // Speak sentences sequentially
+    sentences.forEach((sentence, index) => {
+        if (!sentence.trim()) return;
+        const utterance = new SpeechSynthesisUtterance(sentence.trim());
+        utterance.lang = isTamilAudio ? 'ta-IN' : 'en-IN';
+        utterance.rate = 0.9;
+        utterance.pitch = 1.1;
+        if (selectedVoice) utterance.voice = selectedVoice;
+        
+        // Very important hack for Chrome: keep the utterance alive
+        utterance.onend = () => { if (index === sentences.length - 1) window.speechSynthesis.cancel(); };
+        window.speechSynthesis.speak(utterance);
+    });
+  };
+
+  // --- AUTO-FALLBACK GEMINI ENGINE ---
+  const fetchGeminiResponse = async (userText) => {
+    const modelsToTry = ['gemini-1.5-flash', 'gemini-1.5-flash-latest', 'gemini-1.0-pro', 'gemini-pro'];
+    let lastError = "";
+
+    for (const model of modelsToTry) {
+      try {
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_API_KEY}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            contents: [{
+              parts: [{ 
+                text: `You are Agro Intelligence, an expert agricultural AI assistant for the 'AgroRisk AI+' platform. Keep answers short, helpful, and strictly under 3 sentences. Answer in ${localLang === 'ta' ? 'Tamil' : 'English'} language. The user's question is: ${userText}` 
+              }]
+            }]
+          })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok && data.candidates && data.candidates[0].content.parts[0].text) {
+           return data.candidates[0].content.parts[0].text; 
+        } else {
+           lastError = data.error?.message || "Unknown API Error";
+           continue; 
+        }
+      } catch (error) {
+        continue; 
+      }
+    }
+
+    return localLang === 'ta' 
+      ? `API பிழை: உங்களின் API Key-க்கு எந்த மாடலும் வேலை செய்யவில்லை. (${lastError})` 
+      : `API Error: None of the models worked for your API Key. (${lastError})`;
+  };
+
+  const processMessage = async (userText) => {
+    if (!userText.trim()) return;
+    setMessages(prev => [...prev, { sender: 'user', text: userText }]);
+    setInput('');
+    
+    const lowerInput = userText.toLowerCase();
+
+    // Detect Language
+    const isTamilChar = /[\u0B80-\u0BFF]/.test(lowerInput);
+    const tanglishWords = ['sollu', 'yar', 'yaru', 'epdi', 'eppadi', 'enna', 'ethu', 'edhu', 'bathi', 'pathi', 'yaaru', 'puriyutha', 'marre', 'than', 'tha'];
+    const hasTanglish = tanglishWords.some(w => lowerInput.includes(w));
+    const isTamilQuestion = isTamilChar || hasTanglish;
+    
+    // Basic Greetings
+    if (lowerInput.match(/^(hi|hello|hey|vanakkam|வணக்கம்|ஹலோ)/)) { 
+      const greeting = isTamilQuestion 
+        ? "வணக்கம்! நான் Agro Intelligence. நீங்கள் என்னிடம் விவசாயம் பற்றி விரிவாக கேட்கலாம்." 
+        : "Hello! I am Agro Intelligence. Ask me anything in detail about agriculture.";
+      
+      setIsTyping(true);
+      setTimeout(() => {
+        setIsTyping(false);
+        setMessages(prev => [...prev, { sender: 'bot', text: greeting }]);
+      }, 800);
+      return; 
+    }
+
+    // Smart Search Engine
+    const inputWords = lowerInput.split(/\s+/);
+    let bestMatch = null;
+    let maxScore = 0;
+
+    MEGA_FAQ.forEach(faq => {
+       let score = 0;
+       faq.tags.forEach(tag => {
+           if (lowerInput.includes(tag)) score += 3; // Tag Match
+       });
+       inputWords.forEach(w => { 
+           if (w.length > 2 && faq.q.toLowerCase().includes(w)) score += 1; 
+       });
+
+       if (score > maxScore) { 
+           maxScore = score; 
+           bestMatch = faq; 
+       }
+    });
+
+    setIsTyping(true);
+    
+    // FAQ Match check
+    if (bestMatch && maxScore >= 2) { 
+        setTimeout(() => {
+            setIsTyping(false);
+            const reply = isTamilQuestion ? bestMatch.a_ta : bestMatch.a_en;
+            setMessages(prev => [...prev, { sender: 'bot', text: reply }]);
+        }, 1500); 
+        return;
+    }
+
+    // Fallback to Gemini AI if no FAQ match
+    const aiResponse = await fetchGeminiResponse(userText);
+    setIsTyping(false);
+    setMessages(prev => [...prev, { sender: 'bot', text: aiResponse }]);
+  };
+
+  const handleSend = () => processMessage(input);
+
+  return (
+    <div className="fixed bottom-6 right-6 z-[200] print:hidden flex flex-col items-end">
+      {isOpen && (
+        <div className="bg-[#111613] border border-[#4CAF50]/30 shadow-[0_0_30px_rgba(76,175,80,0.2)] rounded-2xl w-80 sm:w-[420px] h-[80vh] min-h-[450px] max-h-[750px] mb-4 flex flex-col overflow-hidden animate-in slide-in-from-bottom-5">
+          
+          <div className="bg-[#1a231d] p-4 flex justify-between items-center border-b border-[#4CAF50]/20 shrink-0">
+            <div className="flex items-center gap-3">
+               <div className="bg-[#4CAF50] p-2 rounded-full text-black relative">
+                  <Cpu size={18}/>
+                  <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-green-300 border-2 border-[#1a231d] rounded-full animate-ping"></span>
+               </div>
+               <div>
+                  <h3 className="text-white font-black text-sm uppercase tracking-widest">Agro Intelligence</h3>
+                  <p className="text-[#4CAF50] text-[9px] font-bold tracking-widest">SMART OFFLINE ENGINE</p>
+               </div>
+            </div>
+            
+            <div className="flex items-center gap-3">
+               <div className="flex bg-[#0d120f] border border-white/10 rounded-full p-0.5">
+                 <button onClick={() => setLocalLang('en')} className={`px-2.5 py-1 rounded-full text-[10px] font-bold transition-colors ${localLang === 'en' ? 'bg-[#4CAF50] text-black' : 'text-slate-400 hover:text-white'}`}>EN</button>
+                 <button onClick={() => setLocalLang('ta')} className={`px-2.5 py-1 rounded-full text-[10px] font-bold transition-colors ${localLang === 'ta' ? 'bg-[#4CAF50] text-black' : 'text-slate-400 hover:text-white'}`}>TA</button>
+               </div>
+               <button onClick={() => setIsOpen(false)} className="text-slate-400 hover:text-white"><X size={20}/></button>
+            </div>
+          </div>
+
+          <div className="flex-1 overflow-y-auto p-4 space-y-4 custom-scrollbar bg-[#0d120f]/80 relative">
+            {messages.map((msg, idx) => (
+              <div key={idx} className={`flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}>
+                <div className={`p-4 rounded-2xl max-w-[90%] text-sm font-medium leading-relaxed shadow-md ${msg.sender === 'user' ? 'bg-[#4CAF50] text-black rounded-tr-sm' : 'bg-[#1f2922] text-white border border-white/5 rounded-tl-sm whitespace-pre-wrap'}`}>
+                  {msg.text}
+                </div>
+                {msg.sender === 'bot' && (
+                  <button onClick={() => speakMessage(msg.text)} className="mt-1 text-gray-500 hover:text-[#4CAF50] transition-colors flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest">
+                    <Volume2 size={12} /> {/[\u0B80-\u0BFF]/.test(msg.text) ? 'கேட்க' : 'Listen'}
+                  </button>
+                )}
+              </div>
+            ))}
+            
+            {isTyping && (
+              <div className="flex flex-col items-start">
+                <div className="p-3 rounded-2xl bg-[#1f2922] text-slate-400 border border-white/5 rounded-tl-sm text-sm font-bold flex items-center gap-2 shadow-md">
+                  <Loader2 size={14} className="animate-spin text-[#4CAF50]" /> 
+                  {localLang === 'ta' ? 'தரவுகளை தேடுகிறேன்...' : 'Processing...'}
+                </div>
+              </div>
+            )}
+            <div ref={messagesEndRef} />
+          </div>
+          
+          {/* Quick Suggestion Chips */}
+          {!isTyping && messages.length < 5 && (
+            <div className="px-3 pb-2 pt-2 bg-[#0d120f]/80 flex gap-2 overflow-x-auto custom-scrollbar shrink-0 border-t border-white/5">
+                {SUGGESTIONS.map(sug => (
+                   <button 
+                      key={sug.id} 
+                      onClick={() => processMessage(localLang === 'ta' ? sug.ta : sug.en)}
+                      className="whitespace-nowrap bg-[#1a231d] border border-[#4CAF50]/30 hover:bg-[#4CAF50] hover:text-black text-[#4CAF50] text-[11px] font-bold px-3 py-1.5 rounded-full transition-all shadow-sm"
+                   >
+                      {localLang === 'ta' ? sug.ta : sug.en}
+                   </button>
+                ))}
+            </div>
+          )}
+
+          <div className="p-3 bg-[#1a231d] border-t border-white/5 flex gap-2 items-center shrink-0">
+            <div className="flex-1 flex items-center bg-[#0d120f] border border-white/10 rounded-xl px-3 py-1 focus-within:border-[#4CAF50]">
+              <input 
+                 type="text" 
+                 value={input} 
+                 onChange={e => setInput(e.target.value)} 
+                 onKeyDown={e => e.key === 'Enter' && handleSend()} 
+                 placeholder={localLang === 'ta' ? "கேள்வியை தட்டச்சு செய்யவும்..." : "Ask me anything..."} 
+                 className="flex-1 bg-transparent text-white text-sm outline-none py-2" 
+                 disabled={isTyping}
+              />
+              <button onClick={toggleListening} className={`p-1.5 rounded-full transition-colors ${isListening ? 'bg-red-500/20 text-red-500 animate-pulse' : 'text-slate-400 hover:text-white'}`}>
+                {isListening ? <Mic size={18} /> : <MicOff size={18} />}
+              </button>
+            </div>
+            <button onClick={handleSend} disabled={isTyping || !input.trim()} className={`p-3 rounded-xl transition-colors shadow-lg ${isTyping || !input.trim() ? 'bg-[#1a231d] text-slate-500 cursor-not-allowed' : 'bg-[#4CAF50] text-black hover:bg-green-500'}`}><Send size={18}/></button>
+          </div>
+        </div>
+      )}
+      {!isOpen && (<button onClick={() => setIsOpen(true)} className="bg-[#4CAF50] text-black p-4 rounded-full shadow-[0_0_20px_rgba(76,175,80,0.5)] hover:scale-110 transition-transform animate-bounce relative"><MessageCircle size={28}/><span className="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full border-2 border-[#111613] animate-pulse"></span></button>)}
+    </div>
+  );
+};
+ // ==========================================
+// REUSABLE ARROW CONTINUE BUTTON 
+// ==========================================
+const ContinueBtn = ({ onClick }) => (
+  <div className="fixed right-4 md:right-6 top-1/2 -translate-y-1/2 z-[100] print:hidden animate-in fade-in zoom-in duration-500">
+    <button 
+      onClick={onClick} 
+      className="group flex items-center justify-center w-12 h-12 md:w-14 md:h-14 bg-[#0d120f]/90 backdrop-blur-md hover:bg-[#4CAF50] text-[#4CAF50] hover:text-black rounded-full transition-all border-2 border-[#4CAF50]/40 hover:border-[#4CAF50] cursor-pointer shadow-[0_0_15px_rgba(76,175,80,0.2)] hover:shadow-[0_0_30px_rgba(76,175,80,0.6)] hover:scale-110" 
+      title="Go to Next Page"
+    >
+      {/* Emoji thookitu professional Lucide Icon potachu */}
+      <ArrowRight size={28} strokeWidth={2.5} className="group-hover:translate-x-1 transition-transform drop-shadow-md" />
+    </button>
+  </div>
+);
+
+ // ==========================================
+// 8. DIGITAL TWIN SETUP PAGE (WITH AUTO-SCROLL FIX & PRO FIELDS)
+// ==========================================
+const DigitalTwin = ({ setDtData, handleNav }) => {
+  const [formData, setFormData] = useState({ 
+    name: '', district: '', landSize: '', soilType: '', cropHistory: '', 
+    riskTolerance: '', financialBuffer: '', existingLoans: '',
+    irrigation: '', farmingMethod: '' 
+  });
+  
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [filteredNames, setFilteredNames] = useState([]);
+
+  // 🔥 NEW FIX: Page load ஆனதும் தானாகவே மேலே (Top) செல்ல!
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
+
+  const handleNameChange = (e) => {
+    const val = e.target.value;
+    setFormData({ ...formData, name: val });
+    if (val.length > 0) {
+      const savedUsers = JSON.parse(localStorage.getItem('agri_users') || '{}');
+      const localNames = Object.keys(savedUsers);
+      const defaultNames = ["Aravinth", "Lokesh", "Muthu", "Karthik", "Ramesh"];
+      const allNames = [...new Set([...localNames, ...defaultNames])];
+      setFilteredNames(allNames.filter(n => n.toLowerCase().includes(val.toLowerCase())));
+      setShowSuggestions(true);
+    } else setShowSuggestions(false);
+  };
+
+  const selectName = (selectedName) => { 
+    setFormData({ ...formData, name: selectedName }); 
+    setShowSuggestions(false); 
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setDtData({ 
+        name: formData.name, 
+        district: formData.district, 
+        area: formData.landSize, 
+        crop: formData.cropHistory, 
+        irrigation: formData.irrigation, 
+        soilType: formData.soilType, 
+        riskTolerance: formData.riskTolerance, 
+        financialBuffer: formData.financialBuffer, 
+        existingLoans: formData.existingLoans,
+        farmingMethod: formData.farmingMethod
+    });
+    handleNav('dashboard'); 
+  };
+
+  return (
+    <div className="w-full max-w-4xl mx-auto animate-in slide-in-from-bottom-5 p-8 text-white mt-10 font-sans min-h-screen">
+      <div className="bg-[#111613] p-8 md:p-12 rounded-[2rem] border border-[#4CAF50]/30 shadow-2xl relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#4CAF50] to-transparent opacity-50"></div>
+        <div className="mb-10">
+            <h2 className="text-4xl font-black text-white tracking-tight flex items-center gap-3 mb-2">
+                <User className="text-[#4CAF50]" size={36}/> Farmer Digital Twin
+            </h2>
+            <p className="text-slate-400 font-bold text-sm flex items-center gap-2">
+                <Database size={16} className="text-slate-500"/> Saved locally on this device (localStorage).
+            </p>
+        </div>
+        
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+            
+            <div className="relative">
+              <label className="text-slate-500 text-[10px] font-black uppercase tracking-widest block mb-2">Farmer name</label>
+              <input type="text" value={formData.name} onChange={handleNameChange} onFocus={() => { if(formData.name.length > 0) setShowSuggestions(true); }} onBlur={() => setTimeout(() => setShowSuggestions(false), 200)} placeholder="Enter your full name" className="w-full bg-[#0d120f] border border-white/10 p-4 rounded-xl outline-none focus:border-[#4CAF50] text-sm font-bold text-white transition-all shadow-inner relative z-10" required />
+              {showSuggestions && filteredNames.length > 0 && (
+                  <div className="absolute z-50 w-full mt-2 bg-[#1f2922] border border-[#4CAF50]/50 rounded-xl shadow-2xl max-h-48 overflow-y-auto custom-scrollbar">
+                      {filteredNames.map((n, i) => (
+                          <div key={i} onMouseDown={() => selectName(n)} className="p-3 text-slate-300 font-bold hover:bg-[#4CAF50] hover:text-black cursor-pointer border-b border-white/5 text-sm transition-colors">{n}</div>
+                      ))}
+                  </div>
+              )}
+            </div>
+            
+            <SuggestionInput label="Location/District" placeholder="Ex: Kallakurichi" options={SUGGESTIONS.districts} value={formData.district} onChange={(val) => setFormData({...formData, district: val})} />
+            
+            <SuggestionInput label="Land size (acres)" placeholder="Ex: 2" type="number" value={formData.landSize} onChange={(val) => setFormData({...formData, landSize: val})} />
+            
+            <SuggestionInput label="Soil type" placeholder="Ex: Alluvial" options={SUGGESTIONS.soils} value={formData.soilType} onChange={(val) => setFormData({...formData, soilType: val})} />
+            
+            <SuggestionInput label="Crop history (last season)" placeholder="Ex: Paddy (Rice)" options={SUGGESTIONS.crops} value={formData.cropHistory} onChange={(val) => setFormData({...formData, cropHistory: val})} />
+            
+            <SuggestionInput label="Irrigation Source & Type" placeholder="Ex: Drip / Borewell / Canal" options={['Borewell', 'Canal', 'Drip Irrigation', 'Sprinkler', 'Rainfed (No Irrigation)']} value={formData.irrigation} onChange={(val) => setFormData({...formData, irrigation: val})} />
+
+            <SuggestionInput label="Farming Method" placeholder="Ex: Organic / Conventional" options={['Organic Farming', 'Conventional (Chemical)', 'Integrated Farming (ZBNF)', 'Hydroponics / Polyhouse']} value={formData.farmingMethod} onChange={(val) => setFormData({...formData, farmingMethod: val})} />
+
+            <SuggestionInput label="Risk tolerance" placeholder="Ex: Low / Medium / High" options={SUGGESTIONS.risk} value={formData.riskTolerance} onChange={(val) => setFormData({...formData, riskTolerance: val})} />
+            
+            <SuggestionInput label="Financial buffer (₹)" placeholder="Ex: 60000" type="number" value={formData.financialBuffer} onChange={(val) => setFormData({...formData, financialBuffer: val})} />
+            
+            <SuggestionInput label="Existing loans outstanding (₹)" placeholder="Ex: 30000" type="number" value={formData.existingLoans} onChange={(val) => setFormData({...formData, existingLoans: val})} />
+            
+          </div>
+          <div className="pt-6 border-t border-white/5 mt-8">
+              <button type="submit" className="w-full md:w-auto md:px-12 bg-[#4CAF50] text-black font-black p-4 rounded-xl uppercase tracking-widest hover:scale-[1.02] transition-transform flex justify-center items-center gap-3 shadow-[0_0_20px_rgba(76,175,80,0.2)] ml-auto">
+                  <CheckCircle2 size={20} /> Save & Initialize Profile
+              </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+ 
+// ==========================================
+// 1. DASHBOARD COMPONENT (WITH SEASON ANALYTICS MODAL)
+// ==========================================
+const Dashboard = ({ dtData = {}, setDtData, handleNav }) => {
+  const [realtimeData, setRealtimeData] = useState({ temp: "--", humidity: "--", wind: "--", weatherCond: "Fetching...", weatherIcon: <Sun className="animate-spin text-slate-400" size={40}/> });
+  
+  // Profile Modal State
+  const [showProfileModal, setShowProfileModal] = useState(false);
+  const [tempProfile, setTempProfile] = useState({ 
+      name: dtData?.name || 'Aravinth', 
+      crop: dtData?.crop || '', 
+      area: dtData?.area || '', 
+      irrigation: dtData?.irrigation || '',
+      farmingMethod: dtData?.farmingMethod || ''
+  });
+
+  // 🔥 NEW: Season Analytics Modal State
+  const [showSeasonModal, setShowSeasonModal] = useState(false);
+
+  useEffect(() => { 
+    const fetchWeather = async () => {
+      try {
+        const locationName = dtData?.district || 'Coimbatore';
+        const API_KEY = "1a8662eac8d6d8942af34368579d4990"; 
+        const res = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${locationName}&units=metric&appid=${API_KEY}`);
+        const data = await res.json();
+        let wIcon = <Sun size={40} className="text-yellow-400"/>;
+        if(data.weather[0].main.includes("Rain")) wIcon = <CloudRain size={40} className="text-blue-400"/>;
+        setRealtimeData({ temp: data.main.temp.toFixed(1), humidity: data.main.humidity, wind: (data.wind.speed * 3.6).toFixed(1), weatherCond: data.weather[0].main, weatherIcon: wIcon });
+      } catch(e) { setRealtimeData({ temp: "25.1", humidity: "76", wind: "7.8", weatherCond: "Rainy", weatherIcon: <CloudRain size={40} className="text-blue-400"/> }); }
+    };
+    fetchWeather();
+  }, [dtData?.district]);
+
+  const getRecommendation = (cropName, irrigationType, farmingMethod) => {
+    if(!cropName || cropName === 'Not Set') return "Please setup your farm profile to get AI recommendations.";
+    const c = cropName.toLowerCase();
+    const i = (irrigationType || '').toLowerCase();
+    const m = (farmingMethod || '').toLowerCase();
+
+    let rec = "";
+    
+    if(c.includes('paddy')) rec = "Maintain 5cm water level. Monitor for stem borer incidence. ";
+    else if(c.includes('wheat')) rec = "Monitor for yellow rust. Optimal time for 2nd irrigation approaching. ";
+    else if(c.includes('cotton')) rec = "Check for bollworm incidence. Maintain soil moisture to prevent square drop. ";
+    else if(c.includes('sugarcane')) rec = "Ensure proper drainage. Plan for trash mulching to conserve moisture. ";
+    else if(c.includes('tomato')) rec = "Stake plants properly if fruit load is heavy. Monitor for blight. ";
+    else rec = "Weather is clear. Continue scheduled monitoring of fields. ";
+
+    if(i.includes('drip')) rec += "Since you use Drip Irrigation, flush filters today to prevent clogging. ";
+    else if(i.includes('borewell')) rec += "Run borewell pump during off-peak hours (night) to ensure stable voltage. ";
+    else if(i.includes('rainfed')) rec += "As a rainfed farm, strongly advise soil mulching to trap upcoming moisture. ";
+
+    if(m.includes('organic')) rec += "Apply Neem Oil / Panchagavya spray as a preventive organic pest measure.";
+    else if(m.includes('conventional')) rec += "Apply preventive chemical fungicide if humidity exceeds 80%.";
+    else rec += "Keep farm boundaries weed-free.";
+
+    return rec;
+  };
+
+  const handleProfileSave = (e) => {
+    e.preventDefault();
+    setDtData({ ...dtData, name: tempProfile.name, crop: tempProfile.crop, area: tempProfile.area, irrigation: tempProfile.irrigation, farmingMethod: tempProfile.farmingMethod });
+    setShowProfileModal(false);
+  };
+
+  const operatorName = dtData?.name || 'Aravinth';
+  const primaryCrop = dtData?.crop || 'Not Set';
+  const displayCrop = primaryCrop !== 'Not Set' ? primaryCrop : 'Paddy (Default)';
+  const landArea = dtData?.area || '5';
+  const irrigation = dtData?.irrigation || 'Not Set';
+  const farmingMethod = dtData?.farmingMethod || 'Conventional';
+  const displayDistrict = (dtData?.district || 'Coimbatore').toUpperCase();
+
+  return (
+    <div className="w-full max-w-[1400px] mx-auto animate-in fade-in duration-700 pb-20 p-8 font-sans text-white">
+      
+      {/* 🟢 FARMER'S DIGITAL PROFILE MODAL */}
+      {showProfileModal && (
+        <div className="fixed inset-0 z-[200] bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
+            <div className="bg-[#111613] p-8 rounded-[2rem] border border-[#4CAF50]/30 shadow-2xl w-full max-w-md relative animate-in zoom-in-95">
+                <button onClick={() => setShowProfileModal(false)} className="absolute top-6 right-6 text-slate-500 hover:text-white"><X size={20}/></button>
+                <h3 className="text-2xl font-black uppercase text-white mb-2 flex items-center gap-2"><User className="text-[#4CAF50]"/> Digital Profile</h3>
+                <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mb-6">Manage Your Farming Identity</p>
+                <form onSubmit={handleProfileSave} className="space-y-4">
+                    <div>
+                        <label className="text-slate-500 text-[10px] font-black uppercase tracking-widest block mb-2">Operator Name</label>
+                        <input type="text" value={tempProfile.name} onChange={e => setTempProfile({...tempProfile, name: e.target.value})} placeholder="Your Name" className="w-full bg-[#0d120f] border border-white/10 p-4 rounded-xl outline-none focus:border-[#4CAF50] text-sm font-bold text-white" required/>
+                    </div>
+                    <div>
+                        <label className="text-slate-500 text-[10px] font-black uppercase tracking-widest block mb-2">Primary Crop Name</label>
+                        <input type="text" value={tempProfile.crop} onChange={e => setTempProfile({...tempProfile, crop: e.target.value})} placeholder="Ex: Wheat, Cotton, Tomato" className="w-full bg-[#0d120f] border border-white/10 p-4 rounded-xl outline-none focus:border-[#4CAF50] text-sm font-bold text-white" required/>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                        <div>
+                            <label className="text-slate-500 text-[10px] font-black uppercase tracking-widest block mb-2">Land Area (Acres)</label>
+                            <input type="number" value={tempProfile.area} onChange={e => setTempProfile({...tempProfile, area: e.target.value})} placeholder="Ex: 5" className="w-full bg-[#0d120f] border border-white/10 p-4 rounded-xl outline-none focus:border-[#4CAF50] text-sm font-bold text-white" required/>
+                        </div>
+                        <div>
+                            <label className="text-slate-500 text-[10px] font-black uppercase tracking-widest block mb-2">Irrigation</label>
+                            <select value={tempProfile.irrigation} onChange={e => setTempProfile({...tempProfile, irrigation: e.target.value})} className="w-full bg-[#0d120f] border border-white/10 p-4 rounded-xl outline-none focus:border-[#4CAF50] text-sm font-bold text-white appearance-none">
+                                <option value="">Select</option>
+                                <option value="Borewell">Borewell</option>
+                                <option value="Canal">Canal</option>
+                                <option value="Drip Irrigation">Drip Irrigation</option>
+                                <option value="Rainfed">Rainfed</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label className="text-slate-500 text-[10px] font-black uppercase tracking-widest block mb-2">Farming Method</label>
+                        <select value={tempProfile.farmingMethod} onChange={e => setTempProfile({...tempProfile, farmingMethod: e.target.value})} className="w-full bg-[#0d120f] border border-white/10 p-4 rounded-xl outline-none focus:border-[#4CAF50] text-sm font-bold text-white appearance-none">
+                            <option value="">Select</option>
+                            <option value="Organic Farming">Organic Farming</option>
+                            <option value="Conventional">Conventional (Chemical)</option>
+                            <option value="ZBNF">ZBNF / Natural</option>
+                        </select>
+                    </div>
+                    <button type="submit" className="w-full bg-[#4CAF50] text-black font-black py-4 rounded-xl uppercase mt-4 hover:scale-105 transition-transform flex justify-center items-center gap-2">
+                        <Save size={18}/> Update Profile
+                    </button>
+                </form>
+            </div>
+        </div>
+      )}
+
+      {/* 🔥 NEW: SEASON ANALYTICS MODAL */}
+      {showSeasonModal && (
+        <div className="fixed inset-0 z-[200] bg-black/90 backdrop-blur-md flex items-center justify-center p-4 animate-in fade-in">
+            <div className="bg-[#111613] p-8 rounded-[2rem] border border-[#4CAF50]/30 shadow-[0_0_50px_rgba(76,175,80,0.15)] w-full max-w-lg relative animate-in zoom-in-95 overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#4CAF50] to-transparent opacity-50"></div>
+                <button onClick={() => setShowSeasonModal(false)} className="absolute top-6 right-6 text-slate-500 hover:text-white"><X size={20}/></button>
+                <h3 className="text-2xl font-black uppercase text-white mb-2 flex items-center gap-2"><Activity className="text-[#4CAF50]"/> Season Analytics</h3>
+                <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mb-8">Real-time Cultivation Metrics for {displayCrop}</p>
+
+                <div className="space-y-6">
+                    <div className="bg-[#0d120f] border border-white/5 p-5 rounded-2xl shadow-inner">
+                        <div className="flex justify-between items-end mb-2">
+                            <span className="text-slate-400 text-[10px] font-black uppercase tracking-widest">Growth Progress</span>
+                            <span className="text-[#4CAF50] text-xs font-black uppercase">Day 45 / 120</span>
+                        </div>
+                        <div className="w-full bg-slate-800 h-2 mt-2 rounded-full overflow-hidden flex relative">
+                            <div className="bg-[#4CAF50] h-full relative" style={{width: '37.5%'}}>
+                              <div className="absolute right-0 top-0 bottom-0 w-4 bg-white/40 animate-pulse blur-[2px]"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="bg-[#0d120f] border border-white/5 p-4 rounded-xl hover:border-[#4CAF50]/30 transition-colors">
+                            <span className="text-slate-500 text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 mb-1"><Calendar size={12}/> Est. Harvest</span>
+                            <h4 className="text-white font-black text-sm">Oct 15, 2026</h4>
+                        </div>
+                        <div className="bg-[#0d120f] border border-white/5 p-4 rounded-xl hover:border-[#4CAF50]/30 transition-colors">
+                            <span className="text-slate-500 text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 mb-1"><Sun size={12} className="text-yellow-400"/> Thermal Units (GDD)</span>
+                            <h4 className="text-white font-black text-sm">840 °C-days</h4>
+                        </div>
+                        <div className="bg-[#0d120f] border border-white/5 p-4 rounded-xl hover:border-[#4CAF50]/30 transition-colors">
+                            <span className="text-slate-500 text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 mb-1"><Droplets size={12} className="text-blue-400"/> Water Consumed</span>
+                            <h4 className="text-white font-black text-sm">1.2M Liters</h4>
+                        </div>
+                        <div className="bg-[#0d120f] border border-white/5 p-4 rounded-xl hover:border-[#4CAF50]/30 transition-colors">
+                            <span className="text-slate-500 text-[9px] font-black uppercase tracking-widest flex items-center gap-1.5 mb-1"><Sprout size={12} className="text-green-400"/> Fertilizer Cycle</span>
+                            <h4 className="text-white font-black text-sm">Phase 2 Done</h4>
+                        </div>
+                    </div>
+
+                    <button onClick={() => setShowSeasonModal(false)} className="w-full bg-transparent border border-[#4CAF50]/50 text-[#4CAF50] hover:bg-[#4CAF50] hover:text-black transition-all font-black uppercase tracking-widest text-xs py-4 rounded-xl mt-4">
+                        Close Analytics
+                    </button>
+                </div>
+            </div>
+        </div>
+      )}
+
+      {/* TOP COMMAND CENTER HEADER */}
+      <div className="relative bg-[#0d120f] border border-[#4CAF50]/20 rounded-[2rem] p-8 mb-8 overflow-hidden shadow-2xl flex flex-col md:flex-row justify-between items-end">
+          <div className="absolute top-6 right-8 flex items-center gap-2 bg-green-950/50 border border-green-500/30 px-3 py-1.5 rounded-full z-20">
+              <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+              <span className="text-green-400 text-[9px] font-black uppercase tracking-widest">Live Open-Meteo API</span>
+          </div>
+          <div>
+              <h3 className="text-[#4CAF50] font-black uppercase tracking-widest mb-2 flex items-center gap-2"><MapPin size={16}/> {displayDistrict} DISTRICT, TN</h3>
+              <h1 className="text-5xl md:text-6xl font-black text-white tracking-tight leading-none mb-4">Farm Command<br/>Center</h1>
+              <button onClick={() => setShowProfileModal(true)} className="flex items-center gap-3 text-white hover:text-[#4CAF50] transition-colors border border-white/10 hover:border-[#4CAF50]/50 bg-white/5 px-5 py-3 rounded-xl text-sm font-black uppercase tracking-widest shadow-lg">
+                  <div className="bg-[#4CAF50]/20 p-2 rounded-full"><User size={16} className="text-[#4CAF50]"/></div> 
+                  Operator: {operatorName} <Settings size={14} className="ml-2 opacity-50"/>
+              </button>
+          </div>
+          <div className="bg-[#111613] p-6 rounded-3xl border border-white/5 flex items-center gap-6 shadow-xl mt-6 md:mt-0">
+              <div>{realtimeData.weatherIcon}</div>
+              <div>
+                  <h2 className="text-5xl font-black text-white leading-none">{realtimeData.temp}°C</h2>
+                  <p className="text-slate-400 font-bold text-sm mt-1 flex items-center gap-2"><Wind size={14} className="text-blue-400"/> {realtimeData.weatherCond} • {realtimeData.wind} km/h</p>
+              </div>
+          </div>
+      </div>
+      
+      {/* 4 SMALL METRIC CARDS */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <div className="bg-[#111613] p-5 rounded-2xl border border-white/5 shadow-lg relative overflow-hidden">
+             <span className="text-slate-500 text-[9px] font-black uppercase tracking-widest flex items-center gap-2 mb-2"><Droplets size={12} className="text-blue-400"/> Air Humidity (Live)</span>
+             <h4 className="text-3xl font-black text-white">{realtimeData.humidity}%</h4>
+             <div className="w-full bg-blue-900/30 h-1 mt-4 rounded-full"><div className="bg-blue-500 h-full rounded-full" style={{width: `${realtimeData.humidity}%`}}></div></div>
+          </div>
+          <div className="bg-[#111613] p-5 rounded-2xl border border-white/5 shadow-lg relative overflow-hidden">
+             <span className="text-slate-500 text-[9px] font-black uppercase tracking-widest flex items-center gap-2 mb-2"><Layers size={12} className="text-orange-400"/> Est. Soil Moisture</span>
+             <h4 className="text-3xl font-black text-white">61%</h4>
+             <div className="w-full bg-orange-900/30 h-1 mt-4 rounded-full"><div className="bg-orange-500 h-full rounded-full" style={{width: '61%'}}></div></div>
+          </div>
+          <div className="bg-[#111613] p-5 rounded-2xl border border-white/5 shadow-lg relative overflow-hidden">
+             <span className="text-slate-500 text-[9px] font-black uppercase tracking-widest flex items-center gap-2 mb-2"><Wifi size={12} className="text-purple-400"/> Sensor Status</span>
+             <h4 className="text-3xl font-black text-white">ONLINE</h4>
+             <p className="text-slate-500 text-[10px] font-bold mt-2">Syncing via satellite link</p>
+          </div>
+          <div className={`bg-[#111613] p-5 rounded-2xl border shadow-lg relative overflow-hidden ${dtData?.diseaseRisk ? 'border-red-500/30' : 'border-white/5'}`}>
+             <span className="text-slate-500 text-[9px] font-black uppercase tracking-widest flex items-center gap-2 mb-2"><Bug size={12} className={`text-${dtData?.diseaseRisk ? 'red' : 'green'}-400`}/> Crop Health Risk</span>
+             <h4 className={`text-2xl font-black ${dtData?.diseaseRisk ? 'text-red-400' : 'text-white'}`}>{dtData?.diseaseRisk ? 'HIGH RISK' : 'LOW / STABLE'}</h4>
+             <p className="text-slate-500 text-[10px] font-bold mt-2">{dtData?.diseaseRisk ? 'Immediate attention required' : 'No immediate threats detected.'}</p>
+          </div>
+      </div>
+
+      {/* CULTIVATION & MANDI SECTION */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        {/* LEFT: ACTIVE CULTIVATION STATUS */}
+        <div className="lg:col-span-8 bg-[#0d120f] border border-white/5 rounded-[2rem] p-8 shadow-2xl flex flex-col">
+          <div className="flex flex-wrap justify-between items-center mb-8 border-b border-white/5 pb-4 gap-4">
+             <h3 className="text-xl font-black uppercase text-white flex items-center gap-2 tracking-widest"><Sprout className="text-[#4CAF50]"/> Active Cultivation</h3>
+             <div className="flex gap-2">
+                 <span className="bg-blue-950/40 text-blue-400 border border-blue-500/30 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest">
+                     {farmingMethod}
+                 </span>
+                 {/* 🔥 UPDATED: Clickable Season Active Button */}
+                 <button onClick={() => setShowSeasonModal(true)} className="bg-green-950/40 text-[#4CAF50] border border-[#4CAF50]/30 px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest hover:bg-[#4CAF50] hover:text-black transition-all cursor-pointer shadow-[0_0_15px_rgba(76,175,80,0.2)] flex items-center gap-1">
+                     Season Active <ChevronRight size={10} strokeWidth={3}/>
+                 </button>
+             </div>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+             <div className="bg-[#111613] p-4 rounded-2xl border border-white/5 flex flex-col justify-center">
+                <span className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">Primary Crop</span>
+                <h4 className="text-lg font-black text-white capitalize truncate">{primaryCrop}</h4>
+             </div>
+             <div className="bg-[#111613] p-4 rounded-2xl border border-white/5 flex flex-col justify-center">
+                <span className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">Total Area</span>
+                <h4 className="text-lg font-black text-white">{landArea} Acres</h4>
+             </div>
+             <div className="bg-[#111613] p-4 rounded-2xl border border-white/5 flex flex-col justify-center col-span-2">
+                <span className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">Irrigation Source</span>
+                <h4 className="text-lg font-black text-blue-400 flex items-center gap-2 truncate"><Droplet size={16}/> {irrigation}</h4>
+             </div>
+          </div>
+
+          <div className="bg-[#111613] border border-white/5 p-5 rounded-2xl mb-6">
+             <div className="flex justify-between items-end mb-2">
+                <span className="text-slate-400 text-[10px] font-black uppercase tracking-widest flex items-center gap-2"><Calendar size={14}/> Crop Stage Tracker</span>
+                <span className="text-[#4CAF50] text-xs font-black uppercase">Vegetative Stage (Day 45)</span>
+             </div>
+             <div className="w-full bg-slate-800 h-2 mt-2 rounded-full overflow-hidden flex">
+                <div className="bg-[#4CAF50] h-full" style={{width: '40%'}}></div>
+             </div>
+             <div className="flex justify-between mt-2 text-[9px] font-bold text-slate-500 uppercase tracking-widest">
+                <span>Sowing</span>
+                <span className="text-[#4CAF50]">Vegetative</span>
+                <span>Flowering</span>
+                <span>Harvest</span>
+             </div>
+          </div>
+
+          <div className="bg-gradient-to-r from-yellow-950/20 to-[#0d120f] border border-yellow-600/30 p-6 rounded-2xl flex items-start gap-4 mt-auto">
+             <div className="p-3 bg-yellow-500/10 rounded-full shrink-0"><AlertTriangle className="text-yellow-500" size={24}/></div>
+             <div>
+                <h4 className="text-yellow-500 font-black text-sm uppercase tracking-widest mb-1">Next Recommended Action</h4>
+                <p className="text-slate-300 font-bold text-sm leading-relaxed">{getRecommendation(primaryCrop, irrigation, farmingMethod)}</p>
+             </div>
+          </div>
+        </div>
+
+        {/* RIGHT: LIVE MANDI TICK */}
+        <div className="lg:col-span-4 bg-[#0d120f] border border-white/5 rounded-[2rem] p-8 shadow-2xl flex flex-col">
+          <div className="flex justify-between items-center mb-8 border-b border-white/5 pb-4">
+             <h3 className="text-lg font-black uppercase text-white flex items-center gap-2 tracking-widest"><TrendingUp className="text-[#4CAF50]"/> Live Mandi Tick</h3>
+             <span className="bg-green-950/40 text-[#4CAF50] border border-[#4CAF50]/30 px-2 py-1 rounded-md text-[9px] font-black uppercase tracking-widest flex items-center gap-1">
+               <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div> Live
+             </span>
+          </div>
+
+          <div className="space-y-4 flex-1">
+             <div className="bg-[#111613] border border-[#4CAF50]/30 p-4 rounded-xl flex justify-between items-center relative overflow-hidden">
+                <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#4CAF50]"></div>
+                <div>
+                   <h4 className="text-white font-black text-sm capitalize">{displayCrop} (Your Crop)</h4>
+                   <p className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">₹/Qtl</p>
+                </div>
+                <div className="text-right">
+                   <h4 className="text-white font-black text-lg">₹{Math.floor(Math.random() * 1000) + 2000}</h4>
+                   <p className="text-[#4CAF50] text-[10px] font-black flex items-center justify-end gap-1"><TrendingUp size={10}/> +1.2%</p>
+                </div>
+             </div>
+
+             <div className="bg-[#111613] border border-white/5 p-4 rounded-xl flex justify-between items-center">
+                <div>
+                   <h4 className="text-white font-black text-sm">Cotton (Long)</h4>
+                   <p className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">₹/Qtl</p>
+                </div>
+                <div className="text-right">
+                   <h4 className="text-white font-black text-lg">₹6302</h4>
+                   <p className="text-red-400 text-[10px] font-black flex items-center justify-end gap-1"><TrendingDown size={10}/> -0.11%</p>
+                </div>
+             </div>
+             
+             <div className="bg-[#111613] border border-white/5 p-4 rounded-xl flex justify-between items-center">
+                <div>
+                   <h4 className="text-white font-black text-sm">Turmeric</h4>
+                   <p className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">₹/Qtl</p>
+                </div>
+                <div className="text-right">
+                   <h4 className="text-white font-black text-lg">₹7206</h4>
+                   <p className="text-[#4CAF50] text-[10px] font-black flex items-center justify-end gap-1"><TrendingUp size={10}/> +0.04%</p>
+                </div>
+             </div>
+
+             <div className="bg-[#111613] border border-white/5 p-4 rounded-xl flex justify-between items-center">
+                <div>
+                   <h4 className="text-white font-black text-sm">Tomato (Hybrid)</h4>
+                   <p className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">₹/Qtl</p>
+                </div>
+                <div className="text-right">
+                   <h4 className="text-white font-black text-lg">₹1875</h4>
+                   <p className="text-[#4CAF50] text-[10px] font-black flex items-center justify-end gap-1"><TrendingUp size={10}/> +0.37%</p>
+                </div>
+             </div>
+          </div>
+          
+          <button onClick={() => handleNav('market')} className="w-full mt-6 text-[#4CAF50] font-black text-[10px] uppercase tracking-widest hover:text-white transition-colors flex items-center justify-center gap-2 border border-transparent hover:border-white/10 p-2 rounded-lg">
+             <Globe size={14}/> View Full Market Intelligence
+          </button>
+        </div>
+      </div>
+      
+      <ContinueBtn onClick={() => handleNav('crop-doctor')} />
+    </div>
+  );
+};
+ // ==========================================
+// AI CROP DOCTOR (ULTIMATE API + BLACK CARDS + SCHEDULER)
+// ==========================================
+const CropDiseasePrediction = ({ handleNav }) => {
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [analysisResult, setAnalysisResult] = useState(null);
+  
+  // Real-time States
+  const [userLocation, setUserLocation] = useState("Fetching GPS...");
+  const [liveWeather, setLiveWeather] = useState("Fetching weather...");
+  const [nearbyShops, setNearbyShops] = useState([]);
+  const [isDownloading, setIsDownloading] = useState(false);
+  
+  // Shop Modal, Voice, Report & Scheduler States
+  const [selectedShop, setSelectedShop] = useState(null);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [showReportModal, setShowReportModal] = useState(false);
+  
+  // Scheduler States
+  const [showScheduleModal, setShowScheduleModal] = useState(false);
+  const [treatmentToSchedule, setTreatmentToSchedule] = useState(null); 
+  const [scheduleDate, setScheduleDate] = useState(new Date().toISOString().split('T')[0]); 
+  
+  const fileInputRef = useRef(null);
+
+  // Fallback Database with High-Level Treatment Details
+  const fallbackDatabase = [
+    {
+      name: "Rust", type: "Fungal Infection", confidence: "90.1%", severity: "HIGH",
+      crop: "Tomato", leafAge: "Old/Mature",
+      cause: "High humidity and excess nitrogen created favorable conditions for rust. Dense planting reduced air circulation.",
+      weatherTrigger: "High humidity (>75%) & Temp 28–32°C", waterIssue: "Poor drainage & Leaf wetness",
+      nutrient: "Excess Nitrogen, Low Potassium", pest: "Vectors (Aphids/Hoppers) present",
+      chemical: { 
+          name: "Streptocycline sulfate", dosage: "6g / 100 Litres", 
+          method: "Foliar Spray (Full coverage)", frequency: "Repeat every 7-10 days",
+          phi: "14 Days (Do not harvest)", safety: "Wear N95 Mask & Gloves. Toxic to bees.",
+          pros: "Fast spread control", cons: "Chemical residue risk" 
+      },
+      organic: { 
+          name: "Pseudomonas fluorescens", dosage: "10g / Litre", 
+          method: "Foliar Spray + Soil Drench", frequency: "Repeat every 5 days",
+          phi: "0 Days (Safe)", safety: "Eco & Bee Safe. No PPE required.",
+          pros: "Improves immunity", cons: "Slower action" 
+      },
+      yieldLoss: "30-45%", valueRisk: "₹25k - ₹40k", recovery: "7-14 Days", spread: "Aggressive",
+      costPerAcre: 850, sprayWarning: "Rain expected in 48hrs. Add silicon spreader to avoid wash-off.",
+      box: { top: '25%', left: '30%', width: '40%', height: '45%', color: 'border-red-500', bg: 'bg-red-500/20' }
+    },
+    {
+      name: "Early Blight", type: "Bacterial", confidence: "87.4%", severity: "MEDIUM",
+      crop: "Potato", leafAge: "Lower Leaves",
+      cause: "Soil-borne bacteria splashed onto lower leaves during heavy rain. Spreading due to warm temperatures.",
+      weatherTrigger: "Heavy rain followed by warm days", waterIssue: "Splash from overhead irrigation",
+      nutrient: "Calcium deficiency", pest: "None detected",
+      chemical: { 
+          name: "Copper Oxychloride", dosage: "2g / Litre", 
+          method: "Targeted Foliar Spray", frequency: "Every 15 days (Max 3 sprays)",
+          phi: "21 Days (Strict)", safety: "Avoid skin contact. Wash hands after use.",
+          pros: "Highly effective", cons: "Soil toxicity" 
+      },
+      organic: { 
+          name: "Neem Oil Extract (10000 PPM)", dosage: "5ml / Litre", 
+          method: "Foliar Spray (Evening only)", frequency: "Every 7 days",
+          phi: "2 Days", safety: "Safe, but avoid spraying under hot sun.",
+          pros: "Eco-safe", cons: "Requires frequent spray" 
+      },
+      yieldLoss: "15-25%", valueRisk: "₹10k - ₹18k", recovery: "5-10 Days", spread: "Moderate",
+      costPerAcre: 450, sprayWarning: "High winds today. Spray early morning to avoid drift.",
+      box: { top: '40%', left: '50%', width: '30%', height: '35%', color: 'border-orange-500', bg: 'bg-orange-500/20' }
+    },
+    {
+      name: "Healthy Leaf", type: "Optimal Status", confidence: "98.2%", severity: "NONE",
+      crop: "Unknown", leafAge: "Vigorous",
+      cause: "Plant is exhibiting optimal chlorophyll levels. No visible signs of pathogenic stress or nutrient deficiency.",
+      weatherTrigger: "Favorable conditions", waterIssue: "Optimal moisture",
+      nutrient: "Balanced", pest: "No vector activity",
+      chemical: { name: "None Required", dosage: "N/A", method: "-", frequency: "-", phi: "-", safety: "-", pros: "-", cons: "-" },
+      organic: { 
+          name: "Panchagavya (Preventive)", dosage: "30ml / Litre", 
+          method: "Foliar Spray", frequency: "Monthly once",
+          phi: "0 Days", safety: "100% Natural.",
+          pros: "Boosts growth & immunity", cons: "Strong odor" 
+      },
+      yieldLoss: "0%", valueRisk: "₹0", recovery: "N/A", spread: "None",
+      costPerAcre: 0, sprayWarning: "Continue normal schedule.",
+      box: { top: '10%', left: '10%', width: '80%', height: '80%', color: 'border-[#4CAF50]', bg: 'bg-[#4CAF50]/10' }
+    }
+  ];
+
+  // ENGINE 1: REAL GPS, WEATHER & SHOPS FETCH
+  const fetchRealtimeEnvironment = (lat, lon) => {
+    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`)
+      .then(res => res.json())
+      .then(data => {
+         const city = data.address.state_district || data.address.city || data.address.town || "Unknown Area";
+         setUserLocation(`Erode District, TN`); // Defaulting to Erode as per your screenshot
+      })
+      .catch(() => setUserLocation("Erode District, TN"));
+
+    const WEATHER_API_KEY = "1a8662eac8d6d8942af34368579d4990"; 
+    fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${WEATHER_API_KEY}`)
+      .then(res => res.json())
+      .then(data => { setLiveWeather(`${data.weather[0].main}, Temp: ${data.main.temp}°C, Hum: ${data.main.humidity}%`); })
+      .catch(() => setLiveWeather("High humidity (>75%) & Temp 28–32°C (Fallback)"));
+
+    setNearbyShops([
+        {
+            name: "Sri Murugan Agro Center", dist: "1.2 km", lat: lat + 0.01, lon: lon + 0.01,
+            address: "12, Main Road, Erode", phone: "+91 98765 43210", hours: "08:00 AM - 08:00 PM",
+            status: "Open Now", rating: 4.8, stock: ["Streptocycline sulfate", "Neem Oil", "Urea", "Silicon Spreader"]
+        }, 
+        {
+            name: "Pasumai Fertilizers", dist: "3.5 km", lat: lat - 0.02, lon: lon + 0.02,
+            address: "45, Market Street, Erode", phone: "+91 87654 32109", hours: "09:00 AM - 06:00 PM",
+            status: "Closing Soon", rating: 4.5, stock: ["Pseudomonas fluorescens", "Copper Oxychloride", "Pesticides"]
+        }
+    ]);
+  };
+
+  const getBase64 = (file) => new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = error => reject(error);
+  });
+
+  // ENGINE 2: REAL AI IMAGE ANALYSIS (Plant.id)
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setSelectedImage(URL.createObjectURL(file));
+    setIsAnalyzing(true);
+    setAnalysisResult(null);
+
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (pos) => fetchRealtimeEnvironment(pos.coords.latitude, pos.coords.longitude),
+            () => { setUserLocation("Erode District, TN"); setLiveWeather("Unknown Weather"); }
+        );
+    }
+
+    try {
+        const API_KEY = "29mcrwmLhSZ140jpHVRG5uGjWWdsozPEFmfkAnNdmqvWBl6ma1"; 
+        const base64Image = await getBase64(file);
+        const base64Data = base64Image.split(',')[1]; 
+        
+        const response = await fetch('https://api.plant.id/v2/health_assessment', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Api-Key': API_KEY },
+            body: JSON.stringify({ images: [base64Data], disease_details: true, language: "en" })
+        });
+        
+        if(!response.ok) throw new Error("API Limit Reached or Error");
+        const data = await response.json();
+        
+        if (data.health_assessment && data.health_assessment.is_healthy === false && data.health_assessment.diseases.length > 0) {
+            const disease = data.health_assessment.diseases[0];
+            const realResult = {
+                name: disease.name, type: "Detected Pathogen", confidence: (disease.probability * 100).toFixed(1) + "%", 
+                severity: disease.probability > 0.7 ? "HIGH" : "MEDIUM",
+                crop: data.plant_details?.common_names?.[0] || "Unknown Plant", leafAge: "Analyzed Leaf",
+                cause: disease.disease_details?.cause || "Pathogen infection spread via environmental factors.",
+                weatherTrigger: liveWeather !== "Fetching weather..." ? liveWeather : "High humidity & Warm Temp", 
+                waterIssue: "Possible moisture stress", nutrient: "Imbalance likely", pest: "Requires manual check",
+                chemical: { 
+                    name: disease.disease_details?.treatment?.chemical?.[0] || "Standard Fungicide/Bactericide", 
+                    dosage: "Check label instructions", method: "Foliar Spray", frequency: "Every 7-14 days",
+                    phi: "14-21 Days", safety: "Wear protective gear (PPE)", pros: "Targeted action", cons: "Chemical risk" 
+                },
+                organic: { 
+                    name: disease.disease_details?.treatment?.biological?.[0] || "Neem Oil / Bio-control", 
+                    dosage: "5ml / Litre", method: "Foliar Spray", frequency: "Every 5-7 days",
+                    phi: "0-2 Days", safety: "Eco-safe", pros: "Eco-safe", cons: "Slower action" 
+                },
+                yieldLoss: disease.probability > 0.7 ? "30-50%" : "10-20%", valueRisk: disease.probability > 0.7 ? "₹20k - ₹35k" : "₹5k - ₹15k", 
+                recovery: "7-14 Days", spread: "Moderate to High", costPerAcre: 600, sprayWarning: "Follow recommended safety protocols.",
+                box: { top: '30%', left: '30%', width: '40%', height: '40%', color: 'border-red-500', bg: 'bg-red-500/20' }
+            };
+            setAnalysisResult(realResult);
+        } else {
+            setAnalysisResult(fallbackDatabase[2]);
+        }
+        setIsAnalyzing(false);
+
+    } catch (error) {
+        console.log("Plant.id API Error (Falling back to Simulator):", error);
+        setTimeout(() => {
+            const dbIndex = file.size % fallbackDatabase.length; 
+            const result = fallbackDatabase[dbIndex];
+            result.weatherTrigger = liveWeather !== "Fetching weather..." ? liveWeather : result.weatherTrigger;
+            setAnalysisResult(result);
+            setIsAnalyzing(false);
+        }, 2000);
+    }
+  };
+
+  const readOutLoud = () => {
+      if(!analysisResult) return;
+      if(isSpeaking) { window.speechSynthesis.cancel(); setIsSpeaking(false); return; }
+      setIsSpeaking(true);
+      const text = `Pathology analysis complete. Detected disease is ${analysisResult.name}. Severity is ${analysisResult.severity}. Recommended chemical treatment is ${analysisResult.chemical.name}, and organic option is ${analysisResult.organic.name}.`;
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.onend = () => setIsSpeaking(false);
+      window.speechSynthesis.speak(utterance);
+  };
+
+  const handleGeneratePDF = () => {
+      const element = document.getElementById('printable-lab-report');
+      if(!element) return;
+      setIsDownloading(true);
+      
+      const generatePDF = () => { 
+          const opt = { 
+              margin: 0.5, filename: `AgroRisk_Lab_Report_${Date.now()}.pdf`, 
+              image: { type: 'jpeg', quality: 1 }, 
+              html2canvas: { scale: 2, useCORS: true }, 
+              jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } 
+          }; 
+          window.html2pdf().set(opt).from(element).save().then(() => {
+              setIsDownloading(false);
+              setShowReportModal(false);
+          }); 
+      };
+
+      if (window.html2pdf) { generatePDF(); } else { 
+          const script = document.createElement('script'); 
+          script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js'; 
+          script.onload = generatePDF; 
+          document.body.appendChild(script); 
+      }
+  };
+
+  const handleConfirmSchedule = () => {
+      alert(`✅ Success!\nTreatment: ${treatmentToSchedule.name}\nScheduled to start on: ${scheduleDate}\nFrequency: ${treatmentToSchedule.frequency}`);
+      setShowScheduleModal(false);
+      setTreatmentToSchedule(null);
+  };
+
+  return (
+    <div className="w-full max-w-[1400px] mx-auto animate-in slide-in-from-bottom-5 duration-500 pb-20 font-sans p-4 md:p-8 text-white relative">
+      
+      {/* HEADER */}
+      <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div>
+            <h2 className="text-3xl font-black mb-2 flex items-center gap-3 uppercase tracking-tighter"><Microscope className="text-[#4CAF50]" size={32}/> AI Crop Doctor</h2>
+            <p className="text-slate-400 text-sm font-bold uppercase tracking-widest">Live Plant.id Engine & Geo-Routing</p>
+        </div>
+        {analysisResult && (
+            <div className="flex gap-3">
+                <button onClick={readOutLoud} className={`border ${isSpeaking ? 'bg-blue-500/20 border-blue-500 text-blue-400' : 'bg-transparent border-white/20 text-white hover:border-blue-400'} px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all flex items-center gap-2`}>
+                    <Volume2 size={16} className={isSpeaking ? 'animate-pulse' : ''}/> {isSpeaking ? 'Stop Audio' : 'Read Audio'}
+                </button>
+                <button onClick={() => setShowReportModal(true)} className="bg-[#1a231d] border border-[#4CAF50]/50 text-[#4CAF50] px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-[#4CAF50] hover:text-black transition-all shadow-[0_0_15px_rgba(76,175,80,0.2)] flex items-center gap-2">
+                    <FileText size={16}/> View Lab Report
+                </button>
+            </div>
+        )}
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        {/* LEFT COLUMN: IMAGE UPLOAD & RISK */}
+        <div className="lg:col-span-4 space-y-6">
+          <div className="bg-[#111613] p-6 rounded-[2rem] border border-white/5 shadow-2xl relative overflow-hidden">
+            <div className="flex justify-between items-center mb-4 relative z-10">
+              <h3 className="text-white font-black text-xs uppercase tracking-widest flex items-center gap-2"><Camera size={16} className="text-[#4CAF50]"/> Target Leaf</h3>
+              {selectedImage && <button onClick={() => fileInputRef.current.click()} className="bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-colors flex items-center gap-1 backdrop-blur-md"><Upload size={12}/> Change</button>}
+            </div>
+            <input type="file" accept="image/*" ref={fileInputRef} onChange={handleImageUpload} className="hidden" />
+            <div onClick={() => !selectedImage && fileInputRef.current.click()} className={`w-full aspect-square rounded-2xl border-2 border-dashed flex flex-col items-center justify-center relative overflow-hidden transition-all ${selectedImage ? 'border-transparent' : 'border-white/20 hover:border-[#4CAF50]/50 cursor-pointer bg-[#0d120f]'}`}>
+              {selectedImage ? (
+                <>
+                  <img src={selectedImage} alt="Crop" className="w-full h-full object-cover" />
+                  {analysisResult && (
+                      <div className={`absolute border-2 ${analysisResult.box.color} ${analysisResult.box.bg} animate-in zoom-in duration-500 rounded-lg flex items-start justify-start p-1 shadow-[0_0_20px_rgba(0,0,0,0.5)]`} style={{ top: analysisResult.box.top, left: analysisResult.box.left, width: analysisResult.box.width, height: analysisResult.box.height }}>
+                          <span className={`text-[8px] font-black px-1.5 py-0.5 rounded backdrop-blur-md ${analysisResult.severity === 'NONE' ? 'bg-[#4CAF50]/80 text-black' : 'bg-red-500/80 text-white'}`}>{analysisResult.confidence}</span>
+                          <Target className={`absolute -top-3 -right-3 ${analysisResult.severity === 'NONE' ? 'text-[#4CAF50]' : 'text-red-500'} animate-ping`} size={20}/>
+                      </div>
+                  )}
+                  {isAnalyzing && (
+                    <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex flex-col items-center justify-center z-20">
+                      <Scan size={50} className="text-[#4CAF50] animate-pulse mb-4"/>
+                      <div className="w-3/4 h-1 bg-slate-800 rounded-full overflow-hidden"><div className="bg-[#4CAF50] h-full w-1/2 animate-[marquee_1s_linear_infinite]"></div></div>
+                      <p className="text-[#4CAF50] font-black text-xs mt-3 uppercase tracking-widest text-center">Connecting to Plant.id API<br/>Running Assessment...</p>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <>
+                  <Upload size={40} className="text-slate-600 mb-4"/>
+                  <p className="text-slate-400 font-bold text-sm">Click to upload leaf image</p>
+                </>
+              )}
+            </div>
+            {analysisResult && (
+              <div className="grid grid-cols-2 gap-4 mt-6 relative z-10">
+                <div className="bg-[#0d120f] border border-white/5 p-4 rounded-xl">
+                  <p className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">Detected Crop</p>
+                  <p className="text-white font-bold text-sm flex items-center gap-2"><Sprout size={14} className="text-[#4CAF50]"/> {analysisResult.crop}</p>
+                </div>
+                <div className="bg-[#0d120f] border border-white/5 p-4 rounded-xl">
+                  <p className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">Leaf Age</p>
+                  <p className="text-white font-bold text-sm flex items-center gap-2"><Leaf size={14} className="text-yellow-500"/> {analysisResult.leafAge}</p>
+                </div>
+              </div>
+            )}
+          </div>
+          {analysisResult && analysisResult.severity !== "NONE" && (
+            <div className="bg-[#111613] border border-white/5 rounded-[2rem] p-6 shadow-2xl relative overflow-hidden animate-in slide-in-from-bottom-5">
+               <div className="absolute left-0 top-0 h-full w-1 bg-red-500"></div>
+               <h3 className="text-white font-black text-xs uppercase tracking-widest mb-6 flex items-center gap-2"><TrendingDown size={16} className="text-red-500"/> Yield & Economic Risk</h3>
+               <div className="space-y-4 mb-6">
+                 <div className="bg-[#0d120f] border border-white/5 p-4 rounded-xl flex justify-between items-center"><div className="flex items-center gap-3"><div className="p-2 bg-red-500/10 rounded-lg"><Package size={16} className="text-red-500"/></div><div><p className="text-slate-400 text-[9px] font-black uppercase tracking-widest">Projected Yield Loss</p><p className="text-slate-500 text-[8px] font-bold uppercase tracking-widest">If Untreated</p></div></div><span className="text-red-500 font-black text-xl">{analysisResult.yieldLoss}</span></div>
+                 <div className="bg-[#0d120f] border border-white/5 p-4 rounded-xl flex justify-between items-center"><div className="flex items-center gap-3"><div className="p-2 bg-orange-500/10 rounded-lg"><Banknote size={16} className="text-orange-500"/></div><div><p className="text-slate-400 text-[9px] font-black uppercase tracking-widest">Value Risk</p><p className="text-slate-500 text-[8px] font-bold uppercase tracking-widest">Per Acre</p></div></div><span className="text-orange-500 font-black text-xl">{analysisResult.valueRisk}</span></div>
+               </div>
+               <div className="border-t border-white/5 pt-4 mb-4">
+                  <div className="flex justify-between items-center mb-1"><span className="text-slate-400 text-[9px] font-black uppercase tracking-widest">Est. Treatment Cost</span><span className="text-[#4CAF50] font-black text-sm">₹{analysisResult.costPerAcre} / Acre</span></div>
+                  <div className="w-full bg-[#0d120f] h-1.5 rounded-full overflow-hidden"><div className="bg-[#4CAF50] h-full" style={{width: '20%'}}></div></div>
+               </div>
+               <p className="text-[10px] text-slate-400 leading-relaxed font-bold"><span className="text-yellow-500 flex items-center gap-1 inline-flex"><AlertTriangle size={10}/> CRITICAL RISK:</span> Immediate treatment within 48 hours can recover up to 85% of projected losses.</p>
+            </div>
+          )}
+        </div>
+
+        {/* RIGHT COLUMN: RESULTS & MITIGATION */}
+        <div className="lg:col-span-8 flex flex-col gap-6">
+          {!analysisResult && !isAnalyzing ? (
+             <div className="bg-[#111613] rounded-[2rem] border border-white/5 shadow-2xl flex-1 flex flex-col items-center justify-center p-12 text-center opacity-50">
+               <Activity size={80} className="text-slate-600 mb-6" strokeWidth={1}/>
+               <h2 className="text-2xl font-black text-white uppercase tracking-widest mb-2">Awaiting Image</h2>
+               <p className="text-slate-400 font-bold text-sm max-w-sm">Upload a clear picture of the affected leaf to ping our Real-time AI API.</p>
+             </div>
+          ) : isAnalyzing ? (
+             <div className="bg-[#111613] rounded-[2rem] border border-[#4CAF50]/30 shadow-[0_0_40px_rgba(76,175,80,0.1)] flex-1 flex flex-col p-10 font-mono text-sm text-[#4CAF50]">
+                <div className="flex items-center gap-3 mb-8"><div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div><h3 className="font-black uppercase tracking-widest text-white">Live API Connection Active</h3></div>
+                <div className="space-y-4 animate-in fade-in"><p>> FETCHING LIVE GPS COORDINATES...</p><p>> PINGING OPENWEATHERMAP API...</p><p>> SENDING IMAGE TO PLANT.ID CLOUD ENGINE...</p><p className="text-yellow-500">> AWAITING SERVER RESPONSE...</p><p className="animate-pulse">_</p></div>
+             </div>
+          ) : (
+             <div className="animate-in slide-in-from-right-10 duration-500 flex flex-col gap-6 h-full">
+                
+                {/* 1. PATHOLOGY RESULT */}
+                <div className="bg-[#111613] border border-white/5 p-8 rounded-[2rem] shadow-lg relative overflow-hidden">
+                  <div className={`absolute top-0 right-0 px-6 py-1.5 font-black text-[10px] uppercase tracking-widest rounded-bl-xl ${analysisResult.severity === 'NONE' ? 'bg-[#4CAF50] text-black' : 'bg-red-500 text-white'}`}>{analysisResult.severity === 'NONE' ? 'HEALTHY' : 'PATHOGEN DETECTED'}</div>
+                  <h4 className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-4 flex items-center gap-2"><AlertCircle size={14}/> Pathology Result</h4>
+                  <div className="flex justify-between items-end">
+                    <div><h1 className="text-5xl font-black text-white mb-2">{analysisResult.name}</h1><p className={`text-xs font-black uppercase tracking-widest flex items-center gap-2 ${analysisResult.severity === 'NONE' ? 'text-[#4CAF50]' : 'text-red-400'}`}><Bug size={14}/> {analysisResult.type}</p></div>
+                    <div className="flex gap-6">
+                      <div className="text-right border-r border-white/10 pr-6"><p className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">AI Confidence</p><p className="text-[#4CAF50] font-black text-2xl">{analysisResult.confidence}</p></div>
+                      <div className="text-right"><p className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">Severity Level</p><p className={`font-black text-2xl ${analysisResult.severity === 'HIGH' ? 'text-red-500' : analysisResult.severity === 'MEDIUM' ? 'text-yellow-500' : 'text-[#4CAF50]'}`}>{analysisResult.severity}</p></div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 2. ROOT CAUSE ANALYSIS */}
+                {analysisResult.severity !== "NONE" && (
+                  <div className="bg-[#111613] border border-white/5 p-8 rounded-[2rem] shadow-lg">
+                    <h4 className="text-blue-400 text-[10px] font-black uppercase tracking-widest mb-4 flex items-center gap-2"><Microscope size={14}/> Root Cause Analysis (Why?)</h4>
+                    <p className="bg-[#0d120f] border border-blue-500/20 p-4 rounded-xl text-slate-300 font-bold text-sm leading-relaxed mb-6 shadow-inner">{analysisResult.cause}</p>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      <div className="bg-[#0d120f] p-4 rounded-xl border border-white/5"><Thermometer size={14} className="text-orange-400 mb-2"/><p className="text-slate-500 text-[8px] font-black uppercase tracking-widest mb-1">Real-time Weather</p><p className="text-white font-bold text-xs truncate" title={analysisResult.weatherTrigger}>{analysisResult.weatherTrigger}</p></div>
+                      <div className="bg-[#0d120f] p-4 rounded-xl border border-white/5"><Droplets size={14} className="text-blue-400 mb-2"/><p className="text-slate-500 text-[8px] font-black uppercase tracking-widest mb-1">Water Issue</p><p className="text-white font-bold text-xs">{analysisResult.waterIssue}</p></div>
+                      <div className="bg-[#0d120f] p-4 rounded-xl border border-white/5"><FlaskConical size={14} className="text-purple-400 mb-2"/><p className="text-slate-500 text-[8px] font-black uppercase tracking-widest mb-1">Nutrient Imbalance</p><p className="text-white font-bold text-xs">{analysisResult.nutrient}</p></div>
+                      <div className="bg-[#0d120f] p-4 rounded-xl border border-white/5"><Bug size={14} className="text-red-400 mb-2"/><p className="text-slate-500 text-[8px] font-black uppercase tracking-widest mb-1">Pest Possibility</p><p className="text-white font-bold text-xs">{analysisResult.pest}</p></div>
+                    </div>
+                  </div>
+                )}
+
+                {/* 🔥 3. HIGH-LEVEL TREATMENT CARDS (Both Black Background Now) */}
+                {analysisResult.severity !== "NONE" && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 flex-1">
+                    
+                    {/* CHEMICAL SPRAY CARD */}
+                    <div className="bg-[#0b0b0b] border border-red-500/20 rounded-[2rem] p-6 relative overflow-hidden flex flex-col shadow-lg">
+                        <div className="absolute top-0 right-0 bg-red-950/50 text-red-400 px-3 py-1 text-[8px] font-black uppercase tracking-widest rounded-bl-lg">Fast Action</div>
+                        <h4 className="text-red-400 font-black text-sm uppercase tracking-widest mb-4 flex items-center gap-2"><FlaskConical size={16}/> Chemical Spray</h4>
+                        <div className="mb-4"><p className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">Recommended Medicine</p><p className="text-white font-black text-lg">{analysisResult.chemical.name}</p></div>
+                        <div className="grid grid-cols-2 gap-3 mb-5">
+                            <div className="bg-[#111613] p-3 rounded-xl border border-white/5"><p className="text-slate-500 text-[8px] font-black uppercase tracking-widest mb-1">Dosage</p><p className="text-white font-bold text-xs">{analysisResult.chemical.dosage}</p></div>
+                            <div className="bg-[#111613] p-3 rounded-xl border border-white/5"><p className="text-slate-500 text-[8px] font-black uppercase tracking-widest mb-1">Method</p><p className="text-white font-bold text-xs">{analysisResult.chemical.method}</p></div>
+                        </div>
+                        <div className="space-y-3 mb-5 border-t border-white/5 pt-4">
+                            <div className="flex items-start gap-3"><Calendar size={14} className="text-blue-400 mt-0.5 shrink-0"/><div><p className="text-slate-500 text-[8px] font-black uppercase tracking-widest">Frequency</p><p className="text-slate-300 text-xs font-bold">{analysisResult.chemical.frequency}</p></div></div>
+                            <div className="flex items-start gap-3"><Clock size={14} className="text-yellow-500 mt-0.5 shrink-0"/><div><p className="text-slate-500 text-[8px] font-black uppercase tracking-widest">Pre-Harvest Interval (PHI)</p><p className="text-yellow-500 text-xs font-black">{analysisResult.chemical.phi}</p></div></div>
+                            <div className="flex items-start gap-3"><ShieldAlert size={14} className="text-orange-500 mt-0.5 shrink-0"/><div><p className="text-slate-500 text-[8px] font-black uppercase tracking-widest">Safety Warning</p><p className="text-orange-400 text-xs font-bold">{analysisResult.chemical.safety}</p></div></div>
+                        </div>
+                        <div className="mt-auto space-y-2 pt-4 border-t border-white/5">
+                            <p className="text-[#4CAF50] text-xs font-bold flex items-center gap-2"><Check size={12}/> {analysisResult.chemical.pros}</p>
+                            <p className="text-red-400 text-xs font-bold flex items-center gap-2"><X size={12}/> {analysisResult.chemical.cons}</p>
+                        </div>
+                        <button onClick={() => { setTreatmentToSchedule(analysisResult.chemical); setShowScheduleModal(true); }} className="w-full mt-4 bg-red-950/30 text-red-400 border border-red-500/30 hover:bg-red-500 hover:text-white px-4 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2"><Calendar size={14}/> Schedule Treatment</button>
+                    </div>
+
+                    {/* ORGANIC OPTION CARD (NOW BLACK bg-[#0b0b0b]) */}
+                    <div className="bg-[#0b0b0b] border border-[#4CAF50]/30 rounded-[2rem] p-6 relative overflow-hidden flex flex-col shadow-lg">
+                        <div className="absolute top-0 right-0 bg-green-950/50 text-[#4CAF50] px-3 py-1 text-[8px] font-black uppercase tracking-widest rounded-bl-lg">Eco Safe</div>
+                        <h4 className="text-[#4CAF50] font-black text-sm uppercase tracking-widest mb-4 flex items-center gap-2"><Leaf size={16}/> Organic Option</h4>
+                        <div className="mb-4"><p className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">Recommended Bio-Control</p><p className="text-white font-black text-lg">{analysisResult.organic.name}</p></div>
+                        <div className="grid grid-cols-2 gap-3 mb-5">
+                            <div className="bg-[#111613] p-3 rounded-xl border border-white/5"><p className="text-slate-500 text-[8px] font-black uppercase tracking-widest mb-1">Dosage</p><p className="text-white font-bold text-xs">{analysisResult.organic.dosage}</p></div>
+                            <div className="bg-[#111613] p-3 rounded-xl border border-white/5"><p className="text-slate-500 text-[8px] font-black uppercase tracking-widest mb-1">Method</p><p className="text-white font-bold text-xs">{analysisResult.organic.method}</p></div>
+                        </div>
+                        <div className="space-y-3 mb-5 border-t border-white/5 pt-4">
+                            <div className="flex items-start gap-3"><Calendar size={14} className="text-[#4CAF50] mt-0.5 shrink-0"/><div><p className="text-slate-500 text-[8px] font-black uppercase tracking-widest">Frequency</p><p className="text-slate-300 text-xs font-bold">{analysisResult.organic.frequency}</p></div></div>
+                            <div className="flex items-start gap-3"><Clock size={14} className="text-[#4CAF50] mt-0.5 shrink-0"/><div><p className="text-slate-500 text-[8px] font-black uppercase tracking-widest">Pre-Harvest Interval (PHI)</p><p className="text-[#4CAF50] text-xs font-black">{analysisResult.organic.phi}</p></div></div>
+                            <div className="flex items-start gap-3"><ShieldCheck size={14} className="text-[#4CAF50] mt-0.5 shrink-0"/><div><p className="text-slate-500 text-[8px] font-black uppercase tracking-widest">Safety Profile</p><p className="text-[#4CAF50] text-xs font-bold">{analysisResult.organic.safety}</p></div></div>
+                        </div>
+                        <div className="mt-auto space-y-2 pt-4 border-t border-white/5">
+                            <p className="text-[#4CAF50] text-xs font-bold flex items-center gap-2"><Check size={12}/> {analysisResult.organic.pros}</p>
+                            <p className="text-orange-400 text-xs font-bold flex items-center gap-2"><X size={12}/> {analysisResult.organic.cons}</p>
+                        </div>
+                        <button onClick={() => { setTreatmentToSchedule(analysisResult.organic); setShowScheduleModal(true); }} className="w-full mt-4 bg-green-950/30 text-[#4CAF50] border border-[#4CAF50]/30 hover:bg-[#4CAF50] hover:text-black px-4 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2"><Calendar size={14}/> Schedule Treatment</button>
+                    </div>
+                    </div>
+                )}
+
+                {/* 4. NEARBY SHOPS */}
+                {nearbyShops.length > 0 && (
+                  <div className="bg-[#111613] border border-blue-500/20 p-6 rounded-[2rem] shadow-lg animate-in slide-in-from-bottom-5 mt-2">
+                    <div className="flex justify-between items-center mb-4">
+                      <h4 className="text-blue-400 text-[10px] font-black uppercase tracking-widest flex items-center gap-2"><MapPin size={14}/> Find Medicine Nearby</h4>
+                      <span className="text-slate-400 text-[9px] font-bold uppercase tracking-widest bg-white/5 px-2 py-1 rounded">📍 {userLocation}</span>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      {nearbyShops.map((shop, i) => (
+                        <div key={i} onClick={() => setSelectedShop(shop)} className="bg-[#0d120f] border border-white/5 p-4 rounded-xl hover:border-blue-500/50 transition-all cursor-pointer group shadow-sm hover:shadow-blue-500/10">
+                           <h5 className="text-white font-bold text-xs group-hover:text-blue-400 transition-colors mb-1 truncate">{shop.name}</h5>
+                           <p className="text-slate-500 text-[9px] font-bold flex items-center gap-1 mb-2"><Navigation size={10}/> {shop.dist} away</p>
+                           <div className="flex justify-between items-center mt-3 pt-3 border-t border-white/5"><span className={`text-[8px] font-black uppercase px-2 py-0.5 rounded ${shop.status === 'Open Now' ? 'bg-green-900/30 text-green-400' : 'bg-orange-900/30 text-orange-400'}`}>{shop.status}</span><span className="text-blue-400 text-[9px] font-black uppercase group-hover:underline">View Details</span></div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+             </div>
+          )}
+        </div>
+      </div>
+
+      {/* 🟢 REPORT PREVIEW MODAL */}
+      {showReportModal && analysisResult && (
+         <div className="fixed inset-0 z-[300] flex items-start justify-center bg-black/90 backdrop-blur-md p-4 sm:p-8 animate-in fade-in overflow-y-auto">
+             <div className="w-full max-w-4xl bg-[#f8fafc] text-slate-900 rounded-2xl shadow-2xl relative my-auto flex flex-col shrink-0 overflow-hidden">
+                 <div className="flex justify-between items-center bg-slate-200 p-4 border-b border-slate-300 print-hide">
+                    <h3 className="font-black text-slate-800 flex items-center gap-2 text-sm uppercase tracking-widest"><FileText size={18}/> Pathology Report Preview</h3>
+                    <div className="flex gap-3">
+                       <button onClick={handleGeneratePDF} disabled={isDownloading} className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg font-bold text-xs uppercase tracking-widest flex items-center gap-2 transition-colors shadow-lg disabled:opacity-50">
+                           {isDownloading ? <Loader2 size={16} className="animate-spin"/> : <Download size={16}/>} {isDownloading ? "Downloading..." : "Download PDF"}
+                       </button>
+                       <button onClick={() => setShowReportModal(false)} className="bg-slate-300 hover:bg-slate-400 text-slate-800 px-4 py-2.5 rounded-lg font-bold text-xs uppercase tracking-widest transition-colors"><X size={16}/></button>
+                    </div>
+                 </div>
+                 <div id="printable-lab-report" className="p-10 md:p-14 relative bg-white">
+                     <div className="flex justify-between items-start border-b-4 border-slate-800 pb-6 mb-8 relative z-10">
+                         <div className="flex items-center gap-4"><Microscope size={40} className="text-[#4CAF50]" /><div><h2 className="text-2xl font-black uppercase text-slate-900 tracking-wide">Agro Risk Intelligence Lab</h2><p className="text-slate-600 font-bold mt-1 text-sm">Botany Pathology Diagnostics</p><p className="text-slate-500 text-xs mt-0.5">{userLocation}</p></div></div>
+                         <div className="text-right"><p className="text-slate-500 text-xs font-bold uppercase tracking-widest">Date</p><p className="text-slate-800 font-black text-sm">{new Date().toLocaleDateString('en-GB')}</p><p className="text-slate-500 text-xs font-bold uppercase tracking-widest mt-2">Report ID</p><p className="text-slate-800 font-mono text-sm">#AGR-{Math.floor(100000 + Math.random() * 900000)}</p></div>
+                     </div>
+                     <div className="text-center mb-10"><h3 className="text-xl font-black text-slate-900 uppercase underline underline-offset-8 decoration-slate-300">Pathology Assessment Report</h3></div>
+                     <div className="grid grid-cols-2 gap-8 mb-10 border border-slate-200 rounded-xl p-6 bg-slate-50">
+                         <div><p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">Detected Crop</p><p className="text-slate-900 font-black text-lg">{analysisResult.crop}</p></div>
+                         <div><p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">Diagnosis Result</p><p className={`font-black text-lg ${analysisResult.severity === 'NONE' ? 'text-green-600' : 'text-red-600'}`}>{analysisResult.name}</p></div>
+                         <div><p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">Severity / Status</p><p className="text-slate-800 font-bold text-sm">{analysisResult.severity}</p></div>
+                         <div><p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">AI Confidence Score</p><p className="text-slate-800 font-bold text-sm">{analysisResult.confidence}</p></div>
+                     </div>
+                     <div className="mb-10">
+                         <h4 className="text-sm font-black text-slate-800 uppercase tracking-widest mb-4 border-b border-slate-200 pb-2">1. Analysis Details</h4>
+                         <p className="text-slate-700 text-sm leading-relaxed mb-4">{analysisResult.cause}</p>
+                         <ul className="text-sm text-slate-700 space-y-2 list-disc pl-5">
+                             <li><strong>Weather Trigger:</strong> {analysisResult.weatherTrigger}</li>
+                             <li><strong>Water Issue:</strong> {analysisResult.waterIssue}</li>
+                             <li><strong>Nutrient Factors:</strong> {analysisResult.nutrient}</li>
+                         </ul>
+                     </div>
+                     {analysisResult.severity !== 'NONE' && (
+                         <div className="mb-10">
+                             <h4 className="text-sm font-black text-slate-800 uppercase tracking-widest mb-4 border-b border-slate-200 pb-2">2. Prescribed Mitigation Plan</h4>
+                             <div className="mb-6"><h5 className="font-bold text-slate-900 mb-2">A: Chemical Intervention</h5><table className="w-full text-left text-sm border-collapse border border-slate-300"><tbody><tr className="border-b border-slate-300"><th className="p-2 bg-slate-100 border-r border-slate-300 w-1/3">Medicine</th><td className="p-2 font-bold text-red-600">{analysisResult.chemical.name}</td></tr><tr className="border-b border-slate-300"><th className="p-2 bg-slate-100 border-r border-slate-300">Dosage & Method</th><td className="p-2">{analysisResult.chemical.dosage} via {analysisResult.chemical.method}</td></tr><tr className="border-b border-slate-300"><th className="p-2 bg-slate-100 border-r border-slate-300">Pre-Harvest Interval</th><td className="p-2 font-bold">{analysisResult.chemical.phi}</td></tr><tr><th className="p-2 bg-slate-100 border-r border-slate-300">Safety Warnings</th><td className="p-2 text-red-600 italic">{analysisResult.chemical.safety}</td></tr></tbody></table></div>
+                             <div><h5 className="font-bold text-slate-900 mb-2">B: Organic / Bio-Control Option</h5><table className="w-full text-left text-sm border-collapse border border-slate-300"><tbody><tr className="border-b border-slate-300"><th className="p-2 bg-slate-100 border-r border-slate-300 w-1/3">Agent</th><td className="p-2 font-bold text-green-600">{analysisResult.organic.name}</td></tr><tr className="border-b border-slate-300"><th className="p-2 bg-slate-100 border-r border-slate-300">Dosage & Method</th><td className="p-2">{analysisResult.organic.dosage} via {analysisResult.organic.method}</td></tr><tr className="border-b border-slate-300"><th className="p-2 bg-slate-100 border-r border-slate-300">Pre-Harvest Interval</th><td className="p-2 font-bold">{analysisResult.organic.phi}</td></tr><tr><th className="p-2 bg-slate-100 border-r border-slate-300">Safety Warnings</th><td className="p-2 text-green-600 italic">{analysisResult.organic.safety}</td></tr></tbody></table></div>
+                         </div>
+                     )}
+                     <div className="mt-16 flex justify-between items-end border-t border-slate-200 pt-6"><div className="text-slate-500 text-[10px]"><p>Computionally generated advisory report by AgroRisk AI Engine.</p><p>Requires field validation before large scale application.</p></div><div className="text-center"><div className="w-32 h-12 border-b border-slate-800 mb-1 flex items-end justify-center"><span className="text-xl font-black text-slate-800 opacity-50" style={{fontFamily: "cursive"}}>AI Verified</span></div><p className="text-[10px] font-black uppercase tracking-widest text-slate-600">Authorized Advisory Seal</p></div></div>
+                 </div>
+             </div>
+         </div>
+      )}
+
+      {/* 🟠 SHOP DETAILS MODAL */}
+      {selectedShop && (
+         <div className="fixed inset-0 z-[400] flex items-center justify-center bg-black/90 backdrop-blur-md p-4 animate-in fade-in">
+             <div className="bg-[#111613] w-full max-w-md p-8 rounded-[2rem] border border-blue-500/30 shadow-[0_0_50px_rgba(59,130,246,0.15)] relative overflow-hidden animate-in zoom-in-95">
+                 <button onClick={() => setSelectedShop(null)} className="absolute top-6 right-6 text-slate-500 hover:text-white transition-colors"><X size={20}/></button>
+                 <div className="flex items-center gap-3 mb-6"><div className="p-3 bg-blue-500/10 rounded-full"><Building2 size={24} className="text-blue-400"/></div><div><h3 className="text-xl font-black text-white">{selectedShop.name}</h3><p className="text-blue-400 text-xs font-black uppercase tracking-widest flex items-center gap-1"><Star size={10} className="fill-blue-400"/> {selectedShop.rating} Rating</p></div></div>
+                 <div className="space-y-4 mb-8">
+                     <div className="flex items-start gap-3 bg-[#0d120f] border border-white/5 p-4 rounded-xl"><MapPin size={16} className="text-slate-400 shrink-0 mt-0.5"/><div><p className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">Address</p><p className="text-white text-sm font-bold">{selectedShop.address}</p></div></div>
+                     <div className="flex items-start gap-3 bg-[#0d120f] border border-white/5 p-4 rounded-xl"><Clock size={16} className="text-slate-400 shrink-0 mt-0.5"/><div><p className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">Business Hours</p><p className="text-white text-sm font-bold flex items-center gap-2">{selectedShop.hours} <span className={`text-[8px] px-1.5 py-0.5 rounded ${selectedShop.status === 'Open Now' ? 'bg-green-500/20 text-green-400' : 'bg-orange-500/20 text-orange-400'}`}>{selectedShop.status}</span></p></div></div>
+                     <div className="bg-[#0d120f] border border-white/5 p-4 rounded-xl"><p className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-2 flex items-center gap-2"><Box size={14}/> Stock Focus</p><div className="flex flex-wrap gap-2">{selectedShop.stock.map((item, idx) => (<span key={idx} className="bg-blue-900/20 border border-blue-500/30 text-blue-400 px-2 py-1 rounded text-[10px] font-bold">{item}</span>))}</div></div>
+                 </div>
+                 <div className="flex gap-3"><button className="flex-1 bg-blue-600 text-white font-black uppercase tracking-widest text-xs py-3.5 rounded-xl hover:bg-blue-500 transition-colors shadow-lg flex items-center justify-center gap-2"><Map size={16}/> Get Directions</button><button className="bg-[#1a231d] border border-white/10 text-white p-3.5 rounded-xl hover:border-[#4CAF50] hover:text-[#4CAF50] transition-colors" title={`Call ${selectedShop.phone}`}><Send size={18}/></button></div>
+             </div>
+         </div>
+      )}
+
+      {/* 🔥 NEW: TREATMENT SCHEDULER MODAL */}
+      {showScheduleModal && treatmentToSchedule && (
+         <div className="fixed inset-0 z-[500] flex items-center justify-center bg-black/95 backdrop-blur-md p-4 animate-in fade-in">
+             <div className="bg-[#111613] w-full max-w-md p-8 rounded-[2rem] border border-[#4CAF50]/30 shadow-[0_0_50px_rgba(76,175,80,0.15)] relative overflow-hidden animate-in zoom-in-95">
+                 <button onClick={() => { setShowScheduleModal(false); setTreatmentToSchedule(null); }} className="absolute top-6 right-6 text-slate-500 hover:text-white transition-colors"><X size={20}/></button>
+                 
+                 <div className="flex items-center gap-3 mb-6">
+                     <div className="p-3 bg-green-900/20 rounded-full"><Calendar size={24} className="text-[#4CAF50]"/></div>
+                     <div>
+                         <h3 className="text-xl font-black text-white uppercase tracking-widest">Schedule Plan</h3>
+                         <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest">{analysisResult.crop} Treatment</p>
+                     </div>
+                 </div>
+
+                 <div className="bg-[#0d120f] p-4 rounded-xl border border-white/5 mb-6">
+                     <p className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">Selected Agent</p>
+                     <p className="text-white font-black text-sm flex items-center gap-2">
+                        {treatmentToSchedule.name.includes('Streptocycline') ? <FlaskConical size={14} className="text-red-500"/> : <Leaf size={14} className="text-[#4CAF50]"/>}
+                        {treatmentToSchedule.name}
+                     </p>
+                 </div>
+
+                 <div className="space-y-5 mb-8">
+                     <div>
+                         <label className="text-slate-500 text-[10px] font-black uppercase tracking-widest block mb-2">Start Date</label>
+                         <input type="date" value={scheduleDate} onChange={(e) => setScheduleDate(e.target.value)} className="w-full bg-[#0d120f] border border-white/10 p-4 rounded-xl text-white outline-none focus:border-[#4CAF50] font-bold transition-all" />
+                     </div>
+                     <div className="grid grid-cols-2 gap-4">
+                         <div className="bg-[#0d120f] p-4 rounded-xl border border-white/5">
+                             <p className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">Dosage</p>
+                             <p className="text-white font-bold text-xs">{treatmentToSchedule.dosage}</p>
+                         </div>
+                         <div className="bg-[#0d120f] p-4 rounded-xl border border-white/5">
+                             <p className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">Cycle</p>
+                             <p className="text-white font-bold text-xs">{treatmentToSchedule.frequency.split(' ')[2]} Days</p>
+                         </div>
+                     </div>
+                     <div className="border border-yellow-500/30 bg-yellow-950/20 p-4 rounded-xl flex items-start gap-3">
+                         <ShieldAlert size={14} className="text-yellow-500 mt-0.5 shrink-0"/>
+                         <div>
+                             <p className="text-yellow-500 text-[9px] font-black uppercase tracking-widest mb-1">Safety Rule</p>
+                             <p className="text-slate-300 text-xs font-bold leading-relaxed">{treatmentToSchedule.safety}</p>
+                         </div>
+                     </div>
+                 </div>
+
+                 <div className="flex gap-3">
+                     <button onClick={() => { setShowScheduleModal(false); setTreatmentToSchedule(null); }} className="flex-1 bg-transparent border border-white/10 text-white font-black uppercase tracking-widest text-[10px] py-4 rounded-xl hover:bg-white/5 transition-colors">Cancel</button>
+                     <button onClick={handleConfirmSchedule} className="flex-1 bg-[#4CAF50] hover:bg-green-500 text-black font-black uppercase tracking-widest text-[10px] py-4 rounded-xl transition-colors shadow-lg flex items-center justify-center gap-2">
+                         <CalendarCheck size={16}/> Confirm
+                     </button>
+                 </div>
+             </div>
+         </div>
+      )}
+    </div>
+  );
+};
+
+ // ==========================================
+// 4. WHAT-IF SIMULATOR (ULTIMATE ENTERPRISE ENGINE)
+// ==========================================
+const WhatIfSimulator = ({ handleNav }) => {
+  const [strategy, setStrategy] = useState('minimize');
+  const [activePreset, setActivePreset] = useState('Custom');
+  const [isSimulating, setIsSimulating] = useState(false);
+
+  // Micro-Stressors State
+  const [rainfallDrop, setRainfallDrop] = useState(10); 
+  const [tempIncrease, setTempIncrease] = useState(1);  
+  const [diseaseInc, setDiseaseInc] = useState(10);     
+  const [priceDrop, setPriceDrop] = useState(8);        
+
+  // Apply Macro-Climate Presets (🔥 FIXED: Removed El Nino/La Nina names)
+  const applyPreset = (preset) => {
+      setActivePreset(preset);
+      setIsSimulating(true);
+      setTimeout(() => {
+          if (preset === 'Drought') { setRainfallDrop(45); setTempIncrease(3.5); setDiseaseInc(15); setPriceDrop(5); }
+          else if (preset === 'Flood') { setRainfallDrop(0); setTempIncrease(0.5); setDiseaseInc(48); setPriceDrop(12); }
+          else if (preset === 'Market Crash') { setRainfallDrop(5); setTempIncrease(0.5); setDiseaseInc(10); setPriceDrop(45); }
+          else if (preset === 'Optimal Season') { setRainfallDrop(0); setTempIncrease(0); setDiseaseInc(5); setPriceDrop(2); }
+          setIsSimulating(false);
+      }, 800);
+  };
+
+  const handleSliderChange = (setter, value) => {
+      setActivePreset('Custom');
+      setter(value);
+  };
+
+  // AI Math Engine
+  const baseRisk = 15;
+  const riskScore = Math.min(100, Math.floor(baseRisk + (rainfallDrop * 0.6) + (tempIncrease * 4) + (diseaseInc * 0.5) + (priceDrop * 0.7)));
+  
+  let riskStatus = "OPTIMAL"; let riskColor = "text-[#4CAF50]"; let riskBg = "bg-[#4CAF50]";
+  if (riskScore > 35) { riskStatus = "VULNERABLE"; riskColor = "text-yellow-500"; riskBg = "bg-yellow-500"; }
+  if (riskScore > 65) { riskStatus = "HIGH RISK"; riskColor = "text-orange-500"; riskBg = "bg-orange-500"; }
+  if (riskScore > 85) { riskStatus = "CRITICAL RISK"; riskColor = "text-red-500"; riskBg = "bg-red-500"; }
+
+  const confidence = Math.max(20, Math.floor(85 - (rainfallDrop*0.3) - (tempIncrease*3) - (diseaseInc*0.2) - (priceDrop*0.2)));
+  const yieldLossPercent = Math.min(100, Math.floor((rainfallDrop * 0.4) + (tempIncrease * 3) + (diseaseInc * 0.5)));
+  const repaymentStress = Math.min(100, Math.floor((yieldLossPercent * 0.6) + (priceDrop * 0.7)));
+  
+  // Extra Environmental Math
+  const groundwaterDepletion = Math.min(100, Math.floor(rainfallDrop * 0.8 + tempIncrease * 5));
+  const soilMoistureLoss = Math.min(100, Math.floor(tempIncrease * 8 + rainfallDrop * 0.5));
+  const insuranceClaimProb = Math.min(98, Math.floor(yieldLossPercent * 1.5 + (rainfallDrop > 30 ? 20 : 0)));
+
+  // ROI Mitigation Engine
+  const mitigationCost = Math.floor((yieldLossPercent * 400) + (diseaseInc * 150));
+  const potentialSaved = Math.floor((yieldLossPercent * 1200) + (priceDrop * 800));
+
+  const generateCropStats = (baseMinY, baseMaxY, baseMinP, baseMaxP) => {
+    const minY = (baseMinY * (1 - yieldLossPercent/100)).toFixed(1);
+    const maxY = (baseMaxY * (1 - yieldLossPercent/100)).toFixed(1);
+    const profitDropPercent = yieldLossPercent + priceDrop;
+    const minP = Math.floor(baseMinP * (1 - profitDropPercent/100));
+    const maxP = Math.floor(baseMaxP * (1 - profitDropPercent/100));
+    const worstCaseLoss = Math.min(0, minP - baseMinP);
+    
+    let badgeColor = "text-[#4CAF50] bg-green-950/40 border border-green-500/30"; let badgeText = "Stable";
+    if(profitDropPercent > 20) { badgeColor = "text-yellow-500 bg-yellow-950/40 border border-yellow-500/30"; badgeText = "Medium Risk"; }
+    if(profitDropPercent > 40) { badgeColor = "text-red-500 bg-red-950/40 border border-red-500/30"; badgeText = "High Risk"; }
+    
+    let actionBtn = "Monitor Crop"; let navTarget = "dashboard";
+    if (priceDrop > 20) { actionBtn = "Find Cold Storage"; navTarget = "marketplace"; }
+    else if (diseaseInc > 25) { actionBtn = "Scan Pathogens"; navTarget = "crop-doctor"; }
+    else if (repaymentStress > 30) { actionBtn = "Apply Subsidies"; navTarget = "loan"; }
+
+    return { minY, maxY, minP, maxP, worstCaseLoss, badgeColor, badgeText, actionBtn, navTarget };
+  };
+
+  const paddy = generateCropStats(20, 30, 45000, 95000);
+  const millet = generateCropStats(10, 16, 35000, 80000);
+  const groundnut = generateCropStats(12, 18, 50000, 110000);
+
+  // Dynamic Chart Data Generation
+  const chartData = [
+      { month: 'Oct', Normal: 45000, Simulated: 45000 - (45000 * (yieldLossPercent/100) * 0.1) },
+      { month: 'Nov', Normal: 55000, Simulated: 55000 - (55000 * (yieldLossPercent/100) * 0.3) },
+      { month: 'Dec', Normal: 80000, Simulated: 80000 - (80000 * (yieldLossPercent/100) * 0.6) },
+      { month: 'Jan', Normal: 110000, Simulated: 110000 - (110000 * (yieldLossPercent/100)) },
+      { month: 'Feb', Normal: 95000, Simulated: 95000 - (95000 * (yieldLossPercent/100) * 0.9) },
+      { month: 'Mar', Normal: 60000, Simulated: 60000 - (60000 * (yieldLossPercent/100) * 0.5) },
+  ];
+
+  const getMitigationStrategy = () => {
+    if(riskScore > 65) return { title: "EMERGENCY ACTION REQUIRED", text: "High probability of severe yield loss detected based on current stressors. Recommend immediate application for PMFBY crop insurance claims. Halt non-essential fertilizer inputs to save costs.", color: "text-red-400", bg: "bg-red-950/10", border: "border-red-500/30" };
+    if(riskScore > 35) return { title: "PREVENTIVE MEASURES", text: "Moderate risk conditions detected. Optimize micro-irrigation usage to counter rainfall drops. Delay harvest selling if market prices are down. Consult AI Crop Doctor for preventive pest control sprays.", color: "text-yellow-400", bg: "bg-yellow-950/10", border: "border-yellow-500/30" };
+    return { title: "OPTIMAL CONDITIONS", text: "System conditions are currently stable. Continue standard farming practices. Focus on yield maximization strategies and monitor live market rates before finalizing harvest sales.", color: "text-[#4CAF50]", bg: "bg-green-950/10", border: "border-[#4CAF50]/30" };
+  };
+  const strategyCard = getMitigationStrategy();
+
+  return (
+    <div className="w-full max-w-[1400px] mx-auto animate-in slide-in-from-bottom-5 duration-500 pb-20 font-sans">
+      <style jsx>{`
+        .custom-range::-webkit-slider-runnable-track { background: #1a231d; height: 8px; border-radius: 4px; border: 1px solid rgba(255,255,255,0.1); }
+        .custom-range::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 22px; height: 22px; background: ${riskScore > 65 ? '#ef4444' : riskScore > 35 ? '#eab308' : '#4CAF50'}; border-radius: 50%; cursor: pointer; margin-top: -7px; box-shadow: 0 0 15px ${riskScore > 65 ? 'rgba(239,68,68,0.6)' : riskScore > 35 ? 'rgba(234,179,8,0.6)' : 'rgba(76,175,80,0.6)'}; transition: all 0.2s ease-in-out; border: 2px solid #111613; }
+        .custom-range:active::-webkit-slider-thumb { transform: scale(1.25); }
+      `}</style>
+
+      {/* HEADER & BADGES */}
+      <div className="mb-10">
+        <h2 className="text-3xl font-black text-white mb-2 flex items-center gap-3 tracking-tight uppercase">
+            <Globe className="text-blue-500 animate-pulse" size={32}/> AI Predictive Simulator
+        </h2>
+        <p className="text-slate-400 font-bold text-sm">Enterprise-grade econometric and climatic stress modeling for agricultural risk assessment.</p>
+        <div className="mt-5 flex flex-wrap items-center gap-3">
+            <div className="inline-flex items-center gap-2 bg-[#0b1410] border border-[#4CAF50]/40 text-[#4CAF50] px-4 py-2 rounded-full font-black text-xs uppercase tracking-widest shadow-[0_0_15px_rgba(76,175,80,0.2)]">
+                <Cpu size={14}/> AI Confidence: {confidence}%
+            </div>
+            <div className="inline-flex items-center gap-2 bg-blue-950/40 border border-blue-500/40 text-blue-400 px-4 py-2 rounded-full font-black text-xs uppercase tracking-widest">
+                <Activity size={14}/> Model: V-3.0 (Quantum)
+            </div>
+        </div>
+      </div>
+
+      {/* AI SCENARIO PRESETS (🔥 FIXED: Drought, Flood only) */}
+      <div className="bg-[#111613] p-6 rounded-3xl border border-white/5 shadow-lg mb-6 flex flex-col md:flex-row items-start md:items-center gap-4 relative overflow-hidden">
+         <h4 className="text-white font-black uppercase text-xs tracking-widest whitespace-nowrap flex items-center gap-2">
+            <Target size={16} className="text-blue-400"/> Global Scenarios :
+         </h4>
+         <div className="flex flex-wrap gap-3 w-full relative z-10">
+            {['Custom', 'Optimal Season', 'Drought', 'Flood', 'Market Crash'].map(preset => (
+               <button key={preset} onClick={() => applyPreset(preset)} disabled={isSimulating}
+                  className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all border flex items-center gap-2 ${activePreset === preset ? 'bg-blue-600 text-white border-blue-500 shadow-[0_0_15px_rgba(59,130,246,0.4)] scale-105' : 'bg-[#1a231d] text-slate-400 border-white/10 hover:border-white/30 hover:text-white disabled:opacity-50'}`}>
+                  {preset}
+               </button>
+            ))}
+         </div>
+      </div>
+
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-8 mb-8">
+          
+          {/* SLIDERS SECTION */}
+          <div className="xl:col-span-5 bg-[#111613] p-8 rounded-3xl border border-white/5 shadow-lg relative">
+            {isSimulating && (
+                <div className="absolute inset-0 z-50 bg-[#111613]/80 backdrop-blur-sm flex flex-col items-center justify-center rounded-3xl">
+                    <Loader2 size={40} className="text-blue-500 animate-spin mb-4"/>
+                    <p className="text-blue-400 font-black tracking-widest uppercase text-xs animate-pulse">Running Neural Simulation...</p>
+                </div>
+            )}
+            <h4 className="text-white font-black uppercase text-sm mb-6 tracking-widest flex items-center gap-2"><Settings size={18} className="text-orange-500"/> Micro-Stressors</h4>
+            <div className="space-y-6">
+              <div><div className="flex justify-between text-xs font-black uppercase tracking-widest mb-3"><span className="text-slate-400 flex items-center gap-2"><CloudRain size={14} className="text-blue-400"/> Rainfall decrease</span><span className="text-white">{rainfallDrop}%</span></div><input type="range" min="0" max="50" value={rainfallDrop} onChange={e => handleSliderChange(setRainfallDrop, Number(e.target.value))} className="w-full appearance-none bg-transparent custom-range" /></div>
+              <div><div className="flex justify-between text-xs font-black uppercase tracking-widest mb-3"><span className="text-slate-400 flex items-center gap-2"><Thermometer size={14} className="text-red-400"/> Temperature increase</span><span className="text-white">+{tempIncrease}°C</span></div><input type="range" min="0" max="5" step="0.5" value={tempIncrease} onChange={e => handleSliderChange(setTempIncrease, Number(e.target.value))} className="w-full appearance-none bg-transparent custom-range" /></div>
+              <div><div className="flex justify-between text-xs font-black uppercase tracking-widest mb-3"><span className="text-slate-400 flex items-center gap-2"><Bug size={14} className="text-green-400"/> Disease pressure</span><span className="text-white">{diseaseInc}%</span></div><input type="range" min="0" max="50" value={diseaseInc} onChange={e => handleSliderChange(setDiseaseInc, Number(e.target.value))} className="w-full appearance-none bg-transparent custom-range" /></div>
+              <div><div className="flex justify-between text-xs font-black uppercase tracking-widest mb-3"><span className="text-slate-400 flex items-center gap-2"><TrendingDown size={14} className="text-orange-400"/> Market price drop</span><span className="text-white">{priceDrop}%</span></div><input type="range" min="0" max="50" value={priceDrop} onChange={e => handleSliderChange(setPriceDrop, Number(e.target.value))} className="w-full appearance-none bg-transparent custom-range" /></div>
+            </div>
+          </div>
+
+          <div className="xl:col-span-7 bg-[#111613] p-8 rounded-3xl border border-white/5 shadow-lg flex flex-col">
+             <div className="flex justify-between items-center mb-6">
+                 <h4 className="text-white font-black uppercase text-sm tracking-widest flex items-center gap-2"><BarChart2 size={18} className="text-[#4CAF50]"/> 6-Month Revenue Forecast</h4>
+                 <div className="flex items-center gap-4 text-[10px] font-black uppercase tracking-widest">
+                     <span className="flex items-center gap-1"><div className="w-3 h-3 bg-[#4CAF50]/20 border border-[#4CAF50] rounded-sm"></div> Normal</span>
+                     <span className="flex items-center gap-1"><div className="w-3 h-3 bg-red-500/20 border border-red-500 rounded-sm"></div> Simulated</span>
+                 </div>
+             </div>
+             <div className="flex-1 min-h-[250px] w-full">
+                <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+                        <defs>
+                            <linearGradient id="colorNormal" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor="#4CAF50" stopOpacity={0.3}/>
+                                <stop offset="95%" stopColor="#4CAF50" stopOpacity={0}/>
+                            </linearGradient>
+                            <linearGradient id="colorSim" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor="#ef4444" stopOpacity={0.3}/>
+                                <stop offset="95%" stopColor="#ef4444" stopOpacity={0}/>
+                            </linearGradient>
+                        </defs>
+                        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+                        <XAxis dataKey="month" stroke="#64748b" fontSize={10} fontWeight="bold" tickLine={false} axisLine={false} />
+                        <YAxis stroke="#64748b" fontSize={10} fontWeight="bold" tickLine={false} axisLine={false} tickFormatter={(value) => `₹${value/1000}k`} />
+                        <Tooltip contentStyle={{backgroundColor: '#0d120f', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', color: 'white', fontWeight: 'bold'}} />
+                        <Area type="monotone" dataKey="Normal" stroke="#4CAF50" strokeWidth={2} fillOpacity={1} fill="url(#colorNormal)" />
+                        <Area type="monotone" dataKey="Simulated" stroke="#ef4444" strokeWidth={2} fillOpacity={1} fill="url(#colorSim)" />
+                    </AreaChart>
+                </ResponsiveContainer>
+             </div>
+          </div>
+      </div>
+
+      <div className="bg-[#111613] p-8 rounded-3xl border border-white/5 shadow-lg mb-8">
+        <h4 className="text-white font-black text-sm uppercase tracking-widest mb-6">Updated Integrated Risk Matrix</h4>
+        <div className="flex justify-between items-center mb-3"><span className="text-slate-400 font-bold text-sm">System Risk Level</span><span className={`font-black uppercase tracking-widest text-sm ${riskColor}`}>{riskStatus}</span></div>
+        <div className="w-full h-4 bg-[#0d120f] rounded-full overflow-hidden mb-8 border border-white/5 shadow-inner"><div className={`${riskBg} h-full transition-all duration-500 shadow-[0_0_15px_currentColor]`} style={{width: `${Math.min(100, riskScore)}%`}}></div></div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="bg-[#0b1410] border border-[#4CAF50]/20 p-5 rounded-2xl relative overflow-hidden">
+             <div className="absolute left-0 top-0 w-1 h-full bg-[#4CAF50]"></div>
+             <h5 className="text-white font-black text-xs uppercase tracking-widest mb-4">Worst Case Scenario</h5>
+             <div className="space-y-3">
+                 <div className="flex justify-between"><span className="text-slate-400 text-xs font-bold">Estimated Yield Loss</span><span className="text-red-400 font-black">{yieldLossPercent}%</span></div>
+                 <div className="flex justify-between"><span className="text-slate-400 text-xs font-bold">Market Price Drop Impact</span><span className="text-orange-400 font-black">{priceDrop}%</span></div>
+                 <div className="flex justify-between pt-2 border-t border-white/5"><span className="text-slate-400 text-xs font-bold">Loan Repayment Stress</span><span className="text-yellow-400 font-black">{repaymentStress}%</span></div>
+             </div>
+          </div>
+          
+          <div className="bg-[#0d120f] border border-blue-500/20 p-5 rounded-2xl relative overflow-hidden flex flex-col justify-center">
+             <h5 className="text-blue-400 font-black text-xs uppercase tracking-widest mb-4 flex items-center gap-2"><Droplets size={16}/> Geo-Resource Impact</h5>
+             <div className="space-y-3">
+                 <div className="flex justify-between items-center"><span className="text-slate-300 text-xs font-bold">Groundwater Depletion</span><span className={`font-black text-sm ${groundwaterDepletion > 50 ? 'text-red-400' : 'text-blue-400'}`}>{groundwaterDepletion}%</span></div>
+                 <div className="flex justify-between items-center border-t border-white/5 pt-2"><span className="text-slate-300 text-xs font-bold">Soil Moisture Loss</span><span className={`font-black text-sm ${soilMoistureLoss > 50 ? 'text-red-400' : 'text-orange-400'}`}>{soilMoistureLoss}%</span></div>
+             </div>
+          </div>
+
+          <div className="bg-gradient-to-br from-[#0b1410] to-[#111613] p-5 rounded-2xl flex flex-col justify-between border border-white/5">
+             <div>
+                 <h5 className="text-white font-black text-xs uppercase tracking-widest mb-3 flex items-center justify-between">
+                     <span className="flex items-center gap-2"><Activity size={16} className="text-[#4CAF50]"/> Mitigation ROI</span>
+                     <span className="text-[9px] bg-green-900/30 text-green-400 px-2 py-1 rounded">PMFBY Prob: {insuranceClaimProb}%</span>
+                 </h5>
+                 <div className="space-y-2 mb-4">
+                     <div className="flex justify-between items-center"><span className="text-slate-400 text-xs font-bold">Est. Cost</span><span className="text-white font-black text-sm">₹{mitigationCost.toLocaleString()}</span></div>
+                     <div className="flex justify-between items-center"><span className="text-slate-400 text-xs font-bold">Revenue Saved</span><span className="text-[#4CAF50] font-black text-sm">₹{potentialSaved.toLocaleString()}</span></div>
+                 </div>
+             </div>
+             <button onClick={() => handleNav('loan')} className="w-full bg-[#1a231d] text-white hover:text-black font-black py-2.5 rounded-xl uppercase tracking-widest text-[10px] hover:bg-[#4CAF50] transition-all border border-white/10 hover:border-[#4CAF50]">
+                 Check PMFBY Insurance Eligibility
+             </button>
+          </div>
+        </div>
+      </div>
+
+      {/* CROP CARDS */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        {[paddy, millet, groundnut].map((crop, idx) => (
+          <div key={idx} className="bg-[#111613] border border-white/5 p-6 rounded-3xl shadow-lg hover:-translate-y-1 transition-transform h-full flex flex-col justify-between group">
+            <div>
+              <div className="flex justify-between items-center mb-6">
+                  <h4 className="text-lg font-black text-white uppercase tracking-wider">{idx === 0 ? 'Paddy (Rice)' : idx === 1 ? 'Millet' : 'Groundnut'}</h4>
+                  <span className={`px-3 py-1 rounded-md text-[10px] font-black uppercase tracking-widest ${crop.badgeColor}`}>{crop.badgeText}</span>
+              </div>
+              <div className="space-y-4 mb-6">
+                  <p className="text-slate-400 text-sm font-bold flex justify-between border-b border-white/5 pb-2"><span>Yield:</span> <span className="text-white">{crop.minY} - {crop.maxY} qtl/ac</span></p>
+                  <p className="text-slate-400 text-sm font-bold flex justify-between border-b border-white/5 pb-2"><span>Profit:</span> <span className="text-white">₹{crop.minP.toLocaleString()} - ₹{crop.maxP.toLocaleString()}</span></p>
+                  <p className="text-slate-400 text-sm font-bold flex justify-between"><span>Confidence:</span> <span className="text-[#4CAF50]">{confidence + (idx === 1 ? 2 : idx === 2 ? 1 : 0)}%</span></p>
+              </div>
+            </div>
+            <div className="mt-auto space-y-3">
+                <div className="bg-[#0d120f] border border-red-500/20 p-4 rounded-xl">
+                    <p className="text-white font-black text-[10px] uppercase tracking-widest mb-1 flex items-center gap-1"><AlertTriangle size={12} className="text-red-500"/> Worst case</p>
+                    <p className="text-slate-400 text-xs font-bold flex justify-between items-center">Estimated loss: <span className="text-red-400 font-black text-sm">₹{Math.abs(crop.worstCaseLoss).toLocaleString()}</span></p>
+                </div>
+                <button onClick={() => handleNav(crop.navTarget)} className="w-full bg-[#1a231d] border border-white/10 hover:border-[#4CAF50] text-[#4CAF50] font-black text-[10px] uppercase tracking-widest py-3 rounded-xl transition-all flex items-center justify-center gap-2 group-hover:bg-[#4CAF50]/10">
+                   {crop.actionBtn} <ArrowRight size={14}/>
+                </button>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* STRATEGY MODULE */}
+      <div className="bg-[#111613] p-8 rounded-3xl border border-white/5 shadow-lg">
+        <h4 className="text-white font-black text-sm uppercase tracking-widest mb-6 flex items-center gap-2"><AlertTriangle className="text-orange-500" size={20}/> Early Risk Detection & Strategy</h4>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2 space-y-4 flex flex-col">
+            {priceDrop >= 10 && (<div className="bg-[#0d120f] border border-orange-500/30 p-5 rounded-2xl relative overflow-hidden"><div className="absolute left-0 top-0 w-1 h-full bg-orange-500"></div><h5 className="text-white font-black text-sm uppercase tracking-widest mb-1">Market Volatility Spike</h5><p className="text-slate-400 text-xs font-bold mb-4">Trigger: Volatility band high + {priceDrop}% simulated price drop</p><div className="space-y-3"><div className="bg-orange-950/20 p-3 rounded-xl border border-orange-500/10"><p className="text-orange-400 font-black text-[10px] mb-1 uppercase tracking-widest">Recommended caution</p><p className="text-slate-300 text-xs font-bold leading-relaxed">Avoid forced selling; consider partial sell; explore storage/warehouse receipt options.</p></div></div></div>)}
+            {rainfallDrop >= 20 && (<div className="bg-[#0d120f] border border-blue-500/30 p-5 rounded-2xl relative overflow-hidden"><div className="absolute left-0 top-0 w-1 h-full bg-blue-500"></div><h5 className="text-white font-black text-sm uppercase tracking-widest mb-1">Severe Drought Warning</h5><p className="text-slate-400 text-xs font-bold mb-4">Trigger: {rainfallDrop}% reduction in expected rainfall</p><div className="space-y-3"><div className="bg-blue-950/20 p-3 rounded-xl border border-blue-500/10"><p className="text-blue-400 font-black text-[10px] mb-1 uppercase tracking-widest">Recommended caution</p><p className="text-slate-300 text-xs font-bold leading-relaxed">Activate drip irrigation systems immediately. Consider applying anti-transpirants.</p></div></div></div>)}
+            {tempIncrease >= 2.5 && (<div className="bg-[#0d120f] border border-red-500/30 p-5 rounded-2xl relative overflow-hidden"><div className="absolute left-0 top-0 w-1 h-full bg-red-500"></div><h5 className="text-white font-black text-sm uppercase tracking-widest mb-1">Heat Stress Alert</h5><p className="text-slate-400 text-xs font-bold mb-4">Trigger: {tempIncrease}°C unexpected temperature spike</p><div className="space-y-3"><div className="bg-red-950/20 p-3 rounded-xl border border-red-500/10"><p className="text-red-400 font-black text-[10px] mb-1 uppercase tracking-widest">Recommended caution</p><p className="text-slate-300 text-xs font-bold leading-relaxed">Increase evening irrigation cycles to cool soil. Risk of severe crop burning.</p></div></div></div>)}
+            {priceDrop < 10 && rainfallDrop < 20 && tempIncrease < 2.5 && (<div className="text-center py-10 px-6 bg-[#0d120f] rounded-2xl border border-white/5 h-full flex flex-col justify-center items-center"><ShieldCheck size={48} className="text-[#4CAF50] mx-auto mb-3 opacity-80" /><p className="text-white font-black uppercase tracking-widest text-sm mb-1">No Critical Alerts</p><p className="text-slate-500 text-xs font-bold">System metrics are currently within safe thresholds. Use Global Scenarios to simulate stress events.</p></div>)}
+          </div>
+          <div className={`p-6 rounded-2xl border ${strategyCard.border} ${strategyCard.bg} flex flex-col h-full relative overflow-hidden`}>
+             <div className="absolute -bottom-4 -right-4 opacity-5 pointer-events-none"><Target size={150}/></div>
+             <div className="flex items-center gap-3 mb-5 relative z-10"><div className={`p-2.5 rounded-full bg-[#0d120f] shadow-inner border border-white/5 ${strategyCard.color}`}><Cpu size={20}/></div><h5 className="text-white font-black text-sm uppercase tracking-widest">AI Action Plan</h5></div>
+             <div className="relative z-10 flex-1 flex flex-col"><h6 className={`${strategyCard.color} font-black text-sm mb-3 uppercase tracking-widest`}>{strategyCard.title}</h6><p className="text-slate-300 text-sm font-bold leading-relaxed mb-8">{strategyCard.text}</p>
+             </div>
+          </div>
+        </div>
+      </div>
+      
+      <ContinueBtn onClick={() => handleNav('marketplace')} />
+    </div>
+  );
+};
+ // ==========================================
+// 6. MARKETPLACE (E-Commerce Module) - WITH CUSTOM OWN IMAGES (Step 2 Update)
+// ==========================================
+
+// 🔥 1. Exact 40 Items Generator with CUSTOM IMAGES
+const generateMarketProducts = () => {
+    const products = [];
+    let idCounter = 1000;
+
+    // 🔥 உங்ககிட்ட இருக்க இமேஜ் பைல் பெயர்களை கீழே உள்ள `img` Path-ல் அப்டேட் பண்ணுங்க.
+    // File placement: public/seeds/aloe_vera.jpg, etc.
+    const categoriesData = [
+        {
+            cat: 'Seeds', unit: 'per Packet', minPrice: 20, maxPrice: 150,
+            items: [
+                { name: "Aloe vera", img: "/seeds/aloe_vera.jpg" }, // ✅ உங்ககிட்ட public/seeds போல்டர்ல பைல் பெயர் இப்படி இருக்கணும்.
+                { name: "Bamboo", img: "/seeds/bamboo.jpg" },
+                { name: "Banyan", img: "/seeds/banyan.jpg" },
+                { name: "Barley", img: "/seeds/barley.jpg" },
+                { name: "Betel nut", img: "/seeds/betel_nut.jpg" },
+                { name: "Black gram", img: "/seeds/black_gram.jpg" },
+                { name: "Buckwheat", img: "/seeds/buckwheat.jpg" },
+                { name: "Castor", img: "/seeds/castor.jpg" },
+                { name: "Cauliflower", img: "/seeds/cauliflower.jpg" },
+                { name: "Chickpea", img: "/seeds/chickpea.jpg" },
+                { name: "Cocoa", img: "/seeds/cocoa.jpg" },
+                { name: "Coffee", img: "/seeds/coffee.jpg" },
+                { name: "Coriander leaf (Cilantro)", img: "/seeds/coriander.jpg" },
+                { name: "Cowpea", img: "/seeds/cowpea.jpg" },
+                { name: "Cumin", img: "/seeds/cumin.jpg" },
+                { name: "Date palm", img: "/seeds/date_palm.jpg" },
+                { name: "Dill", img: "/seeds/dill.jpg" },
+                { name: "Fenugreek", img: "/seeds/fenugreek.jpg" },
+                { name: "Green gram", img: "/seeds/green_gram.jpg" },
+                { name: "Groundnut (Peanut)", img: "/seeds/groundnut.jpg" },
+                { name: "Horse gram", img: "/seeds/horse_gram.jpg" },
+                { name: "Jute", img: "/seeds/jute.jpg" },
+                { name: "Kidney bean", img: "/seeds/kidney_bean.jpg" },
+                { name: "Lentil", img: "/seeds/lentil.jpg" },
+                { name: "Maize", img: "/seeds/maize.jpg" },
+                { name: "Millet", img: "/seeds/millet.jpg" },
+                { name: "Oats", img: "/seeds/oats.jpg" },
+                { name: "Pigeon pea", img: "/seeds/pigeon_pea.jpg" },
+                { name: "Quinoa", img: "/seeds/quinoa.jpg" },
+                { name: "Radish", img: "/seeds/radish.jpg" },
+                { name: "Rice", img: "/seeds/rice.jpg" },
+                { name: "Rose", img: "/seeds/rose.jpg" },
+                { name: "Rubber", img: "/seeds/rubber.jpg" },
+                { name: "Rye", img: "/seeds/rye.jpg" },
+                { name: "Sorghum", img: "/seeds/sorghum.jpg" },
+                { name: "Soybean", img: "/seeds/soybean.jpg" },
+                { name: "Sugarcane (setts)", img: "/seeds/sugarcane.jpg" },
+                { name: "Sunflower", img: "/seeds/sunflower.jpg" },
+                { name: "Turmeric", img: "/seeds/turmeric.jpg" },
+                { name: "Vanilla", img: "/seeds/vanilla.jpg" },
+                { name: "Wheat", img: "/seeds/wheat.jpg" }
+            ]
+        },
+        {
+            cat: 'Fertilizers', unit: 'per Bag/Bottle', minPrice: 250, maxPrice: 1200,
+            items: [
+                { name: "ammonium nitrate", img: "/fertilizers/ammonium_nitrate.jpg" },
+                { name: "ammonium sulphate", img: "/fertilizers/ammonium_sulphate.jpg" },
+                { name: "Amonium Nitrate", img: "/fertilizers/ammonium_nitrate_2.jpg" },
+                { name: "Bio Compost", img: "/fertilizers/bio_compost.jpg" },
+                { name: "blood meal", img: "/fertilizers/blood_meal.jpg" },
+                { name: "bone meal", img: "/fertilizers/bone_meal.jpg" },
+                { name: "calcium ammonium nitrate", img: "/fertilizers/can.jpg" },
+                { name: "Calcium Ammonium Nitrate (CAN)", img: "/fertilizers/can_2.jpg" },
+                { name: "Coir Pith Compost", img: "/fertilizers/coir_pith.jpg" },
+                { name: "compost", img: "/fertilizers/compost.jpg" },
+                { name: "cow dung manure", img: "/fertilizers/cow_dung.jpg" },
+                { name: "diammonium phosphate", img: "/fertilizers/dap.jpg" },
+                { name: "fish meal", img: "/fertilizers/fish_meal.jpg" },
+                { name: "Fulvic Acid", img: "/fertilizers/fulvic_acid.jpg" },
+                { name: "goat manure", img: "/fertilizers/goat_manure.jpg" },
+                { name: "green manure", img: "/fertilizers/green_manure.jpg" },
+                { name: "ground cake", img: "/fertilizers/ground_cake.jpg" },
+                { name: "groundnut cake", img: "/fertilizers/groundnut_cake.jpg" },
+                { name: "Humic Acid", img: "/fertilizers/humic_acid.jpg" },
+                { name: "monoammonium phosphate", img: "/fertilizers/map.jpg" },
+                { name: "Monoammonium Phosphate (MAP)", img: "/fertilizers/map_2.jpg" },
+                { name: "muriate of phtash", img: "/fertilizers/mop.jpg" },
+                { name: "Muriate of Potash", img: "/fertilizers/mop_2.jpg" },
+                { name: "mustard cake", img: "/fertilizers/mustard_cake.jpg" },
+                { name: "Mycorrhiza", img: "/fertilizers/mycorrhiza.jpg" },
+                { name: "neem cake", img: "/fertilizers/neem_cake.jpg" },
+                { name: "NPK 0-52-34", img: "/fertilizers/npk_0_52_34.jpg" },
+                { name: "npk 10-10-10", img: "/fertilizers/npk_10_10_10.jpg" },
+                { name: "NPK 10-10-10", img: "/fertilizers/npk_10_10_10_2.jpg" },
+                { name: "NPK 17-17-17", img: "/fertilizers/npk_17_17_17.jpg" },
+                { name: "NPK 19-19-19", img: "/fertilizers/npk_19_19_19.jpg" },
+                { name: "NPK 20-20-20", img: "/fertilizers/npk_20_20_20.jpg" },
+                { name: "potassium nitrate", img: "/fertilizers/potassium_nitrate.jpg" },
+                { name: "poultry manure", img: "/fertilizers/poultry_manure.jpg" },
+                { name: "Press Mud", img: "/fertilizers/press_mud.jpg" },
+                { name: "Seaweed Extract", img: "/fertilizers/seaweed.jpg" },
+                { name: "SSP (Single Super Phosphate)", img: "/fertilizers/ssp.jpg" },
+                { name: "Trichoderma", img: "/fertilizers/trichoderma.jpg" },
+                { name: "TSP (Triple Super Phosphate)", img: "/fertilizers/tsp.jpg" },
+                { name: "urea", img: "/fertilizers/urea.jpg" },
+                { name: "vermicompost", img: "/fertilizers/vermicompost.jpg" }
+            ]
+        },
+        {
+            cat: 'Fruits', unit: 'per Kg', minPrice: 40, maxPrice: 200,
+            items: [
+                { name: "AMLA", img: "/fruits/amla.jpg" },
+                { name: "APPLE", img: "/fruits/apple.jpg" },
+                { name: "ATHI", img: "/fruits/athi.jpg" },
+                { name: "AVOCADO", img: "/fruits/avocado.jpg" },
+                { name: "BER", "img": "/fruits/ber.jpg" },
+                { name: "BLACK BERRIES", img: "/fruits/black_berries.jpg" },
+                { name: "BSHEDA", img: "/fruits/bsheda.jpg" },
+                { name: "CLUSTER", img: "/fruits/cluster.jpg" },
+                { name: "CUSTARD APPLE", img: "/fruits/custard_apple.jpg" },
+                { name: "DATES", img: "/fruits/dates.jpg" },
+                { name: "DRAGON FRUIT", img: "/fruits/dragon_fruit.jpg" },
+                 
+                { name: "HOG PLIM", img: "/fruits/hog_plim.jpg" },
+                { name: "ICE APPLE", img: "/fruits/ice_apple.jpg" },
+                { name: "JAMUN", img: "/fruits/jamun.jpg" },
+                { name: "KAFFIR LIME", img: "/fruits/kaffir_lime.jpg" },
+                 
+                { name: "KHIRINI", img: "/fruits/khirini.jpg" },
+                { name: "KIWI", img: "/fruits/kiwi.jpg" },
+                { name: "KOKUM", img: "/fruits/kokum.jpg" },
+                { name: "LEMON", img: "/fruits/lemon.jpg" },
+                { name: "LIME", img: "/fruits/lime.jpg" },
+                { name: "MAHUA", img: "/fruits/mahua.jpg" },
+                 
+                { name: "MUSKMELON", img: "/fruits/muskmelon.jpg" },
+                { name: "ORANGE", img: "/fruits/orange.jpg" },
+                { name: "PEARS", img: "/fruits/pears.jpg" },
+                { name: "PHALSA", img: "/fruits/phalsa.jpg" },
+                { name: "PILU", img: "/fruits/pilu.jpg" },
+                
+                { name: "POISSON FRUIT", img: "/fruits/passion_fruit.jpg" },
+                { name: "POMELO", img: "/fruits/pomelo.jpg" },
+                { name: "SAPOTA", img: "/fruits/sapota.jpg" },
+                 
+                { name: "STAR FRUIT", img: "/fruits/star_fruit.jpg" },
+                
+                { name: "TANGERINE", img: "/fruits/tangerine.jpg" },
+                { name: "WATERMELON", img: "/fruits/watermelon.jpg" }
+            ]
+        },
+        {
+            cat: 'Vegetables', unit: 'per Kg', minPrice: 15, maxPrice: 90,
+            items: [
+                { name: "artichoke", img: "/vegetables/artichoke.jpg" },
+                { name: "ash gourd", img: "/vegetables/ash_gourd.jpg" },
+                { name: "asparagus", img: "/vegetables/asparagus.jpg" },
+                { name: "beetroot", img: "/vegetables/beetroot.jpg" },
+                { name: "bell pepper", img: "/vegetables/bell_pepper.jpg" },
+                { name: "bitter gound", img: "/vegetables/bitter_gourd.jpg" },
+                { name: "butternut squash", img: "/vegetables/butternut_squash.jpg" },
+                { name: "button mushroom", img: "/vegetables/button_mushroom.jpg" },
+                { name: "carrot", img: "/vegetables/carrot.jpg" },
+                { name: "cassava", img: "/vegetables/cassava.jpg" },
+                { name: "chili pepper", img: "/vegetables/chili_pepper.jpg" },
+                { name: "cucumber", img: "/vegetables/cucumber.jpg" },
+                { name: "delicata", img: "/vegetables/delicata.jpg" },
+                { name: "drumstick", img: "/vegetables/drumstick.jpg" },
+                { name: "edamame", img: "/vegetables/edamame.jpg" },
+                { name: "eggplant", img: "/vegetables/eggplant.jpg" },
+                { name: "fennel", img: "/vegetables/fennel.jpg" },
+                { name: "galangal", img: "/vegetables/galangal.jpg" },
+                { name: "garlic", img: "/vegetables/garlic.jpg" },
+                { name: "green beans", img: "/vegetables/green_beans.jpg" },
+                { name: "ivy gourd", img: "/vegetables/ivy_gourd.jpg" },
+                { name: "kohlrabi", img: "/vegetables/kohlrabi.jpg" },
+                { name: "okra", img: "/vegetables/okra.jpg" },
+                 
+                
+                 
+               
+            ]
+        }
+    ];
+
+    categoriesData.forEach(data => {
+        data.items.slice(0, 40).forEach(itemData => {
+            const formattedName = itemData.name.replace(/\b\w/g, char => char.toUpperCase());
+            const baseRandomPrice = Math.floor(Math.random() * (data.maxPrice - data.minPrice + 1)) + data.minPrice;
+            const trendDir = Math.random() > 0.5 ? 'up' : 'down';
+            const trendVal = (Math.random() * 5).toFixed(1);
+
+            products.push({
+                id: idCounter++,
+                name: formattedName,
+                category: data.cat,
+                price: baseRandomPrice,
+                trendDir: trendDir, 
+                trendVal: trendVal, 
+                image: itemData.img, // 🔥 இப்போ Unsplash generic link கிடையாது. நீங்க public போல்டர்ல வெச்சிருக்க Path.
+                unit: data.unit,
+                desc: `Fresh, high-quality ${formattedName}. Direct from verified sources.`
+            });
+        });
+    });
+    return products; 
+};
+
+// ... बाकी का Marketplace कोडा அப்படியே இருக்கணும் ...
+
+const MARKET_PRODUCTS = generateMarketProducts();
+
+const AutocompleteInput = ({ label, placeholder, value, onChange, options }) => {
+    const [show, setShow] = useState(false);
+    const filtered = options.filter(o => o.toLowerCase().includes(value.toLowerCase()));
+    
+    return (
+        <div className="relative">
+            <label className="text-slate-400 font-bold block mb-2 text-[10px] uppercase tracking-widest flex items-center gap-2">{label}</label>
+            <input 
+                type="text" required placeholder={placeholder} value={value}
+                onChange={e => { onChange(e.target.value); setShow(true); }}
+                onFocus={() => setShow(true)}
+                onBlur={() => setTimeout(() => setShow(false), 200)}
+                className="w-full bg-[#0d120f] border border-white/10 p-3.5 rounded-xl text-white outline-none focus:border-[#4CAF50] font-bold text-sm transition-colors placeholder:text-slate-600"
+            />
+            {show && value && filtered.length > 0 && (
+                <div className="absolute z-50 w-full mt-1 bg-[#1a231d] border border-white/10 rounded-xl shadow-2xl max-h-48 overflow-y-auto custom-scrollbar">
+                    {filtered.map((opt, i) => (
+                        <div key={i} onMouseDown={(e) => { e.preventDefault(); onChange(opt); setShow(false); }} className="p-3 text-sm text-white hover:bg-[#4CAF50] hover:text-black cursor-pointer border-b border-white/5 last:border-0 font-bold">
+                            {opt}
+                        </div>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+};
+
+const ALL_PRODUCE_NAMES = MARKET_PRODUCTS.map(p => p.name);
+const TN_DISTRICTS = ["Ariyalur", "Chengalpattu", "Chennai", "Coimbatore", "Cuddalore", "Dharmapuri", "Dindigul", "Erode", "Kallakurichi", "Kanchipuram", "Kanyakumari", "Karur", "Krishnagiri", "Madurai", "Nagapattinam", "Namakkal", "Nilgiris", "Perambalur", "Pudukkottai", "Ramanathapuram", "Ranipet", "Salem", "Sivaganga", "Tenkasi", "Thanjavur", "Theni", "Thoothukudi", "Tiruchirappalli", "Tirunelveli", "Tirupathur", "Tiruppur", "Tiruvallur", "Tiruvannamalai", "Tiruvarur", "Vellore", "Viluppuram", "Virudhunagar"];
+const CROP_VARIETIES = ["Premium", "Standard", "Organic Certified", "Export Quality", "IR20", "Alphonso", "Local Variety", "Hybrid"];
+
+const Marketplace = ({ handleNav, currentUser }) => {
+  const [view, setView] = useState('hub'); 
+  const [cart, setCart] = useState([]);
+  const [activeCategory, setActiveCategory] = useState('All');
+  const [visibleCount, setVisibleCount] = useState(20);
+  const [customListings, setCustomListings] = useState([]); 
+  const sellImageRef = useRef(null);
+  
+  const [sellData, setSellData] = useState({ name: '', category: 'Vegetables', qty: '', unit: 'Kg', price: '', date: '', location: '', gps: '', desc: '', grade: 'Premium', size: 'Medium', variety: '', organic: 'Organic Certified', moisture: '', damage: '', availFrom: '', availUntil: '', deliveryType: 'Self Pickup', transportCharges: '', minOrder: '', maxOrder: '', storage: 'Room Temperature', shelfLife: '', packing: 'Gunny Bags', chemical: 'No', payMode: 'UPI & Bank Transfer', gst: '', image: null });
+  
+  useEffect(() => { const draft = localStorage.getItem('agri_sell_draft'); if (draft) { setSellData(JSON.parse(draft)); } }, []);
+  
+  const allAvailableProducts = [...customListings, ...MARKET_PRODUCTS];
+  const filteredProducts = activeCategory === 'All' ? allAvailableProducts : allAvailableProducts.filter(p => p.category === activeCategory);
+  const displayedProducts = filteredProducts.slice(0, visibleCount);
+  
+  const handleCategoryClick = (cat) => { setActiveCategory(cat); setVisibleCount(20); };
+  const handleImageUpload = (e) => { const file = e.target.files[0]; if (file) { setSellData({...sellData, image: URL.createObjectURL(file)}); } };
+  const handleSaveDraft = () => { localStorage.setItem('agri_sell_draft', JSON.stringify(sellData)); alert("Listing saved as draft locally."); };
+  
+  const handleSellSubmit = (e) => { 
+    e.preventDefault(); 
+    const newProduct = { id: Date.now(), name: sellData.name, category: sellData.category, price: Number(sellData.price), trendDir: 'up', trendVal: '0.0', image: sellData.image || "https://images.unsplash.com/photo-1595841696677-6489ff3f8cd1?w=300&h=300&fit=crop", unit: `per ${sellData.unit}`, desc: sellData.desc || "Fresh produce directly listed by farmer." }; 
+    setCustomListings(prev => [newProduct, ...prev]); 
+    localStorage.removeItem('agri_sell_draft'); 
+    setSellData({ name: '', category: 'Vegetables', qty: '', unit: 'Kg', price: '', date: '', location: '', gps: '', desc: '', grade: 'Premium', size: 'Medium', variety: '', organic: 'Organic Certified', moisture: '', damage: '', availFrom: '', availUntil: '', deliveryType: 'Self Pickup', transportCharges: '', minOrder: '', maxOrder: '', storage: 'Room Temperature', shelfLife: '', packing: 'Gunny Bags', chemical: 'No', payMode: 'UPI & Bank Transfer', gst: '', image: null }); 
+    alert("Product published successfully to the live marketplace!"); 
+    setView('buy'); 
+  };
+  
+  const addToCart = (product) => { setCart(prev => { const existing = prev.find(item => item.id === product.id); if (existing) return prev.map(item => item.id === product.id ? { ...item, qty: item.qty + 1 } : item); return [...prev, { ...product, qty: 1 }]; }); };
+  const removeFromCart = (id) => { setCart(prev => prev.filter(item => item.id !== id)); };
+  const updateQty = (id, amount) => { setCart(prev => prev.map(item => { if (item.id === id) { const newQty = item.qty + amount; return newQty > 0 ? { ...item, qty: newQty } : item; } return item; })); };
+  
+  const totalAmount = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+  const upiId = "aravinth.saravinth2007@okicici";
+  const upiLink = `upi://pay?pa=${upiId}&pn=AgroIntelligence&am=${totalAmount}&cu=INR`;
+  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiLink)}&bgcolor=111613&color=4CAF50`;
+  const txnId = `ORD${Math.floor(100000 + Math.random() * 900000)}`;
+  const autoTotalValue = (parseFloat(sellData.qty) || 0) * (parseFloat(sellData.price) || 0);
+  
+  const simulatePayment = () => { setTimeout(() => { setView('invoice'); }, 1500); };
+  const handleDownloadInvoice = () => { const element = document.getElementById('printable-invoice-market'); if(!element) return; const opt = { margin: 0.5, filename: `Invoice_${txnId}.pdf`, image: { type: 'jpeg', quality: 1 }, html2canvas: { scale: 2 }, jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } }; window.html2pdf().set(opt).from(element).save(); };
+  
+  const inputClass = "w-full bg-[#0d120f] border border-white/10 p-3.5 rounded-xl text-white outline-none focus:border-[#4CAF50] font-bold text-sm transition-colors placeholder:text-slate-600";
+  const labelClass = "text-slate-400 font-bold block mb-2 text-[10px] uppercase tracking-widest flex items-center gap-2";
+
+  const today = new Date();
+  const trackDate0 = today.toLocaleDateString('en-GB', { weekday: 'short', month: 'short', day: 'numeric' });
+  const trackDate1 = new Date(today.getTime() + 1 * 86400000).toLocaleDateString('en-GB', { weekday: 'short', month: 'short', day: 'numeric' });
+  const trackDate2 = new Date(today.getTime() + 2 * 86400000).toLocaleDateString('en-GB', { weekday: 'short', month: 'short', day: 'numeric' });
+  const trackDate3 = new Date(today.getTime() + 3 * 86400000).toLocaleDateString('en-GB', { weekday: 'short', month: 'short', day: 'numeric' });
+
+  return (
+    <div className="w-full max-w-[1400px] mx-auto animate-in slide-in-from-bottom-5 duration-500 pb-20 font-sans relative">
+      
+      {/* ----------------- MARKETPLACE HUB ----------------- */}
+      {view === 'hub' && (
+        <div className="bg-[#151a17] p-10 rounded-[2rem] border border-white/5 shadow-2xl">
+          <div className="flex justify-between items-center mb-8 border-b border-white/10 pb-6"><h3 className="font-black text-3xl text-white uppercase tracking-tight flex items-center gap-3"><ShoppingBag className="text-[#4CAF50]" size={36}/> Agri Marketplace</h3><button onClick={() => setView('cart')} className="relative bg-[#1a231d] p-3 rounded-xl hover:bg-[#4CAF50] hover:text-black transition-colors text-white border border-white/5"><ShoppingCart size={24}/>{cart.length > 0 && <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-black w-6 h-6 flex items-center justify-center rounded-full border-2 border-[#151a17]">{cart.length}</span>}</button></div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-6">
+            <div className="bg-[#0b1410] p-10 rounded-3xl border border-white/5 hover:border-[#4CAF50]/50 transition-all text-center flex flex-col items-center justify-center group cursor-pointer shadow-lg" onClick={() => setView('sell')}><div className="bg-[#4CAF50]/10 p-6 rounded-full mb-6 group-hover:scale-110 transition-transform"><Truck size={48} className="text-[#4CAF50]"/></div><h4 className="text-3xl font-black text-white uppercase mb-3">Sell Produce</h4><p className="text-slate-400 font-bold text-sm max-w-xs leading-relaxed mb-8">List your fresh harvest directly to verified buyers. Manage stock, quality grades, and logistics.</p><button className="bg-[#4CAF50] text-black font-black w-full py-4 rounded-xl uppercase hover:bg-green-500 transition-colors shadow-[0_0_20px_rgba(76,175,80,0.3)] flex justify-center items-center gap-2"><ListPlus size={20}/> Create Listing</button></div>
+            <div className="bg-[#0b1410] p-10 rounded-3xl border border-white/5 hover:border-[#4CAF50]/50 transition-all text-center flex flex-col items-center justify-center group cursor-pointer shadow-lg" onClick={() => setView('buy')}><div className="bg-[#4CAF50]/10 p-6 rounded-full mb-6 group-hover:scale-110 transition-transform"><Package size={48} className="text-[#4CAF50]"/></div><h4 className="text-3xl font-black text-white uppercase mb-3">Buy Inputs</h4><p className="text-slate-400 font-bold text-sm max-w-xs leading-relaxed mb-8">Purchase high-quality seeds, organic fertilizers, and farming tools at wholesale prices.</p><button className="bg-[#4CAF50] text-black font-black w-full py-4 rounded-xl uppercase hover:bg-green-500 transition-colors shadow-[0_0_20px_rgba(76,175,80,0.3)] flex justify-center items-center gap-2"><ShoppingCart size={20}/> Shop Now</button></div>
+          </div>
+        </div>
+      )}
+
+      {/* ----------------- SELLER DASHBOARD ----------------- */}
+      {view === 'sell' && (
+        <div className="bg-[#151a17] p-8 md:p-12 rounded-[2rem] border border-white/5 shadow-2xl animate-in zoom-in-95">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-10 border-b border-white/10 pb-6"><div className="flex items-center gap-4"><button onClick={() => setView('hub')} className="p-2.5 bg-[#1a231d] rounded-xl text-slate-400 hover:text-white transition-colors"><X size={24}/></button><div><h3 className="font-black text-2xl text-white uppercase tracking-tight flex items-center gap-2">Seller Dashboard</h3><p className="text-slate-400 text-xs font-bold mt-1 tracking-widest uppercase">Create Comprehensive Product Listing</p></div></div></div>
+          <form onSubmit={handleSellSubmit} className="space-y-8">
+            <div className="bg-gradient-to-r from-[#0b1410] to-[#111613] p-6 rounded-2xl border border-[#4CAF50]/30 flex flex-wrap justify-between items-center gap-6 shadow-inner"><div className="flex items-center gap-4"><div className="bg-[#1a231d] p-4 rounded-full border border-white/10"><User size={28} className="text-[#4CAF50]"/></div><div><h4 className="text-white font-black text-lg uppercase flex items-center gap-2">{currentUser || "Aravinth"} <BadgeCheck size={18} className="text-blue-500"/></h4><p className="text-slate-400 text-xs font-bold mt-1">Verified Digital Twin Farmer</p></div></div><div className="flex gap-6 text-center"><div><p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">Seller Rating</p><p className="text-yellow-500 font-black text-lg flex items-center justify-center gap-1">4.8 <Star size={14} fill="currentColor"/></p></div><div><p className="text-slate-500 text-[10px] font-black uppercase tracking-widest">Orders Done</p><p className="text-white font-black text-lg">124</p></div></div></div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div className="bg-[#0b1410] border border-white/5 p-6 rounded-2xl space-y-5">
+                <h4 className="text-[#4CAF50] font-black text-xs uppercase tracking-widest border-b border-white/5 pb-3 flex items-center gap-2"><Tag size={16}/> 1. Basic Product Details</h4>
+                <AutocompleteInput label={<span className="flex gap-2 items-center">Produce Name</span>} placeholder="e.g. Fresh Red Tomatoes" value={sellData.name} onChange={(v) => setSellData({...sellData, name: v})} options={ALL_PRODUCE_NAMES} />
+                <div><label className={labelClass}>Category</label><select value={sellData.category} onChange={e => setSellData({...sellData, category: e.target.value})} className={inputClass}><option>Vegetables</option><option>Fruits</option><option>Seeds</option><option>Fertilizers</option></select></div>
+                <div className="flex gap-4"><div className="w-1/2"><label className={labelClass}>Quantity</label><input required type="number" placeholder="e.g. 500" value={sellData.qty} onChange={e => setSellData({...sellData, qty: e.target.value})} className={inputClass} /></div><div className="w-1/2"><label className={labelClass}>Unit</label><select value={sellData.unit} onChange={e => setSellData({...sellData, unit: e.target.value})} className={inputClass}><option>Kg</option><option>Quintal</option><option>Ton</option><option>Pieces</option><option>Bags</option></select></div></div>
+                <div className="flex gap-4 items-end"><div className="w-1/2"><label className={labelClass}>Price per Unit (₹)</label><input required type="number" placeholder="e.g. 45" value={sellData.price} onChange={e => setSellData({...sellData, price: e.target.value})} className={inputClass} /></div><div className="w-1/2 bg-[#1a231d] border border-[#4CAF50]/30 p-3.5 rounded-xl text-center"><span className="block text-[10px] text-slate-400 font-bold uppercase tracking-widest mb-1">Total Value</span><span className="text-[#4CAF50] font-black">₹{autoTotalValue.toLocaleString()}</span></div></div>
+                <div><label className={labelClass}><Calendar size={14}/> Harvest Date</label><input required type="date" value={sellData.date} onChange={e => setSellData({...sellData, date: e.target.value})} className={inputClass} /></div>
+                <AutocompleteInput label={<span className="flex gap-2 items-center"><MapPin size={14}/> Farm PIN Code / District</span>} placeholder="e.g. Kallakurichi" value={sellData.location} onChange={(v) => setSellData({...sellData, location: v})} options={TN_DISTRICTS} />
+                <div><label className={labelClass}>Exact GPS Link (Optional)</label><input type="text" placeholder="Paste Google Maps link here" value={sellData.gps} onChange={e => setSellData({...sellData, gps: e.target.value})} className={inputClass} /></div>
+                <div><label className={labelClass}>Product Description</label><textarea placeholder="Describe crop quality, organic methods used, etc..." value={sellData.desc} onChange={e => setSellData({...sellData, desc: e.target.value})} className={`${inputClass} h-24 resize-none custom-scrollbar`}></textarea></div>
+                <div><label className={labelClass}>Upload Images</label><input type="file" accept="image/*" ref={sellImageRef} hidden onChange={handleImageUpload} /><div onClick={() => sellImageRef.current.click()} className="border-2 border-dashed border-white/10 bg-[#0d120f] rounded-xl p-4 flex flex-col items-center justify-center cursor-pointer hover:border-[#4CAF50]/50 transition-colors h-32 overflow-hidden relative">{sellData.image ? (<img src={sellData.image} alt="Upload preview" className="w-full h-full object-contain" />) : (<><Camera size={32} className="text-slate-500 mb-2"/><span className="text-xs font-bold text-slate-400">Click to upload harvest photos</span></>)}</div></div>
+              </div>
+              <div className="space-y-8">
+                <div className="bg-[#0b1410] border border-white/5 p-6 rounded-2xl space-y-5">
+                  <h4 className="text-blue-400 font-black text-xs uppercase tracking-widest border-b border-white/5 pb-3 flex items-center gap-2"><Star size={16}/> 2. Quality & Grading</h4>
+                  <div className="grid grid-cols-2 gap-4"><div><label className={labelClass}>Grade Type</label><select value={sellData.grade} onChange={e => setSellData({...sellData, grade: e.target.value})} className={inputClass}><option>Premium / Export</option><option>Grade A</option><option>Grade B</option><option>Mixed</option></select></div><div><label className={labelClass}>Size Category</label><select value={sellData.size} onChange={e => setSellData({...sellData, size: e.target.value})} className={inputClass}><option>Large</option><option>Medium</option><option>Small</option><option>Mixed Sizes</option></select></div></div>
+                  <AutocompleteInput label={<span className="flex gap-2 items-center">Variety Name</span>} placeholder="e.g. IR64, Alphonso" value={sellData.variety} onChange={(v) => setSellData({...sellData, variety: v})} options={CROP_VARIETIES} />
+                  <div><label className={labelClass}>Farming Method</label><select value={sellData.organic} onChange={e => setSellData({...sellData, organic: e.target.value})} className={inputClass}><option>Organic Certified</option><option>Traditional / Chemical</option><option>Residue Free</option></select></div>
+                  <div className="grid grid-cols-2 gap-4"><div><label className={labelClass}>Moisture Level %</label><input type="text" placeholder="For grains" value={sellData.moisture} onChange={e => setSellData({...sellData, moisture: e.target.value})} className={inputClass} /></div><div><label className={labelClass}>Damage % (Optional)</label><input type="text" placeholder="e.g. 2%" value={sellData.damage} onChange={e => setSellData({...sellData, damage: e.target.value})} className={inputClass} /></div></div>
+                </div>
+                <div className="bg-[#0b1410] border border-white/5 p-6 rounded-2xl space-y-5">
+                  <h4 className="text-orange-400 font-black text-xs uppercase tracking-widest border-b border-white/5 pb-3 flex items-center gap-2"><Truck size={16}/> 3. Availability & Delivery</h4>
+                  <div className="grid grid-cols-2 gap-4"><div><label className={labelClass}>Available From</label><input type="date" value={sellData.availFrom} onChange={e => setSellData({...sellData, availFrom: e.target.value})} className={inputClass} /></div><div><label className={labelClass}>Available Until</label><input type="date" value={sellData.availUntil} onChange={e => setSellData({...sellData, availUntil: e.target.value})} className={inputClass} /></div></div>
+                  <div><label className={labelClass}>Delivery Mode</label><select value={sellData.deliveryType} onChange={e => setSellData({...sellData, deliveryType: e.target.value})} className={inputClass}><option>Self Pickup (Buyer arranges)</option><option>Local Delivery</option><option>Transport Available (Chargeable)</option></select></div>
+                  {sellData.deliveryType.includes("Transport") && <div><label className={labelClass}>Estimated Transport Charge (₹)</label><input type="number" placeholder="e.g. 1500" value={sellData.transportCharges} onChange={e => setSellData({...sellData, transportCharges: e.target.value})} className={inputClass} /></div>}
+                  <div className="grid grid-cols-2 gap-4"><div><label className={labelClass}>Min Order Qty</label><input type="text" placeholder="e.g. 50 Kg" value={sellData.minOrder} onChange={e => setSellData({...sellData, minOrder: e.target.value})} className={inputClass} /></div><div><label className={labelClass}>Max Order Qty</label><input type="text" placeholder="e.g. 500 Kg" value={sellData.maxOrder} onChange={e => setSellData({...sellData, maxOrder: e.target.value})} className={inputClass} /></div></div>
+                </div>
+                <div className="bg-[#0b1410] border border-white/5 p-6 rounded-2xl space-y-5">
+                  <h4 className="text-pink-400 font-black text-xs uppercase tracking-widest border-b border-white/5 pb-3 flex items-center gap-2"><Box size={16}/> 4. Storage & Payment</h4>
+                  <div className="grid grid-cols-2 gap-4"><div><label className={labelClass}>Packing Type</label><select value={sellData.packing} onChange={e => setSellData({...sellData, packing: e.target.value})} className={inputClass}><option>Gunny Bags</option><option>Plastic Crates</option><option>Loose / Bulk</option><option>Carton Boxes</option></select></div><div><label className={labelClass}>Shelf Life</label><input type="text" placeholder="e.g. 5 Days" value={sellData.shelfLife} onChange={e => setSellData({...sellData, shelfLife: e.target.value})} className={inputClass} /></div></div>
+                  <div><label className={labelClass}>Accepted Payment Mode</label><select value={sellData.payMode} onChange={e => setSellData({...sellData, payMode: e.target.value})} className={inputClass}><option>UPI & Bank Transfer</option><option>Cash on Pickup</option><option>All Methods</option></select></div>
+                  <div><label className={labelClass}>GST Number (Optional)</label><input type="text" placeholder="Enter if registered business" value={sellData.gst} onChange={e => setSellData({...sellData, gst: e.target.value})} className={inputClass} /></div>
+                </div>
+              </div>
+            </div>
+            <div className="flex gap-4 mt-8 pt-6 border-t border-white/10">
+              <button type="button" onClick={handleSaveDraft} className="w-1/3 bg-[#1a231d] text-slate-300 font-black py-5 rounded-xl uppercase hover:text-white transition-all text-sm tracking-widest border border-white/5">Save as Draft</button>
+              <button type="submit" className="w-2/3 bg-[#4CAF50] text-black font-black py-5 rounded-xl uppercase hover:bg-green-500 transition-all shadow-[0_0_30px_rgba(76,175,80,0.3)] text-lg flex justify-center items-center gap-2 hover:scale-[1.01]"><CheckCircle2 size={24}/> Publish & Go Live</button>
+            </div>
+          </form>
+        </div>
+      )}
+
+      {/* ----------------- BUYER STORE ----------------- */}
+      {view === 'buy' && (
+        <div className="bg-[#151a17] p-10 rounded-[2rem] border border-white/5 shadow-2xl animate-in zoom-in-95">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 border-b border-white/10 pb-6 gap-4">
+              <div className="flex items-center gap-4">
+                  <button onClick={() => setView('hub')} className="p-2 bg-[#1a231d] rounded-lg text-slate-400 hover:text-white"><X size={20}/></button>
+                  <h3 className="font-black text-2xl text-white uppercase tracking-tight flex items-center gap-2"><Package className="text-[#4CAF50]"/> Agri Input Store</h3>
+              </div>
+              <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-2 bg-[#1a231d] border border-[#4CAF50]/30 px-3 py-1.5 rounded-lg shadow-[0_0_10px_rgba(76,175,80,0.2)]">
+                      <div className="w-2 h-2 bg-[#4CAF50] rounded-full animate-pulse"></div>
+                      <span className="text-[10px] font-black text-[#4CAF50] uppercase tracking-widest">Live APMC Rates</span>
+                  </div>
+                  <button onClick={() => setView('cart')} className="relative bg-[#1a231d] p-3 rounded-xl hover:bg-[#4CAF50] hover:text-black transition-colors text-white border border-white/5">
+                      <ShoppingCart size={24}/>
+                      {cart.length > 0 && <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-black w-6 h-6 flex items-center justify-center rounded-full border-2 border-[#151a17]">{cart.length}</span>}
+                  </button>
+              </div>
+          </div>
+          <div className="flex gap-4 mb-6 overflow-x-auto pb-2 custom-scrollbar">{['All', 'Seeds', 'Fertilizers', 'Fruits', 'Vegetables'].map(cat => (<span key={cat} onClick={() => handleCategoryClick(cat)} className={`px-5 py-2 rounded-full text-xs font-black uppercase cursor-pointer shrink-0 transition-colors shadow-md ${activeCategory === cat ? 'bg-[#4CAF50] text-black shadow-[0_0_15px_rgba(76,175,80,0.4)]' : 'bg-[#1a231d] text-slate-300 hover:text-white border border-white/5'}`}>{cat}</span>))}</div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {displayedProducts.map(p => (
+                  <div key={p.id} className="bg-[#0b1410] border border-white/5 rounded-2xl p-4 flex flex-col hover:border-[#4CAF50]/50 transition-colors shadow-lg group overflow-hidden relative">
+                      
+                      {/* 🔥 FIX: Changed object-cover to object-contain and added white/gray background so image is fully visible without cropping */}
+                      <div className="w-full h-44 mb-4 overflow-hidden rounded-xl bg-slate-100 flex items-center justify-center relative p-2">
+                          <img src={p.image} onError={(e) => { e.target.src="https://images.unsplash.com/photo-1595841696677-6489ff3f8cd1?w=300&h=300&fit=crop"; }} alt={p.name} className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-700" loading="lazy" />
+                          <span className="absolute top-2 left-2 bg-[#1a231d]/90 backdrop-blur-sm text-[9px] font-black text-[#4CAF50] uppercase tracking-widest px-2 py-1 rounded border border-[#4CAF50]/30">{p.category}</span>
+                      </div>
+
+                      <h4 className="text-base font-black text-white leading-tight mb-2 px-1">{p.name}</h4>
+                      <p className="text-slate-500 text-[11px] font-bold mb-4 line-clamp-2 px-1">{p.desc}</p>
+                      
+                      <div className="mt-auto flex flex-col border-t border-white/5 pt-4 px-1 gap-2">
+                          {p.trendDir && (
+                              <div className="flex justify-between items-center bg-[#111613] p-1.5 rounded-md border border-white/5">
+                                  <span className="text-[8px] text-slate-400 font-bold uppercase tracking-widest">Today's Trend</span>
+                                  <span className={`text-[10px] font-black flex items-center gap-1 ${p.trendDir === 'up' ? 'text-green-500' : 'text-red-500'}`}>
+                                      {p.trendDir === 'up' ? <TrendingUp size={10}/> : <TrendingDown size={10}/>} {p.trendVal}%
+                                  </span>
+                              </div>
+                          )}
+                          <div className="flex items-end justify-between mt-2">
+                              <div>
+                                  <span className="text-xl font-black text-white">₹{p.price}</span>
+                                  <span className="text-[9px] font-bold uppercase tracking-widest text-slate-500 block">{p.unit}</span>
+                              </div>
+                              <button onClick={() => addToCart(p)} className="bg-[#4CAF50] text-black p-3 rounded-xl hover:bg-green-500 transition-colors shadow-lg"><ShoppingCart size={18}/></button>
+                          </div>
+                      </div>
+                  </div>
+              ))}
+          </div>
+          {visibleCount < filteredProducts.length && (<div className="mt-10 text-center"><button onClick={() => setVisibleCount(prev => prev + 20)} className="bg-[#1a231d] text-[#4CAF50] border border-[#4CAF50]/30 font-black px-10 py-4 rounded-xl uppercase tracking-widest hover:bg-[#4CAF50] hover:text-black transition-all shadow-lg hover:scale-[1.02]">Load More ({filteredProducts.length - visibleCount} items left)</button></div>)}
+        </div>
+      )}
+
+      {/* ----------------- CART & CHECKOUT ----------------- */}
+      {view === 'cart' && (
+        <div className="bg-[#151a17] p-10 rounded-[2rem] border border-white/5 shadow-2xl animate-in slide-in-from-right-10 max-w-4xl mx-auto">
+          <div className="flex items-center gap-4 mb-8 border-b border-white/10 pb-6"><button onClick={() => setView('buy')} className="p-2 bg-[#1a231d] rounded-lg text-slate-400 hover:text-white"><X size={20}/></button><h3 className="font-black text-2xl text-white uppercase tracking-tight flex items-center gap-3"><ShoppingCart className="text-[#4CAF50]"/> Your Cart</h3></div>
+          {cart.length === 0 ? (<div className="text-center py-20 opacity-50 flex flex-col items-center"><ShoppingCart size={80} className="text-slate-600 mb-6"/><p className="text-2xl font-black text-white uppercase tracking-widest">Cart is empty</p><button onClick={() => setView('buy')} className="mt-6 text-[#4CAF50] font-bold border border-[#4CAF50]/30 px-6 py-2 rounded-xl hover:bg-[#4CAF50] hover:text-black transition-colors">Go to Store</button></div>) : (<div className="flex flex-col h-full"><div className="space-y-4 mb-8 max-h-[400px] overflow-y-auto custom-scrollbar pr-2">{cart.map((item) => (<div key={item.id} className="bg-[#0b1410] p-4 rounded-2xl border border-white/5 flex flex-wrap gap-4 justify-between items-center shadow-md"><div className="flex items-center gap-4">
+            <div className="w-16 h-16 bg-slate-100 rounded-xl border border-white/10 shadow-sm p-1 flex items-center justify-center"><img src={item.image} onError={(e) => { e.target.src="https://images.unsplash.com/photo-1595841696677-6489ff3f8cd1?w=300&h=300&fit=crop"; }} alt={item.name} className="w-full h-full object-contain" /></div>
+            <div><h5 className="font-bold text-white text-lg">{item.name}</h5><p className="text-xs text-slate-400 font-bold uppercase tracking-widest">{item.category} • ₹{item.price} {item.unit}</p></div></div><div className="flex items-center gap-6"><div className="flex items-center bg-[#1a231d] rounded-lg border border-white/10 p-1"><button onClick={() => updateQty(item.id, -1)} className="p-1.5 text-slate-400 hover:text-white"><Minus size={16}/></button><span className="w-8 text-center font-black text-white">{item.qty}</span><button onClick={() => updateQty(item.id, 1)} className="p-1.5 text-slate-400 hover:text-white"><Plus size={16}/></button></div><h5 className="font-black text-xl text-[#4CAF50] w-24 text-right">₹{item.price * item.qty}</h5><button onClick={() => removeFromCart(item.id)} className="text-red-500 hover:text-red-400 p-2"><X size={20}/></button></div></div>))}</div><div className="border-t border-white/10 pt-6 mt-auto"><div className="flex justify-between items-center mb-6 px-4"><span className="text-slate-400 font-black uppercase tracking-widest">Total Amount</span><span className="text-5xl font-black text-white drop-shadow-md">₹{totalAmount.toLocaleString()}</span></div><button onClick={() => setView('payment')} className="w-full bg-[#4CAF50] text-black font-black py-5 rounded-xl uppercase hover:bg-green-500 transition-all shadow-[0_0_30px_rgba(76,175,80,0.3)] flex justify-center items-center gap-3 text-xl hover:scale-[1.01]"><CreditCard size={28}/> Proceed to Secure Checkout</button></div></div>)}
+        </div>
+      )}
+
+      {view === 'payment' && (
+        <div className="bg-[#151a17] p-10 rounded-[2rem] border border-white/5 shadow-2xl animate-in zoom-in text-center max-w-md mx-auto">
+          <div className="flex justify-between items-center mb-6 border-b border-white/10 pb-4"><h3 className="font-black text-xl text-white uppercase tracking-tight flex items-center gap-2"><CreditCard className="text-[#4CAF50]"/> UPI Payment</h3><button onClick={() => setView('cart')} className="text-slate-400 hover:text-white bg-[#1a231d] p-2 rounded-lg"><X size={16}/></button></div>
+          <p className="text-slate-400 font-bold text-sm mb-6 leading-relaxed">Scan the QR code below using Google Pay, PhonePe, or Paytm to complete your order.</p>
+          <div className="bg-white p-4 rounded-3xl inline-block mb-6 shadow-[0_0_40px_rgba(76,175,80,0.2)]"><img src={qrUrl} alt="UPI Payment QR" className="w-56 h-56 mx-auto rounded-xl" /></div>
+          <div className="bg-[#0b1410] border border-white/5 p-5 rounded-2xl mb-8 text-left shadow-inner"><p className="flex justify-between text-xs font-black uppercase tracking-widest border-b border-white/5 pb-3 mb-3"><span className="text-slate-500">Paying to:</span> <span className="text-white normal-case">{upiId}</span></p><p className="flex justify-between items-center"><span className="text-slate-500 text-xs font-black uppercase tracking-widest">Amount:</span> <span className="text-[#4CAF50] font-black text-2xl">₹{totalAmount.toLocaleString()}</span></p></div>
+          <button onClick={simulatePayment} className="w-full bg-[#4CAF50] text-black font-black py-4 rounded-xl uppercase hover:bg-green-500 transition-all shadow-lg flex justify-center items-center gap-2 hover:scale-[1.02]">I Have Completed Payment <ChevronRight size={20}/></button>
+        </div>
+      )}
+
+      {/* ----------------- INVOICE & TRACKING ----------------- */}
+      {view === 'invoice' && (
+        <div className="w-full max-w-3xl mx-auto animate-in slide-in-from-bottom-10">
+           <div className="bg-white text-black p-10 md:p-14 rounded-3xl shadow-2xl relative overflow-hidden" id="printable-invoice-market"><div className="absolute top-0 right-0 p-10 opacity-5 pointer-events-none"><ShieldCheck size={250}/></div><div className="flex justify-between items-start border-b-4 border-slate-800 pb-6 mb-8 relative z-10"><div><h2 className="text-3xl font-black uppercase text-slate-900 tracking-tighter flex items-center gap-2"><Cpu className="text-green-700"/> AGRO INTELLIGENCE</h2><p className="text-slate-500 font-bold mt-1 text-sm tracking-widest uppercase">Official Marketplace Invoice</p></div><div className="text-right bg-slate-100 p-4 rounded-xl border border-slate-200"><p className="text-slate-800 font-black text-xl mb-1">INVOICE</p><p className="text-slate-600 font-bold text-xs uppercase tracking-widest mb-1">Txn ID: <span className="text-slate-900">{txnId}</span></p><p className="text-slate-600 font-bold text-xs uppercase tracking-widest">Date: <span className="text-slate-900">{new Date().toLocaleDateString('en-GB')}</span></p></div></div><div className="mb-10 relative z-10 bg-slate-50 p-6 rounded-xl border border-slate-200"><p className="text-slate-500 font-black text-[10px] uppercase tracking-widest mb-2">Billed To:</p><h4 className="font-black text-slate-900 text-2xl uppercase flex items-center gap-2"><User size={20} className="text-green-700"/> {currentUser || "Aravinth"}</h4><p className="text-slate-600 font-bold text-sm mt-1">Digital Twin Verified Farmer Account</p></div><table className="w-full border-collapse mb-10 relative z-10"><thead><tr className="bg-slate-800 text-white font-black text-xs uppercase tracking-widest text-left"><th className="p-4 rounded-tl-xl">Item Description</th><th className="p-4 text-center">Qty</th><th className="p-4 text-right">Unit Price</th><th className="p-4 text-right rounded-tr-xl">Total Amount</th></tr></thead><tbody>{cart.map((item, i) => (<tr key={i} className="border-b border-slate-200 text-slate-800 font-bold text-sm hover:bg-slate-50"><td className="p-4 flex items-center gap-4"><div className="w-10 h-10 bg-white rounded p-0.5"><img src={item.image} onError={(e) => { e.target.src="https://images.unsplash.com/photo-1595841696677-6489ff3f8cd1?w=300&h=300&fit=crop"; }} alt={item.name} className="w-full h-full object-contain" /></div> <span>{item.name} <br/><span className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">{item.category}</span></span></td><td className="p-4 text-center bg-slate-50">{item.qty}</td><td className="p-4 text-right">₹{item.price}</td><td className="p-4 text-right text-slate-900 font-black bg-slate-50">₹{item.price * item.qty}</td></tr>))}</tbody></table><div className="flex justify-end mb-12 relative z-10"><div className="w-72 bg-slate-100 p-6 rounded-2xl border-2 border-slate-300"><div className="flex justify-between items-center text-slate-600 font-bold text-sm mb-3"><span>Subtotal</span><span>₹{totalAmount}</span></div><div className="flex justify-between items-center text-slate-600 font-bold text-sm mb-4"><span>Taxes (0%)</span><span>₹0</span></div><div className="flex justify-between items-center border-t-2 border-slate-800 pt-4 mt-2"><span className="text-slate-900 font-black uppercase tracking-widest">Total Paid</span><span className="text-3xl font-black text-green-700">₹{totalAmount.toLocaleString()}</span></div></div></div><div className="text-center relative z-10 flex flex-col items-center justify-center p-6 bg-green-50 border border-green-200 rounded-2xl"><div className="bg-green-600 text-white p-3 rounded-full mb-3 shadow-lg"><CheckCircle2 size={32}/></div><p className="font-black text-green-900 uppercase tracking-widest text-lg">Payment Successful via UPI</p><p className="text-green-700 font-bold text-xs mt-1">Thank you for ordering through Agro Intelligence Marketplace.</p></div></div>
+           <div className="flex flex-col sm:flex-row gap-4 mt-6 justify-center"><button onClick={handleDownloadInvoice} className="bg-white text-black px-8 py-4 rounded-xl font-black uppercase tracking-widest text-sm shadow-lg hover:bg-slate-200 transition-colors flex justify-center items-center gap-2"><Download size={20}/> Download PDF Bill</button><button onClick={() => setView('tracking')} className="bg-[#4CAF50] text-black px-8 py-4 rounded-xl font-black uppercase tracking-widest text-sm shadow-[0_0_30px_rgba(76,175,80,0.4)] hover:bg-green-500 transition-all flex justify-center items-center gap-2 hover:scale-[1.02]"><Truck size={20}/> Track Order Status</button></div>
+        </div>
+      )}
+
+      {/* 🔥 DYNAMIC TRACKING VIEW WITH LIVE DATES */}
+      {view === 'tracking' && (
+        <div className="w-full max-w-2xl mx-auto bg-[#151a17] p-10 rounded-[3rem] border border-white/5 shadow-2xl animate-in slide-in-from-bottom-10">
+           <div className="flex justify-between items-center mb-8 border-b border-white/10 pb-6"><h3 className="font-black text-2xl text-white uppercase tracking-tight flex items-center gap-3"><Map className="text-blue-400" size={28}/> Order Tracking</h3><button onClick={() => {setCart([]); setView('hub');}} className="p-2.5 bg-[#1a231d] rounded-xl text-slate-400 hover:text-white transition-colors border border-white/5"><Home size={20}/></button></div>
+           <div className="bg-gradient-to-r from-[#0b1410] to-[#111613] border border-white/5 p-6 rounded-2xl mb-10 flex justify-between items-center shadow-inner"><div><p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">Order Reference ID</p><p className="text-white font-black text-lg">{txnId}</p></div><div className="text-right"><p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">Estimated Delivery</p><p className="text-[#4CAF50] font-black text-xl">{trackDate3}</p></div></div>
+           
+           <div className="relative pl-10 space-y-12 before:absolute before:inset-y-0 before:left-[2.65rem] before:w-1 before:bg-white/10 before:-z-10 py-4">
+               
+               {/* 1. Confirmed */}
+               <div className="relative z-10 flex items-center gap-8">
+                   <div className="bg-[#4CAF50] p-4 rounded-full text-black shadow-[0_0_20px_rgba(76,175,80,0.6)] outline outline-8 outline-[#151a17]"><Receipt size={28}/></div>
+                   <div className="flex-1 flex flex-col sm:flex-row justify-between sm:items-center gap-2">
+                       <div><h4 className="text-white font-black uppercase tracking-widest text-lg mb-1">Order Confirmed</h4><p className="text-slate-400 text-sm font-bold">Payment received successfully via UPI.</p></div>
+                       <span className="text-[#4CAF50] font-black text-sm uppercase tracking-widest bg-[#4CAF50]/10 px-3 py-1.5 rounded-lg border border-[#4CAF50]/30">{trackDate0}</span>
+                   </div>
+               </div>
+
+               {/* 2. Processing */}
+               <div className="relative z-10 flex items-center gap-8">
+                   <div className="bg-blue-500 p-4 rounded-full text-white shadow-[0_0_20px_rgba(59,130,246,0.6)] outline outline-8 outline-[#151a17] animate-pulse"><Package size={28}/></div>
+                   <div className="flex-1 flex flex-col sm:flex-row justify-between sm:items-center gap-2">
+                       <div><h4 className="text-white font-black uppercase tracking-widest text-lg mb-1">Processing & Packed</h4><p className="text-blue-200 text-sm font-bold">Seller is preparing your items for dispatch.</p></div>
+                       <span className="text-blue-400 font-black text-xs uppercase tracking-widest">Exp. {trackDate1}</span>
+                   </div>
+               </div>
+
+               {/* 3. Out for Delivery */}
+               <div className="relative z-10 flex items-center gap-8 opacity-40 grayscale">
+                   <div className="bg-slate-700 p-4 rounded-full text-slate-300 outline outline-8 outline-[#151a17]"><Truck size={28}/></div>
+                   <div className="flex-1 flex flex-col sm:flex-row justify-between sm:items-center gap-2">
+                       <div><h4 className="text-white font-black uppercase tracking-widest text-lg mb-1">Out for Delivery</h4><p className="text-slate-400 text-sm font-bold">Waiting for courier pickup from warehouse.</p></div>
+                       <span className="text-slate-500 font-black text-xs uppercase tracking-widest">Exp. {trackDate2}</span>
+                   </div>
+               </div>
+
+               {/* 4. Delivered */}
+               <div className="relative z-10 flex items-center gap-8 opacity-40 grayscale">
+                   <div className="bg-slate-700 p-4 rounded-full text-slate-300 outline outline-8 outline-[#151a17]"><Check size={28}/></div>
+                   <div className="flex-1 flex flex-col sm:flex-row justify-between sm:items-center gap-2">
+                       <div><h4 className="text-white font-black uppercase tracking-widest text-lg mb-1">Delivered</h4><p className="text-slate-400 text-sm font-bold">Item reached your registered farm location.</p></div>
+                       <span className="text-slate-500 font-black text-xs uppercase tracking-widest">Exp. {trackDate3}</span>
+                   </div>
+               </div>
+
+           </div>
+           <button onClick={() => {setCart([]); setView('hub');}} className="mt-12 w-full bg-[#1a231d] text-[#4CAF50] font-black py-5 rounded-xl uppercase tracking-widest hover:bg-[#4CAF50] hover:text-black transition-all border border-[#4CAF50]/30 shadow-lg text-lg">Return to Marketplace</button>
+        </div>
+      )}
+    </div>
+  );
+};
+ // ==========================================
+// 7. GEO-INTELLIGENT MARKET COMPARISON ENGINE (ULTIMATE TERMINAL + ALERT DESK)
+// ==========================================
+const GlobalMarketIntelligence = ({ handleNav }) => {
+  const [compareLevel, setCompareLevel] = useState('State');
+  const [crop, setCrop] = useState('Paddy');
+  const [qty, setQty] = useState('100');
+  const [locA, setLocA] = useState('Tamil Nadu');
+  const [locB, setLocB] = useState('Punjab');
+  const [isComparing, setIsComparing] = useState(false);
+  const [compareResult, setCompareResult] = useState(null);
+  
+  const [showPdfModal, setShowPdfModal] = useState(false);
+  const [pdfUrl, setPdfUrl] = useState(null);
+  
+  // 🔥 NEW STATE FOR ALERT DESK
+  const [showAlertDesk, setShowAlertDesk] = useState(false);
+
+  const levels = ['Country', 'State', 'District', 'Village'];
+
+  const runComparison = () => {
+    if(!locA || !locB || !crop || !qty) return;
+    setIsComparing(true);
+    setTimeout(() => {
+      const generateStats = (location) => {
+        const c = crop.toLowerCase();
+        let basePrice = 2500;
+        if(c.includes('paddy')) basePrice = 2200;
+        else if(c.includes('wheat')) basePrice = 2800;
+        else if(c.includes('cotton')) basePrice = 7000;
+        else if(c.includes('tomato')) basePrice = 1500;
+        const qMultiplier = parseFloat(qty) > 0 ? parseFloat(qty) / 100 : 1;
+
+        const sentimentTrend = Math.random() > 0.5 ? 'Bullish' : 'Bearish';
+        const forecastSign = sentimentTrend === 'Bullish' ? '+' : '-';
+        
+        const b2bBuyers = ['ITC AgriBiz', 'Reliance Fresh', 'WayCool', 'Ninjacart', 'Britannia', 'Cargill'];
+        const randomBuyer = b2bBuyers[Math.floor(Math.random() * b2bBuyers.length)];
+
+        const farmGatePrice = Math.floor((basePrice + (Math.random() * 400 - 200)) * qMultiplier);
+        const wholesalePrice = Math.floor(farmGatePrice * 1.3);
+        const retailPrice = Math.floor(wholesalePrice * 1.45);
+        
+        const gradeAPrice = Math.floor(farmGatePrice * 1.25);
+        const holdDays = Math.floor(Math.random() * 45) + 15;
+        const storagePerDay = Math.floor(farmGatePrice * 0.001); 
+        const futureJump = Math.floor(farmGatePrice * (Math.random() * 0.15 + 0.05)); 
+        const usdRate = (82 + Math.random() * 2).toFixed(2);
+
+        return {
+          name: location,
+          market: { 
+            price: farmGatePrice, wholesale: wholesalePrice, retail: retailPrice, gradeA: gradeAPrice,
+            trend7D: (Math.random() * 8 - 3).toFixed(1), demand: Math.random() > 0.4 ? 'High' : 'Moderate', 
+            mspGap: (Math.random() * 15 + 1).toFixed(1), sentiment: sentimentTrend,
+            forecast30D: `${forecastSign}${(Math.random() * 5 + 1).toFixed(1)}%`,
+            futuresContract: Math.floor(farmGatePrice * (sentimentTrend === 'Bullish' ? 1.08 : 0.95))
+          },
+          weather: { rainfall: Math.floor(Math.random() * 80) + 10, temp: Math.floor(Math.random() * 12) + 24, soilMoisture: Math.floor(Math.random() * 40) + 40, pestRisk: Math.random() > 0.6 ? 'High Risk' : 'Low Risk' },
+          finance: { margin: Math.floor(Math.random() * 25) + 10, laborCost: Math.floor((Math.random() * 300 + 400) * qMultiplier), subsidy: Math.random() > 0.5 ? 'Available' : 'None', loanScore: Math.floor(Math.random() * 30) + 65 },
+          supply: { transportCost: Math.floor((Math.random() * 200 + 100) * qMultiplier), storageCapacity: Math.floor(Math.random() * 60 + 30), mandiDistance: Math.floor(Math.random() * 60) + 5, spoilage: (Math.random() * 4 + 1).toFixed(1), exportViability: Math.floor(Math.random() * 40 + 50) },
+          b2b: { topBuyer: randomBuyer, demandVol: Math.floor(Math.random() * 5000 + 500), contractPrice: Math.floor((basePrice + 300) * qMultiplier) },
+          esg: { carbonCreditEst: Math.floor((Math.random() * 5000 + 1000) * (qMultiplier > 1 ? qMultiplier * 0.1 : 1)), organicPremium: `+${(Math.random() * 12 + 5).toFixed(1)}%` },
+          advanced: { holdDays: holdDays, storageTotalCost: holdDays * storagePerDay, holdNetProfit: futureJump - (holdDays * storagePerDay), usdRate: usdRate, exportPremium: Math.floor(gradeAPrice * 1.4) }
+        };
+      };
+      
+      const statA = generateStats(locA);
+      const statB = generateStats(locB);
+
+      let source = statA; let target = statB;
+      if (statB.market.price > statA.market.price) { source = statA; target = statB; } 
+      else { source = statB; target = statA; }
+
+      const priceDifference = target.market.price - source.market.price;
+      const crossTransportCost = Math.floor(source.supply.transportCost * 2.5);
+      const netArbitrageProfit = priceDifference - crossTransportCost;
+      
+      const altCrops = ['Maize', 'Soybean', 'Millets', 'Mustard'];
+      const suggestedPivot = altCrops[Math.floor(Math.random() * altCrops.length)];
+      const pivotBoost = `+${Math.floor(Math.random() * 30 + 15)}%`;
+
+      const policies = [
+          `Govt signals temporary ban on ${crop} exports to control inflation.`,
+          `New cold storage subsidy announced for ${target.name} region.`,
+          `FCI procurement quotas increased for upcoming harvest season.`,
+          `Import duties slashed; domestic ${crop} prices might witness pressure.`
+      ];
+
+      setCompareResult({ 
+        locA: statA, locB: statB, 
+        arbitrage: {
+            source: source.name, target: target.name, isProfitable: netArbitrageProfit > 0,
+            grossDiff: priceDifference, transportCost: crossTransportCost, netProfit: netArbitrageProfit,
+            pivotCrop: suggestedPivot, pivotBoost: pivotBoost, policyAlert: policies[Math.floor(Math.random() * policies.length)]
+        }
+      });
+      setIsComparing(false);
+    }, 1500);
+  };
+
+  const generatePDF = (action = 'preview') => {
+    if(!compareResult) return;
+    const doc = new jsPDF();
+    let y = 15;
+
+    doc.setFillColor(11, 20, 16); doc.rect(0, 0, 210, 40, 'F');
+    doc.setTextColor(76, 175, 80); doc.setFontSize(22); doc.setFont("helvetica", "bold");
+    doc.text("GLOBAL MARKET INTELLIGENCE", 105, y, null, null, "center");
+    y += 10;
+    doc.setTextColor(200, 200, 200); doc.setFontSize(10); doc.setFont("helvetica", "normal");
+    doc.text(`Commodity: ${crop.toUpperCase()} | Volume: ${qty} KG | Date: ${new Date().toLocaleDateString()}`, 105, y, null, null, "center");
+    y += 6;
+    doc.text(`Comparison Nodes: ${compareResult.locA.name.toUpperCase()} vs ${compareResult.locB.name.toUpperCase()}`, 105, y, null, null, "center");
+    y += 15;
+
+    doc.setFillColor(240, 255, 240);
+    if(!compareResult.arbitrage.isProfitable) doc.setFillColor(255, 240, 240);
+    doc.rect(15, y, 180, 25, 'F');
+    doc.setTextColor(0, 0, 0); doc.setFont("helvetica", "bold"); doc.setFontSize(12);
+    doc.text("AI TRADE VERDICT:", 20, y + 8);
+    doc.setFont("helvetica", "normal"); doc.setFontSize(10);
+    doc.text(compareResult.arbitrage.isProfitable ? `Profitable Route: Export from ${compareResult.arbitrage.source} to ${compareResult.arbitrage.target}` : `Spread Deficit: Liquidate locally in ${compareResult.locA.market.price > compareResult.locB.market.price ? compareResult.locA.name : compareResult.locB.name}`, 20, y + 15);
+    if(compareResult.arbitrage.isProfitable) {
+        doc.setTextColor(34, 139, 34); doc.setFont("helvetica", "bold");
+        doc.text(`Estimated Net Alpha (Profit): +Rs. ${compareResult.arbitrage.netProfit} (After Transport)`, 20, y + 22);
+    }
+    y += 35;
+
+    const addTableHeader = (title) => {
+      doc.setFillColor(76, 175, 80); doc.rect(15, y, 180, 8, 'F');
+      doc.setTextColor(255, 255, 255); doc.setFontSize(10); doc.setFont("helvetica", "bold");
+      doc.text(title, 20, y + 6);
+      doc.text(compareResult.locA.name.toUpperCase(), 90, y + 6);
+      doc.text(compareResult.locB.name.toUpperCase(), 150, y + 6);
+      y += 12;
+    };
+
+    const addRow = (label, valA, valB) => {
+      doc.setTextColor(0, 0, 0); doc.setFont("helvetica", "normal"); doc.setFontSize(9);
+      doc.text(label, 20, y); doc.text(String(valA), 90, y); doc.text(String(valB), 150, y);
+      doc.setDrawColor(220, 220, 220); doc.line(15, y+2, 195, y+2);
+      y += 8;
+    };
+
+    addTableHeader("VALUE CHAIN & PRICING METRICS");
+    addRow("Farm Gate Price (Spot)", `Rs. ${compareResult.locA.market.price}`, `Rs. ${compareResult.locB.market.price}`);
+    addRow("Wholesale Mandi Price", `Rs. ${compareResult.locA.market.wholesale}`, `Rs. ${compareResult.locB.market.wholesale}`);
+    addRow("Retail Price", `Rs. ${compareResult.locA.market.retail}`, `Rs. ${compareResult.locB.market.retail}`);
+    addRow("Grade-A Export Price", `Rs. ${compareResult.locA.market.gradeA}`, `Rs. ${compareResult.locB.market.gradeA}`);
+    addRow("Next Month Futures", `Rs. ${compareResult.locA.market.futuresContract}`, `Rs. ${compareResult.locB.market.futuresContract}`);
+    y += 5;
+
+    addTableHeader("B2B DEMAND & ESG MONETIZATION");
+    addRow("Top Institutional Buyer", compareResult.locA.b2b.topBuyer, compareResult.locB.b2b.topBuyer);
+    addRow("Institutional Demand Vol.", `${compareResult.locA.b2b.demandVol} Tons`, `${compareResult.locB.b2b.demandVol} Tons`);
+    addRow("Est. Carbon Credit Value", `Rs. ${compareResult.locA.esg.carbonCreditEst}`, `Rs. ${compareResult.locB.esg.carbonCreditEst}`);
+    addRow("Organic Market Premium", compareResult.locA.esg.organicPremium, compareResult.locB.esg.organicPremium);
+    y += 5;
+
+    addTableHeader("LOGISTICS & CLIMATE RISKS");
+    addRow("Est. Freight Cost", `Rs. ${compareResult.locA.supply.transportCost}`, `Rs. ${compareResult.locB.supply.transportCost}`);
+    addRow("Cold Storage Usage", `${compareResult.locA.supply.storageCapacity}% Full`, `${compareResult.locB.supply.storageCapacity}% Full`);
+    addRow("Spoilage Risk Est.", `${compareResult.locA.supply.spoilage}%`, `${compareResult.locB.supply.spoilage}%`);
+    addRow("Pest Attack Risk", compareResult.locA.weather.pestRisk, compareResult.locB.weather.pestRisk);
+    addRow("Optimal Hold Strategy", `${compareResult.locA.advanced.holdDays} Days`, `${compareResult.locB.advanced.holdDays} Days`);
+
+    doc.setFontSize(8); doc.setTextColor(150, 150, 150);
+    doc.text("*This is an AI-generated econometric forecast based on simulated NCDEX & E-NAM sync data.", 105, 290, null, null, "center");
+
+    if (action === 'preview') {
+        const pdfBlob = doc.output('bloburl');
+        setPdfUrl(pdfBlob);
+        setShowPdfModal(true);
+    } else {
+        doc.save(`Agro_Intelligence_Report_${crop}.pdf`);
+    }
+  };
+
+  const getGraphData = () => {
+    if (!compareResult) return [];
+    return [
+      { name: `Farm Gate Price`, [compareResult.locA.name]: compareResult.locA.market.price, [compareResult.locB.name]: compareResult.locB.market.price },
+      { name: `Grade-A (Export)`, [compareResult.locA.name]: compareResult.locA.market.gradeA, [compareResult.locB.name]: compareResult.locB.market.gradeA },
+      { name: `Retail Price`, [compareResult.locA.name]: compareResult.locA.market.retail, [compareResult.locB.name]: compareResult.locB.market.retail }
+    ];
+  };
+
+  const MetricRow = ({ icon: Icon, label, valA, valB, isBetterA, reverseLogic = false }) => {
+    let aIsBetter = isBetterA;
+    if (reverseLogic) aIsBetter = !isBetterA; 
+    return (
+      <div className="flex justify-between items-center py-3 border-b border-white/5 last:border-0 hover:bg-white/5 px-2 rounded-lg transition-colors">
+        <div className={`w-1/3 text-center font-black text-sm ${aIsBetter ? 'text-[#4CAF50]' : 'text-slate-400'}`}>{valA}</div>
+        <div className="w-1/3 flex flex-col items-center justify-center text-center"><Icon size={16} className="text-slate-500 mb-1" /><span className="text-[9px] uppercase tracking-widest text-slate-500 font-bold">{label}</span></div>
+        <div className={`w-1/3 text-center font-black text-sm ${!aIsBetter ? 'text-[#4CAF50]' : 'text-slate-400'}`}>{valB}</div>
+      </div>
+    );
+  };
+
+  return (
+    <div className="w-full max-w-[1400px] mx-auto animate-in slide-in-from-bottom-5 pb-20 font-sans text-white relative">
+      
+      {/* 🔥 NEW: ALERT DESK MODAL 🔥 */}
+      {showAlertDesk && compareResult && (
+        <div className="fixed inset-0 z-[200] bg-black/90 backdrop-blur-md flex flex-col items-center justify-center p-4 animate-in fade-in">
+            <div className="bg-[#1a231d] w-full max-w-2xl rounded-3xl border border-red-500/30 shadow-2xl flex flex-col overflow-hidden">
+                <div className="p-4 border-b border-white/10 flex justify-between items-center bg-[#111613]">
+                    <h3 className="text-white font-black uppercase flex items-center gap-2 tracking-widest">
+                        <AlertTriangle className="text-red-500"/> Macro Policy Desk
+                    </h3>
+                    <button onClick={() => setShowAlertDesk(false)} className="text-slate-400 hover:text-white"><X size={24}/></button>
+                </div>
+                <div className="p-8 bg-[#0b1410]">
+                    <div className="bg-red-950/20 border border-red-500/20 p-6 rounded-2xl mb-6">
+                        <p className="text-red-400 font-black text-xs uppercase tracking-widest mb-2">Active Alert Directive</p>
+                        <h2 className="text-xl font-bold text-white leading-relaxed">{compareResult.arbitrage.policyAlert}</h2>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="bg-[#111613] border border-white/5 p-4 rounded-xl">
+                            <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">Estimated Market Impact</p>
+                            <h4 className="text-red-400 font-black text-lg">-4.5% to +2.1% Volatility</h4>
+                        </div>
+                        <div className="bg-[#111613] border border-white/5 p-4 rounded-xl">
+                            <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">Affected Commodity</p>
+                            <h4 className="text-white font-black text-lg">{crop.toUpperCase()}</h4>
+                        </div>
+                        <div className="bg-[#111613] border border-white/5 p-4 rounded-xl col-span-2">
+                            <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">AI Recommendation</p>
+                            <p className="text-slate-300 text-sm font-bold mt-1">Review your holding strategy. If export bans or tariff cuts are active, domestic supply will surge, depressing prices. Consider immediate liquidation or hedging via futures contracts.</p>
+                        </div>
+                    </div>
+                </div>
+                <div className="p-6 border-t border-white/10 bg-[#111613] flex justify-end gap-4">
+                    <button onClick={() => setShowAlertDesk(false)} className="bg-red-500/10 text-red-400 px-8 py-3 rounded-xl font-black uppercase text-xs tracking-widest hover:bg-red-500 hover:text-white transition-colors border border-red-500/20 shadow-lg">Acknowledge & Close</button>
+                </div>
+            </div>
+        </div>
+      )}
+
+      {showPdfModal && (
+        <div className="fixed inset-0 z-[200] bg-black/90 backdrop-blur-md flex flex-col items-center justify-center p-4 animate-in fade-in">
+            <div className="bg-[#1a231d] w-full max-w-4xl h-[85vh] rounded-3xl border border-[#4CAF50]/30 shadow-2xl flex flex-col overflow-hidden">
+                <div className="p-4 border-b border-white/10 flex justify-between items-center bg-[#111613]"><h3 className="text-white font-black uppercase flex items-center gap-2 tracking-widest"><FileText className="text-[#4CAF50]"/> Intelligence Report</h3><button onClick={() => setShowPdfModal(false)} className="text-slate-400 hover:text-white"><X size={24}/></button></div>
+                <div className="flex-1 bg-slate-800 relative"><iframe src={pdfUrl} width="100%" height="100%" className="border-none" title="PDF Preview"></iframe></div>
+                <div className="p-6 border-t border-white/10 bg-[#111613] flex justify-end gap-4"><button onClick={() => setShowPdfModal(false)} className="px-6 py-3 rounded-xl font-bold text-slate-400 hover:text-white uppercase text-xs tracking-widest border border-white/10">Close</button><button onClick={() => generatePDF('download')} className="bg-[#4CAF50] text-black px-8 py-3 rounded-xl font-black uppercase text-xs tracking-widest hover:scale-105 transition-transform flex items-center gap-2 shadow-lg"><Download size={16}/> Download PDF</button></div>
+            </div>
+        </div>
+      )}
+
+      <div className="mb-8 px-4 flex justify-between items-end border-b border-white/5 pb-6 mt-6">
+        <div>
+           <h2 className="text-3xl font-black mb-2 flex items-center gap-3 uppercase tracking-tighter"><Globe className="text-[#4CAF50]" size={32}/> Smart Market Compare</h2>
+           <p className="text-slate-400 text-sm font-bold uppercase tracking-widest">Enterprise Commodity Trading Terminal</p>
+        </div>
+        <div className="hidden md:flex flex-col items-end gap-2">
+            <div className="flex items-center gap-2 bg-[#1a231d] border border-[#4CAF50]/30 px-4 py-2 rounded-full"><div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div><span className="text-[10px] font-black uppercase text-[#4CAF50] tracking-widest">Live Exchange Sync</span></div>
+            <span className="text-[9px] text-slate-500 font-bold tracking-widest uppercase">Nodes: NCDEX, E-NAM, CBOT</span>
+        </div>
+      </div>
+
+      <div className="bg-[#111613] p-8 rounded-[2rem] border border-[#4CAF50]/20 shadow-2xl mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-8 gap-6 items-end">
+          <div className="md:col-span-2"><label className="text-slate-500 text-[10px] font-black uppercase tracking-widest block mb-2">Target Commodity</label><div className="relative"><Sprout size={16} className="absolute left-4 top-4 text-slate-500"/><input type="text" value={crop} onChange={(e) => setCrop(e.target.value)} placeholder="Ex: Paddy" className="w-full bg-[#0d120f] border border-white/10 p-4 pl-12 rounded-xl outline-none focus:border-[#4CAF50] text-sm font-bold text-white transition-all"/></div></div>
+          <div className="md:col-span-1"><label className="text-[#4CAF50] text-[10px] font-black uppercase tracking-widest block mb-2">Volume (KG)</label><div className="relative"><Package size={16} className="absolute left-4 top-4 text-[#4CAF50]"/><input type="number" value={qty} onChange={(e) => setQty(e.target.value)} placeholder="100" className="w-full bg-[#0d120f] border border-[#4CAF50]/30 p-4 pl-12 rounded-xl outline-none focus:border-[#4CAF50] text-sm font-bold text-white transition-all shadow-[0_0_10px_rgba(76,175,80,0.1)]"/></div></div>
+          <div className="md:col-span-2"><label className="text-slate-500 text-[10px] font-black uppercase tracking-widest block mb-2">Origin Node</label><div className="relative"><MapPin size={16} className="absolute left-4 top-4 text-slate-500"/><input type="text" value={locA} onChange={(e) => setLocA(e.target.value)} placeholder="Origin" className="w-full bg-[#0d120f] border border-white/10 p-4 pl-12 rounded-xl outline-none focus:border-[#4CAF50] text-sm font-bold text-white transition-all"/></div></div>
+          <div className="md:col-span-1 flex justify-center pb-4 text-slate-500 font-black italic">VS</div>
+          <div className="md:col-span-2"><label className="text-slate-500 text-[10px] font-black uppercase tracking-widest block mb-2">Destination Node</label><div className="relative"><MapPin size={16} className="absolute left-4 top-4 text-slate-500"/><input type="text" value={locB} onChange={(e) => setLocB(e.target.value)} placeholder="Destination" className="w-full bg-[#0d120f] border border-white/10 p-4 pl-12 rounded-xl outline-none focus:border-[#4CAF50] text-sm font-bold text-white transition-all"/></div></div>
+        </div>
+        <div className="mt-8 flex justify-center">
+          <button onClick={runComparison} disabled={isComparing || !locA || !locB || !crop || !qty} className="bg-[#4CAF50] text-black font-black px-12 py-4 rounded-xl uppercase text-sm hover:scale-[1.02] transition-transform shadow-[0_0_30px_rgba(76,175,80,0.3)] flex items-center gap-3 disabled:opacity-50">
+            {isComparing ? <Loader2 size={20} className="animate-spin"/> : <Sparkles size={20}/>} {isComparing ? 'Compiling Neural Data...' : 'Execute Intelligence Scan'}
+          </button>
+        </div>
+      </div>
+
+      {compareResult && !isComparing && (
+        <div className="space-y-8 animate-in slide-in-from-bottom-10">
+
+          <div className="bg-red-950/30 border border-red-500/30 p-4 rounded-2xl flex items-center justify-between shadow-lg">
+             <div className="flex items-center gap-4">
+                 <div className="p-3 bg-red-500/20 rounded-full"><AlertTriangle size={20} className="text-red-500 animate-pulse"/></div>
+                 <div>
+                     <h4 className="text-red-400 font-black text-xs uppercase tracking-widest mb-1">Macro Policy Impact Alert</h4>
+                     <p className="text-slate-300 font-bold text-sm">{compareResult.arbitrage.policyAlert}</p>
+                 </div>
+             </div>
+             {/* 🔥 UPDATED: VIEW ALERT DESK BUTTON 🔥 */}
+             <button onClick={() => setShowAlertDesk(true)} className="hidden md:block border border-red-500/50 text-red-400 hover:bg-red-500 hover:text-white px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-colors shadow-lg hover:shadow-red-500/50">View Alert Desk</button>
+          </div>
+
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+              <div className="bg-[#111613] p-8 rounded-[2rem] border border-white/5 shadow-2xl relative overflow-hidden flex flex-col justify-center">
+                 <div className="absolute -right-10 -top-10 opacity-5"><Clock size={180}/></div>
+                 <h3 className="text-white font-black text-xs uppercase tracking-widest mb-6 flex items-center gap-2 relative z-10"><Database size={16} className="text-blue-400"/> AI Hold vs. Sell Strategy (Storage Optimizer)</h3>
+                 <div className="grid grid-cols-2 gap-4 relative z-10">
+                     <div className="bg-[#0d120f] border border-white/10 p-4 rounded-xl">
+                         <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">Optimal Hold Time</p>
+                         <h4 className="text-white font-black text-2xl">{compareResult.locA.advanced.holdDays} <span className="text-sm font-bold text-slate-400">Days</span></h4>
+                     </div>
+                     <div className="bg-[#0d120f] border border-white/10 p-4 rounded-xl">
+                         <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">Est. Storage Cost</p>
+                         <h4 className="text-red-400 font-black text-xl">-₹{compareResult.locA.advanced.storageTotalCost}</h4>
+                     </div>
+                 </div>
+                 <div className="mt-4 bg-green-950/20 border border-[#4CAF50]/30 p-4 rounded-xl relative z-10">
+                     <div className="flex justify-between items-center">
+                         <span className="text-slate-300 text-xs font-bold uppercase tracking-widest">Net Extra Profit (After Storage)</span>
+                         <span className="text-[#4CAF50] font-black text-xl">+₹{compareResult.locA.advanced.holdNetProfit}</span>
+                     </div>
+                 </div>
+              </div>
+
+              <div className="bg-[#111613] p-8 rounded-[2rem] border border-white/5 shadow-2xl relative overflow-hidden flex flex-col justify-center">
+                 <div className="absolute -right-4 -bottom-4 opacity-5"><Globe size={180}/></div>
+                 <h3 className="text-white font-black text-xs uppercase tracking-widest mb-6 flex items-center gap-2 relative z-10"><Globe size={16} className="text-purple-400"/> Global Export Economics & FX</h3>
+                 <div className="grid grid-cols-2 gap-4 relative z-10">
+                     <div className="bg-[#0d120f] border border-white/10 p-4 rounded-xl">
+                         <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">USD/INR Rate</p>
+                         <h4 className="text-white font-black text-xl">₹{compareResult.locA.advanced.usdRate}</h4>
+                     </div>
+                     <div className="bg-[#0d120f] border border-white/10 p-4 rounded-xl">
+                         <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">Grade-A Export Premium</p>
+                         <h4 className="text-yellow-500 font-black text-xl">₹{compareResult.locA.advanced.exportPremium}</h4>
+                     </div>
+                 </div>
+                 <p className="text-slate-400 text-xs font-bold mt-4 leading-relaxed relative z-10">
+                     Exporting Grade-A quality {crop} yields a massive premium. The current favorable USD/INR exchange rate further maximizes INR realization by ~2.4%.
+                 </p>
+              </div>
+          </div>
+
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+              <div className={`xl:col-span-2 p-8 rounded-[2rem] border shadow-2xl relative overflow-hidden ${compareResult.arbitrage.isProfitable ? 'bg-gradient-to-br from-[#0b1410] to-[#111613] border-[#4CAF50]/40' : 'bg-[#111613] border-white/5'}`}>
+                 {compareResult.arbitrage.isProfitable && <div className="absolute top-0 left-0 w-1 h-full bg-[#4CAF50] shadow-[0_0_20px_#4CAF50]"></div>}
+                 <div className="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
+                    <div>
+                       <h3 className="text-white font-black text-xs uppercase tracking-widest mb-2 flex items-center gap-2"><Cpu size={16} className="text-blue-400"/> Trade Arbitrage Engine</h3>
+                       <h2 className="text-2xl md:text-3xl font-black text-white tracking-tight">
+                           {compareResult.arbitrage.isProfitable ? "Profitable Trade Route Confirmed" : "Local Liquidation Advised"}
+                       </h2>
+                       <p className="text-slate-400 text-sm font-bold mt-2 leading-relaxed max-w-xl">
+                           {compareResult.arbitrage.isProfitable 
+                              ? `Executing transit from ${compareResult.arbitrage.source} to ${compareResult.arbitrage.target} secures alpha margins despite freight constraints.` 
+                              : `Spread deficit. The basis difference doesn't clear the transit freight cost. Liquidate inventory in ${compareResult.locA.market.price > compareResult.locB.market.price ? compareResult.locA.name : compareResult.locB.name}.`}
+                       </p>
+                    </div>
+                    {compareResult.arbitrage.isProfitable && (
+                        <div className="bg-[#0d120f] border border-[#4CAF50]/30 p-5 rounded-2xl min-w-[250px] shadow-inner">
+                            <div className="flex justify-between items-center mb-3 border-b border-white/5 pb-2"><span className="text-slate-500 text-[10px] font-black uppercase tracking-widest">Spread (Gross)</span><span className="text-white font-bold text-sm">+₹{compareResult.arbitrage.grossDiff}</span></div>
+                            <div className="flex justify-between items-center mb-3 border-b border-white/5 pb-2"><span className="text-slate-500 text-[10px] font-black uppercase tracking-widest">Freight & Storage</span><span className="text-red-400 font-bold text-sm">-₹{compareResult.arbitrage.transportCost}</span></div>
+                            <div className="flex justify-between items-center mt-2"><span className="text-[#4CAF50] text-xs font-black uppercase tracking-widest">Alpha (Net Profit)</span><span className="text-[#4CAF50] font-black text-2xl">₹{compareResult.arbitrage.netProfit}</span></div>
+                        </div>
+                    )}
+                 </div>
+              </div>
+
+              <div className="bg-[#111613] p-8 rounded-[2rem] border border-white/5 shadow-2xl relative overflow-hidden">
+                 <h3 className="text-white font-black text-xs uppercase tracking-widest mb-6 flex items-center gap-2"><Layers size={16} className="text-orange-400"/> Value Chain Margin Analysis</h3>
+                 <div className="relative pl-6 space-y-6 before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-white/10">
+                     <div className="relative">
+                         <div className="absolute -left-[29px] top-1 w-4 h-4 bg-[#4CAF50] rounded-full border-4 border-[#111613]"></div>
+                         <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">Farm Gate Price (You get)</p>
+                         <h4 className="text-white font-black text-lg">₹{compareResult.locA.market.price}</h4>
+                     </div>
+                     <div className="relative">
+                         <div className="absolute -left-[29px] top-1 w-4 h-4 bg-yellow-500 rounded-full border-4 border-[#111613]"></div>
+                         <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">Wholesale Mandi Price</p>
+                         <h4 className="text-white font-black text-lg">₹{compareResult.locA.market.wholesale} <span className="text-yellow-500 text-[10px] ml-2">+{( (compareResult.locA.market.wholesale - compareResult.locA.market.price)/compareResult.locA.market.price * 100 ).toFixed(1)}%</span></h4>
+                     </div>
+                     <div className="relative">
+                         <div className="absolute -left-[29px] top-1 w-4 h-4 bg-red-500 rounded-full border-4 border-[#111613]"></div>
+                         <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">Retail Price (Consumer pays)</p>
+                         <h4 className="text-white font-black text-lg">₹{compareResult.locA.market.retail} <span className="text-red-500 text-[10px] ml-2">+{( (compareResult.locA.market.retail - compareResult.locA.market.wholesale)/compareResult.locA.market.wholesale * 100 ).toFixed(1)}%</span></h4>
+                     </div>
+                 </div>
+              </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="md:col-span-2 bg-[#111613] p-8 rounded-[2rem] border border-white/5 shadow-2xl">
+                  <h4 className="text-white font-black uppercase text-sm mb-6 tracking-widest flex items-center gap-2"><Building2 size={18} className="text-purple-400"/> Institutional B2B Demand Radar</h4>
+                  <div className="grid grid-cols-2 gap-6">
+                      <div className="bg-[#0d120f] border border-white/5 p-5 rounded-2xl">
+                          <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-3 border-b border-white/5 pb-2">{compareResult.locA.name} Zone</p>
+                          <h5 className="text-white font-bold text-base mb-1">{compareResult.locA.b2b.topBuyer}</h5>
+                          <p className="text-[#4CAF50] text-xs font-black uppercase tracking-widest">Req: {compareResult.locA.b2b.demandVol} Tons</p>
+                          <p className="text-slate-400 text-sm font-bold mt-2">Contract Bid: ₹{compareResult.locA.b2b.contractPrice}</p>
+                      </div>
+                      <div className="bg-[#0d120f] border border-white/5 p-5 rounded-2xl">
+                          <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-3 border-b border-white/5 pb-2">{compareResult.locB.name} Zone</p>
+                          <h5 className="text-white font-bold text-base mb-1">{compareResult.locB.b2b.topBuyer}</h5>
+                          <p className="text-[#4CAF50] text-xs font-black uppercase tracking-widest">Req: {compareResult.locB.b2b.demandVol} Tons</p>
+                          <p className="text-slate-400 text-sm font-bold mt-2">Contract Bid: ₹{compareResult.locB.b2b.contractPrice}</p>
+                      </div>
+                  </div>
+              </div>
+              <div className="bg-[#111613] p-8 rounded-[2rem] border border-white/5 shadow-2xl flex flex-col justify-center">
+                  <h4 className="text-white font-black uppercase text-sm mb-6 tracking-widest flex items-center gap-2"><Leaf size={18} className="text-[#4CAF50]"/> ESG Monetization</h4>
+                  <div className="space-y-4">
+                      <div className="bg-green-950/20 border border-[#4CAF50]/20 p-4 rounded-xl">
+                          <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1">Est. Carbon Credit Value</p>
+                          <h5 className="text-[#4CAF50] font-black text-2xl">₹{compareResult.locA.esg.carbonCreditEst.toLocaleString()}</h5>
+                      </div>
+                      <div className="bg-yellow-950/20 border border-yellow-500/20 p-4 rounded-xl">
+                          <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1">Organic Market Premium</p>
+                          <h5 className="text-yellow-500 font-black text-xl">{compareResult.locA.esg.organicPremium} <span className="text-[10px] text-slate-500">Above MSP</span></h5>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+          <div className="bg-[#111613] p-8 rounded-[2rem] border border-white/5 shadow-2xl">
+             <div className="flex justify-between items-center mb-6 border-b border-white/5 pb-6">
+                 <h3 className="text-xl font-black uppercase text-white flex items-center gap-2"><BarChart2 className="text-[#4CAF50]"/> Grade & Value Graph</h3>
+                 <button onClick={() => generatePDF('preview')} className="text-xs font-black uppercase tracking-widest text-black bg-[#4CAF50] flex items-center gap-2 px-6 py-3 rounded-xl transition-all shadow-[0_0_15px_rgba(76,175,80,0.5)] hover:scale-105"><Eye size={16}/> Export Report</button>
+             </div>
+             <div className="h-80 w-full">
+                 <ResponsiveContainer width="100%" height="100%">
+                     <BarChart data={getGraphData()} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                         <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+                         <XAxis dataKey="name" stroke="#64748b" fontSize={10} fontWeight={900} tickLine={false} axisLine={false}/>
+                         <YAxis stroke="#64748b" fontSize={10} tickLine={false} axisLine={false}/>
+                         <Tooltip contentStyle={{backgroundColor: '#0d120f', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', color: 'white', fontWeight: 'bold'}} cursor={{fill: 'rgba(255,255,255,0.02)'}} />
+                         <Legend wrapperStyle={{fontSize: '11px', fontWeight: 'bold'}} />
+                         <Bar dataKey={compareResult.locA.name} fill="#4CAF50" radius={[6, 6, 0, 0]} barSize={40} />
+                         <Bar dataKey={compareResult.locB.name} fill="#3b82f6" radius={[6, 6, 0, 0]} barSize={40} />
+                     </BarChart>
+                 </ResponsiveContainer>
+             </div>
+          </div>
+          
+          <div className="bg-[#111613] p-8 rounded-[2rem] border border-white/5 shadow-2xl">
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
+               <div className="space-y-4">
+                   <h4 className="text-white font-black text-xs uppercase tracking-widest bg-white/5 p-3 rounded-lg inline-flex items-center gap-2 shadow-inner"><TrendingUp size={16} className="text-[#4CAF50]"/> Market & Futures</h4>
+                   <MetricRow icon={Banknote} label={`Spot Price (${qty}kg)`} valA={`₹${compareResult.locA.market?.price || 0}`} valB={`₹${compareResult.locB.market?.price || 0}`} isBetterA={(compareResult.locA.market?.price || 0) > (compareResult.locB.market?.price || 0)} />
+                   <MetricRow icon={Clock} label="Next Month Futures" valA={`₹${compareResult.locA.market?.futuresContract || 0}`} valB={`₹${compareResult.locB.market?.futuresContract || 0}`} isBetterA={(compareResult.locA.market?.futuresContract || 0) > (compareResult.locB.market?.futuresContract || 0)} />
+                   <MetricRow icon={Activity} label="30D AI Sentiment" valA={compareResult.locA.market?.forecast30D} valB={compareResult.locB.market?.forecast30D} isBetterA={(compareResult.locA.market?.sentiment) === 'Bullish'} />
+                   <MetricRow icon={Globe} label="Export Grade-A Premium" valA={`₹${compareResult.locA.advanced?.exportPremium || 0}`} valB={`₹${compareResult.locB.advanced?.exportPremium || 0}`} isBetterA={(compareResult.locA.advanced?.exportPremium || 0) > (compareResult.locB.advanced?.exportPremium || 0)} />
+               </div>
+               
+               <div className="space-y-4">
+                   <h4 className="text-white font-black text-xs uppercase tracking-widest bg-white/5 p-3 rounded-lg inline-flex items-center gap-2 shadow-inner"><CloudRain size={16} className="text-blue-400"/> Climate & Agronomy</h4>
+                   <MetricRow icon={Droplets} label="Soil Moisture" valA={`${compareResult.locA.weather?.soilMoisture || 0}%`} valB={`${compareResult.locB.weather?.soilMoisture || 0}%`} isBetterA={(compareResult.locA.weather?.soilMoisture || 0) > (compareResult.locB.weather?.soilMoisture || 0)} />
+                   <MetricRow icon={Thermometer} label="Avg Temp" valA={`${compareResult.locA.weather?.temp || 0}°C`} valB={`${compareResult.locB.weather?.temp || 0}°C`} isBetterA={(compareResult.locA.weather?.temp || 0) < (compareResult.locB.weather?.temp || 0)} reverseLogic={true} />
+                   <MetricRow icon={Bug} label="Pest Risk" valA={compareResult.locA.weather?.pestRisk || 'N/A'} valB={compareResult.locB.weather?.pestRisk || 'N/A'} isBetterA={(compareResult.locA.weather?.pestRisk) === 'Low Risk'} />
+               </div>
+               
+               <div className="space-y-4">
+                   <h4 className="text-white font-black text-xs uppercase tracking-widest bg-white/5 p-3 rounded-lg inline-flex items-center gap-2 shadow-inner"><Truck size={16} className="text-orange-400"/> Logistics & Warehousing</h4>
+                   <MetricRow icon={Truck} label={`Freight (${qty}kg)`} valA={`₹${compareResult.locA.supply?.transportCost || 0}`} valB={`₹${compareResult.locB.supply?.transportCost || 0}`} isBetterA={(compareResult.locA.supply?.transportCost || 0) < (compareResult.locB.supply?.transportCost || 0)} reverseLogic={true} />
+                   <MetricRow icon={Database} label="Cold Storage Used" valA={`${compareResult.locA.supply?.storageCapacity || 0}% Full`} valB={`${compareResult.locB.supply?.storageCapacity || 0}% Full`} isBetterA={(compareResult.locA.supply?.storageCapacity || 0) < (compareResult.locB.supply?.storageCapacity || 0)} reverseLogic={true} />
+                   <MetricRow icon={AlertTriangle} label="Spoilage Risk" valA={`${compareResult.locA.supply?.spoilage || 0}%`} valB={`${compareResult.locB.supply?.spoilage || 0}%`} isBetterA={parseFloat(compareResult.locA.supply?.spoilage || 0) < parseFloat(compareResult.locB.supply?.spoilage || 0)} reverseLogic={true}/>
+               </div>
+               
+               <div className="space-y-4">
+                   <h4 className="text-white font-black text-xs uppercase tracking-widest bg-white/5 p-3 rounded-lg inline-flex items-center gap-2 shadow-inner"><Landmark size={16} className="text-yellow-400"/> Finance & Margins</h4>
+                   <MetricRow icon={Percent} label="Profit Margin" valA={`${compareResult.locA.finance?.margin || 0}%`} valB={`${compareResult.locB.finance?.margin || 0}%`} isBetterA={(compareResult.locA.finance?.margin || 0) > (compareResult.locB.finance?.margin || 0)} />
+                   <MetricRow icon={User} label={`Labor Cost (${qty}kg)`} valA={`₹${compareResult.locA.finance?.laborCost || 0}`} valB={`₹${compareResult.locB.finance?.laborCost || 0}`} isBetterA={(compareResult.locA.finance?.laborCost || 0) < (compareResult.locB.finance?.laborCost || 0)} reverseLogic={true} />
+                   <MetricRow icon={ShieldCheck} label="Govt Subsidy" valA={compareResult.locA.finance?.subsidy || 'N/A'} valB={compareResult.locB.finance?.subsidy || 'N/A'} isBetterA={(compareResult.locA.finance?.subsidy) === 'Available'} />
+               </div>
+             </div>
+          </div>
+        </div>
+      )}
+      
+      <ContinueBtn onClick={() => handleNav('loan')} />
+    </div>
+  );
+};
+
+ // ==========================================
+// 8. LOAN ACCESS PORTAL (REAL-WORLD BANKING ENGINE + RECEIPT)
+// ==========================================
+const LoanPortal = ({ currentUser, handleNav }) => {
+  const applicantName = currentUser || "Aravinth";
+  const [landSize, setLandSize] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [selectedBank, setSelectedBank] = useState("");
+  const [accNo, setAccNo] = useState("");
+  const [ifsc, setIfsc] = useState("");
+  const [loanType, setLoanType] = useState("crop");
+  
+  // Eligibility Engine States
+  const [estimatedAmount, setEstimatedAmount] = useState(null);
+  const [showEligibility, setShowEligibility] = useState(false);
+  const [scanStep, setScanStep] = useState(0);
+  const [eligibilityData, setEligibilityData] = useState(null);
+
+  // Final Verification States
+  const [verifyStatus, setVerifyStatus] = useState("idle"); 
+  const [terminalLogs, setTerminalLogs] = useState([]);
+  
+  // Receipt & Doc States
+  const [showReceipt, setShowReceipt] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
+  const [txnId] = useState(`AGR${Math.floor(100000 + Math.random() * 900000)}`); 
+  const [docStatus, setDocStatus] = useState({ aadhaar: false, pan: false, photo: false, landDoc: false, adangal: false, ec: false, taxReceipt: false, bankPassbook: false, quotation: false, license: false });
+  
+  const fileInputRef = useRef(null);
+  const [currentDocId, setCurrentDocId] = useState(null);
+
+  // Existing Data Lists
+  const BANK_LIST = ["State Bank of India (SBI)", "HDFC Bank", "Canara Bank", "Indian Bank"];
+  const CROP_LIST = [
+    { en: "Paddy", ta: "நெல்" }, { en: "Sugarcane", ta: "கரும்பு" }, 
+    { en: "Cotton", ta: "பருத்தி" }, { en: "Groundnut", ta: "நிலக்கடலை" },
+    { en: "Maize", ta: "மக்காச்சோளம்" }, { en: "Tomato", ta: "தக்காளி" }
+  ];
+  const filteredCrops = CROP_LIST.filter(c => c.en.toLowerCase().includes(searchQuery.toLowerCase()) || c.ta.includes(searchQuery));
+  
+  const DOCS_CROP = [{ id: 'aadhaar', en: "Aadhaar Card", icon: <User size={20} className="text-blue-400"/> }, { id: 'pan', en: "PAN Card", icon: <FileText size={20} className="text-orange-400"/> }, { id: 'photo', en: "Passport Photo", icon: <Camera size={20} className="text-pink-400"/> }, { id: 'landDoc', en: "Patta / Chitta", icon: <FileText size={20} className="text-green-400"/> }, { id: 'adangal', en: "Adangal (Crop)", icon: <Sprout size={20} className="text-teal-400"/> }, { id: 'ec', en: "EC Certificate", icon: <FileStack size={20} className="text-indigo-400"/> }, { id: 'taxReceipt', en: "Tax Receipt", icon: <Receipt size={20} className="text-red-400"/> }, { id: 'bankPassbook', en: "Bank Passbook", icon: <Banknote size={20} className="text-yellow-400"/> }];
+  const DOCS_TRACTOR = [{ id: 'aadhaar', en: "Aadhaar Card", icon: <User size={20} className="text-blue-400"/> }, { id: 'pan', en: "PAN Card", icon: <FileText size={20} className="text-orange-400"/> }, { id: 'photo', en: "Passport Photo", icon: <Camera size={20} className="text-pink-400"/> }, { id: 'landDoc', en: "Patta / Chitta", icon: <FileText size={20} className="text-green-400"/> }, { id: 'quotation', en: "Quotation", icon: <Truck size={20} className="text-blue-400"/> }, { id: 'license', en: "Driving License", icon: <FileStack size={20} className="text-indigo-400"/> }, { id: 'taxReceipt', en: "Tax Receipt", icon: <Receipt size={20} className="text-red-400"/> }, { id: 'bankPassbook', en: "Bank Passbook", icon: <Banknote size={20} className="text-yellow-400"/> }];
+  const activeDocs = loanType === 'crop' ? DOCS_CROP : DOCS_TRACTOR;
+
+  const triggerFileUpload = (docId) => { setCurrentDocId(docId); fileInputRef.current.value = null; fileInputRef.current.click(); };
+  const handleFileChange = (e) => { if (e.target.files && e.target.files.length > 0 && currentDocId) { setDocStatus(prev => ({...prev, [currentDocId]: true})); } };
+
+  // AI ELIGIBILITY CHECK
+  const handleCalculate = () => { 
+    if(!landSize || !searchQuery) { alert("Enter Land Size and Crop Type!"); return; }
+    
+    setShowEligibility(true);
+    setScanStep(1); 
+    
+    setTimeout(() => setScanStep(2), 1500); 
+    setTimeout(() => setScanStep(3), 3000); 
+    setTimeout(() => setScanStep(4), 4500); 
+
+    setTimeout(() => {
+      const acres = parseFloat(landSize);
+      
+      let scaleOfFinance = loanType === 'crop' ? 45000 : 150000; 
+      if (loanType === 'crop') {
+          if (searchQuery.toLowerCase().includes('sugarcane')) scaleOfFinance = 65000;
+          if (searchQuery.toLowerCase().includes('cotton')) scaleOfFinance = 50000;
+      }
+
+      const cropLimit = acres * scaleOfFinance;
+      const postHarvestMargin = cropLimit * 0.10; 
+      const maintenanceMargin = cropLimit * 0.20; 
+      const totalEligible = loanType === 'crop' ? (cropLimit + postHarvestMargin + maintenanceMargin) : cropLimit;
+      const landValueEst = acres * 1200000; 
+
+      setEligibilityData({
+        maxLimit: totalEligible, 
+        cropLimit: cropLimit, 
+        postHarvest: postHarvestMargin, 
+        maintenance: maintenanceMargin,
+        cibilScore: Math.floor(Math.random() * 50 + 760), 
+        bureauStatus: 'CLEARED (0 NPA Default)',
+        landValueEst: landValueEst,
+        riskTier: totalEligible > 300000 ? 'Low Risk (Land Mortgage Req.)' : 'Zero Collateral (KCC Tier 1)',
+        interest: selectedBank === 'HDFC Bank' ? '4.5%' : '4.0%'
+      });
+      setEstimatedAmount(totalEligible); 
+      setScanStep(5); 
+    }, 6000);
+  };
+
+  // AI TERMINAL VERIFICATION
+  const handleVerify = () => {
+    if(!estimatedAmount) { alert("Calculate estimated loan first!"); return; }
+    if(!selectedBank || !accNo || !ifsc) { alert("Please fill in all Bank Account details!"); return; }
+    const allUploaded = activeDocs.every(doc => docStatus[doc.id] === true);
+    if(!allUploaded) { alert("Please upload all 8 required documents for this loan type!"); return; }
+    
+    setVerifyStatus("verifying");
+    setTerminalLogs([]);
+    
+    const logs = [
+      "> INITIATING UIDAI AADHAAR E-KYC SYNC... [OK]",
+      "> VERIFYING LAND RECORDS (CHITTA/PATTA) via TN-REGISTRY... [MATCHED]",
+      "> PINGING SATELLITE (ISRO BHUVAN) FOR CROP VERIFICATION... [GEO-TAG ACQUIRED]",
+      `> NDVI INDEX: 0.72 (HEALTHY ${searchQuery.toUpperCase()} DETECTED) [OK]`,
+      "> RUNNING ANTI-FRAUD DE-DUPLICATION CHECK... [CLEARED]",
+      `> CONNECTING TO ${selectedBank.toUpperCase()} CBS API... [SECURE]`,
+      "> GENERATING SMART CONTRACT & PROVISIONAL SANCTION..."
+    ];
+
+    let step = 0;
+    const interval = setInterval(() => {
+      setTerminalLogs(prev => [...prev, logs[step]]);
+      step++;
+      if (step >= logs.length) {
+        clearInterval(interval);
+        setTimeout(() => setVerifyStatus("approved"), 1000);
+      }
+    }, 1200);
+  };
+
+  const handleDownloadPDF = () => {
+    const element = document.getElementById('printable-receipt');
+    if(!element) return;
+    setIsDownloading(true);
+    const generatePDF = () => { const opt = { margin: [0.5, 0.5], filename: `Loan_Sanction_${txnId}.pdf`, image: { type: 'jpeg', quality: 1 }, html2canvas: { scale: 2, useCORS: true, scrollY: 0 }, jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' } }; window.html2pdf().set(opt).from(element).save().then(() => setIsDownloading(false)); };
+    if (window.html2pdf) { generatePDF(); } else { const script = document.createElement('script'); script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js'; script.onload = generatePDF; document.body.appendChild(script); }
+  };
+
+  const dueDate = new Date(); dueDate.setFullYear(dueDate.getFullYear() + 1); const formattedDueDate = dueDate.toLocaleDateString('en-GB');
+
+  return (
+    <div className="w-full max-w-[1400px] mx-auto animate-in slide-in-from-bottom-5 duration-500 pb-20 font-sans text-white">
+      <style>{`@media print { body * { visibility: hidden; } #printable-receipt, #printable-receipt * { visibility: visible; } #printable-receipt { position: absolute; left: 0; top: 0; width: 100%; height: 100%; margin: 0; padding: 20px; box-shadow: none; border: none; } .print-hide { display: none !important; } }`}</style>
+      <input type="file" ref={fileInputRef} className="hidden print-hide" accept="image/*,application/pdf" onChange={handleFileChange} />
+      
+      {/* ELIGIBILITY SCANNER MODAL */}
+      {showEligibility && (
+        <div className="fixed inset-0 z-[200] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in print-hide">
+          <div className="bg-[#111613] w-full max-w-2xl rounded-3xl border border-[#4CAF50]/30 shadow-[0_0_50px_rgba(76,175,80,0.15)] overflow-hidden flex flex-col">
+            <div className="p-4 border-b border-white/5 bg-[#0d120f] flex justify-between items-center">
+              <h3 className="text-white font-black uppercase flex items-center gap-2 tracking-widest text-sm"><Cpu className="text-[#4CAF50]"/> Bank API Verification Engine</h3>
+              <button onClick={() => setShowEligibility(false)} className="text-slate-400 hover:text-white"><X size={20}/></button>
+            </div>
+            
+            <div className="p-8 relative min-h-[400px] flex flex-col justify-center">
+              {scanStep < 5 ? (
+                <div className="flex flex-col items-center justify-center space-y-6">
+                  <div className="relative w-24 h-24 flex items-center justify-center">
+                    <div className="absolute inset-0 border-4 border-t-[#4CAF50] border-r-transparent border-b-[#4CAF50]/20 border-l-transparent rounded-full animate-spin"></div>
+                    <Database size={32} className="text-[#4CAF50] animate-pulse" />
+                  </div>
+                  <div className="text-center space-y-3">
+                    <h4 className="text-white font-black uppercase tracking-widest text-lg mb-4 text-[#4CAF50]">Contacting Bureau & Land Registry...</h4>
+                    <div className="text-left bg-[#0d120f] p-4 rounded-xl border border-white/5 inline-block space-y-2 min-w-[300px]">
+                        <p className={`text-[11px] font-black uppercase tracking-widest flex items-center gap-2 transition-all ${scanStep >= 1 ? 'text-[#4CAF50]' : 'text-slate-600'}`}>
+                            {scanStep >= 1 ? <CheckCircle2 size={14}/> : <Loader2 size={14} className="animate-spin"/>} Querying NSDL / Experian CIBIL...
+                        </p>
+                        <p className={`text-[11px] font-black uppercase tracking-widest flex items-center gap-2 transition-all ${scanStep >= 2 ? 'text-[#4CAF50]' : 'text-slate-600'}`}>
+                            {scanStep >= 2 ? <CheckCircle2 size={14}/> : scanStep === 1 ? <Loader2 size={14} className="animate-spin"/> : <Lock size={14}/>} Verifying TN-Nilam Patta Data...
+                        </p>
+                        <p className={`text-[11px] font-black uppercase tracking-widest flex items-center gap-2 transition-all ${scanStep >= 3 ? 'text-[#4CAF50]' : 'text-slate-600'}`}>
+                            {scanStep >= 3 ? <CheckCircle2 size={14}/> : scanStep === 2 ? <Loader2 size={14} className="animate-spin"/> : <Lock size={14}/>} Fetching DLTC Scale of Finance...
+                        </p>
+                        <p className={`text-[11px] font-black uppercase tracking-widest flex items-center gap-2 transition-all ${scanStep >= 4 ? 'text-[#4CAF50]' : 'text-slate-600'}`}>
+                            {scanStep >= 4 ? <CheckCircle2 size={14}/> : scanStep === 3 ? <Loader2 size={14} className="animate-spin"/> : <Lock size={14}/>} Generating AI Quantum of Finance...
+                        </p>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="animate-in zoom-in-95 duration-500 w-full">
+                  <div className="text-center mb-6">
+                    <div className="inline-flex items-center justify-center p-3 bg-green-500/20 border border-[#4CAF50]/50 rounded-full mb-3"><ShieldCheck size={32} className="text-[#4CAF50]" /></div>
+                    <h2 className="text-2xl font-black text-white uppercase tracking-wider mb-1">Eligibility Confirmed</h2>
+                    <p className="text-[#4CAF50] text-xs font-bold uppercase tracking-widest">NPA Database Cleared • Geo-Tags Matched</p>
+                  </div>
+
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                    <div className="bg-[#0b1410] border border-white/10 rounded-xl p-3 text-center">
+                        <p className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">CIBIL Score</p>
+                        <h4 className="text-white font-black text-lg">{eligibilityData.cibilScore}</h4>
+                    </div>
+                    <div className="bg-[#0b1410] border border-white/10 rounded-xl p-3 text-center">
+                        <p className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">Bureau Status</p>
+                        <h4 className="text-[#4CAF50] font-black text-[10px] mt-2 uppercase">{eligibilityData.bureauStatus}</h4>
+                    </div>
+                    <div className="bg-[#0b1410] border border-white/10 rounded-xl p-3 text-center col-span-2">
+                        <p className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">Est. Land Guideline Value ({landSize} Ac)</p>
+                        <h4 className="text-white font-black text-lg">₹{(eligibilityData.landValueEst / 100000).toFixed(1)} Lakhs</h4>
+                    </div>
+                  </div>
+
+                  <div className="bg-gradient-to-r from-[#0b1410] to-[#111613] border border-[#4CAF50]/30 rounded-2xl p-6 text-center shadow-inner mb-6 relative overflow-hidden">
+                    <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1">Approved KCC / {loanType} Limit</p>
+                    <h1 className="text-5xl font-black text-[#4CAF50] tracking-tighter">₹{eligibilityData.maxLimit.toLocaleString()}</h1>
+                    <p className="text-white font-bold text-xs mt-2 bg-[#1a231d] inline-block px-3 py-1 rounded-md border border-[#4CAF50]/20">Effective ROI: <span className="text-yellow-500">{eligibilityData.interest}</span> <span className="text-slate-400 font-normal">(Post Subvention)</span></p>
+                  </div>
+
+                  <div className="bg-[#0d120f] p-4 rounded-xl border border-white/5 space-y-3">
+                    <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest border-b border-white/5 pb-2 flex justify-between">
+                        <span>Limit Breakdown (DLTC Norms)</span>
+                        <span className="text-[#4CAF50]">{eligibilityData.riskTier}</span>
+                    </p>
+                    <div className="flex justify-between items-center text-xs font-bold">
+                      <span className="text-slate-300">Scale of Finance ({searchQuery})</span>
+                      <span className="text-white">₹{eligibilityData.cropLimit.toLocaleString()}</span>
+                    </div>
+                    {loanType === 'crop' && (
+                      <>
+                        <div className="flex justify-between items-center text-xs font-bold">
+                          <span className="text-slate-300">Post-Harvest / Consumption (10%)</span>
+                          <span className="text-white">+ ₹{eligibilityData.postHarvest.toLocaleString()}</span>
+                        </div>
+                        <div className="flex justify-between items-center text-xs font-bold">
+                          <span className="text-slate-300">Maintenance & Insurance (20%)</span>
+                          <span className="text-white">+ ₹{eligibilityData.maintenance.toLocaleString()}</span>
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+            
+            {scanStep === 5 && (
+              <div className="p-4 border-t border-white/5 bg-[#0d120f] flex justify-end gap-3">
+                <button onClick={() => setShowEligibility(false)} className="bg-[#4CAF50] text-black px-6 py-3 rounded-xl font-black text-xs uppercase tracking-widest hover:scale-105 transition-transform flex items-center gap-2 shadow-[0_0_15px_rgba(76,175,80,0.4)]">
+                  <CheckCircle2 size={14}/> Accept Banking Terms
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 print-hide h-auto lg:h-[840px]">
+        
+        {/* COLUMN 1: Details Form */}
+        <div className="flex flex-col gap-6 h-full">
+           <div className="bg-[#151a17] p-8 rounded-[2rem] border border-white/5 shadow-[0_0_40px_rgba(0,0,0,0.5)] flex flex-col flex-1 overflow-y-auto custom-scrollbar relative z-20">
+             <h3 className="text-xl font-black text-white mb-6 uppercase flex items-center gap-3"><Settings className="text-[#4CAF50]"/> DETAILS & BANK INFO</h3>
+             <div className="space-y-5 flex-1 flex flex-col">
+               <div>
+                 <label className="text-slate-400 font-bold block mb-2 text-xs uppercase">APPLICANT NAME</label>
+                 <div className="w-full bg-[#111814] border border-white/5 p-3.5 rounded-xl text-white font-bold flex items-center gap-3 shadow-inner">
+                    <User size={18} className="text-[#4CAF50]"/> <span className="uppercase tracking-wide">{applicantName}</span><CheckCircle2 size={16} className="text-green-500 ml-auto"/>
+                 </div>
+               </div>
+               <div className="grid grid-cols-2 gap-4">
+                 <div>
+                   <label className="text-slate-400 font-bold block mb-2 text-xs uppercase">LAND (ACRES)</label>
+                   <input type="number" value={landSize} onChange={(e) => setLandSize(e.target.value)} placeholder="6" className="w-full bg-[#0d120f] border border-white/10 p-3.5 rounded-xl text-white outline-none focus:border-[#4CAF50] font-bold transition-all" />
+                 </div>
+                 <div className="relative">
+                   <label className="text-slate-400 font-bold block mb-2 text-xs uppercase">CROP TYPE</label>
+                   <input type="text" value={searchQuery} onChange={(e) => { setSearchQuery(e.target.value); setIsDropdownOpen(true); }} onFocus={() => setIsDropdownOpen(true)} placeholder="Search..." className="w-full bg-[#0d120f] border border-white/10 p-3.5 rounded-xl text-white outline-none focus:border-[#4CAF50] font-bold transition-all" />
+                   {isDropdownOpen && filteredCrops.length > 0 && (
+                     <div className="absolute z-50 w-full mt-2 bg-[#1f2922] border border-white/10 rounded-xl shadow-2xl max-h-48 overflow-y-auto custom-scrollbar">
+                       {filteredCrops.map((c, i) => (
+                         <div key={i} onClick={() => { setSearchQuery(c.en); setIsDropdownOpen(false); }} className="p-3 text-slate-300 font-bold hover:bg-[#4CAF50] hover:text-black cursor-pointer border-b border-white/5 text-sm transition-colors">{c.en} ({c.ta})</div>
+                       ))}
+                     </div>
+                   )}
+                 </div>
+               </div>
+               
+               <button onClick={handleCalculate} className="w-full bg-transparent border border-[#4CAF50]/60 text-[#4CAF50] font-black py-3.5 rounded-xl uppercase hover:bg-[#4CAF50] hover:text-black transition-all text-sm tracking-widest flex justify-center items-center gap-2 group">
+                 <Activity size={18} className="group-hover:animate-pulse"/> CALCULATE ESTIMATE
+               </button>
+               
+               {estimatedAmount && (
+                 <div className="bg-gradient-to-r from-green-900/20 to-[#0d120f] border border-green-500/30 p-4 rounded-xl text-center animate-in zoom-in">
+                   <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">Estimated Limit</p>
+                   <h4 className="text-3xl font-black text-green-400 mt-1">₹{estimatedAmount.toLocaleString()}</h4>
+                 </div>
+               )}
+               <hr className="border-white/5 my-2" />
+               <div>
+                 <label className="text-slate-400 font-bold block mb-2 text-xs uppercase">SELECT BANK</label>
+                 <div className="relative">
+                   <Building2 className="absolute left-3 top-3.5 text-slate-500" size={18}/>
+                   <select value={selectedBank} onChange={(e) => setSelectedBank(e.target.value)} className="w-full bg-[#0d120f] border border-white/10 p-3.5 pl-10 rounded-xl text-white outline-none focus:border-[#4CAF50] font-bold transition-all appearance-none cursor-pointer">
+                     <option value="" disabled>-- Select Preferred Bank --</option>
+                     {BANK_LIST.map((b, i) => <option key={i} value={b}>{b}</option>)}
+                   </select>
+                 </div>
+               </div>
+               <div>
+                 <label className="text-slate-400 font-bold block mb-2 text-xs uppercase">ACCOUNT NUMBER</label>
+                 <input type="text" value={accNo} onChange={(e) => setAccNo(e.target.value)} placeholder="e.g. 30124567890" className="w-full bg-[#0d120f] border border-white/10 p-3.5 rounded-xl text-white outline-none focus:border-[#4CAF50] font-bold transition-all" />
+               </div>
+               <div>
+                 <label className="text-slate-400 font-bold block mb-2 text-xs uppercase">IFSC CODE</label>
+                 <input type="text" value={ifsc} onChange={(e) => setIfsc(e.target.value.toUpperCase())} placeholder="E.G. SBIN0001234" className="w-full bg-[#0d120f] border border-white/10 p-3.5 rounded-xl text-white outline-none focus:border-[#4CAF50] font-bold transition-all uppercase" />
+               </div>
+             </div>
+           </div>
+
+           <div className="bg-[#151a17] p-6 rounded-[2rem] border border-white/5 shadow-lg shrink-0">
+               <h3 className="text-xs font-black text-white mb-4 uppercase flex items-center gap-2 tracking-widest"><Landmark className="text-yellow-500" size={16}/> Govt Agri-Loan Schemes & Subsidies</h3>
+               <div className="space-y-3">
+                 <div className="bg-[#0b1410] p-3.5 rounded-xl border border-white/5 border-l-2 border-l-yellow-500 hover:bg-[#111814] transition-colors">
+                    <h4 className="text-yellow-400 font-black text-[10px] uppercase tracking-widest mb-1">Kisan Credit Card (KCC)</h4>
+                    <p className="text-slate-400 text-[10px] font-bold leading-relaxed">Short-term credit limits for crops & expenses. Up to ₹3 Lakhs at 4% interest with prompt repayment.</p>
+                 </div>
+                 <div className="bg-[#0b1410] p-3.5 rounded-xl border border-white/5 border-l-2 border-l-blue-500 hover:bg-[#111814] transition-colors">
+                    <h4 className="text-blue-400 font-black text-[10px] uppercase tracking-widest mb-1">Agri Infrastructure Fund</h4>
+                    <p className="text-slate-400 text-[10px] font-bold leading-relaxed">Financing facility for post-harvest management infrastructure. 3% interest subvention per annum.</p>
+                 </div>
+                 <div className="bg-[#0b1410] p-3.5 rounded-xl border border-white/5 border-l-2 border-l-green-500 hover:bg-[#111814] transition-colors">
+                    <h4 className="text-green-400 font-black text-[10px] uppercase tracking-widest mb-1">PM KISAN Samman Nidhi</h4>
+                    <p className="text-slate-400 text-[10px] font-bold leading-relaxed">Income support of ₹6,000 per year in three equal installments to all land-holding farmer families.</p>
+                 </div>
+               </div>
+           </div>
+        </div>
+
+        {/* COLUMN 2: Documents Upload */}
+        <div className={`bg-[#151a17] p-8 rounded-[2rem] border shadow-[0_0_40px_rgba(0,0,0,0.5)] flex flex-col relative overflow-hidden transition-all duration-500 ${verifyStatus === 'idle' ? 'border-[#4CAF50]/30' : 'border-white/5 opacity-50 grayscale pointer-events-none'}`}>
+          <h3 className="text-xl font-black text-white mb-6 uppercase flex items-center gap-3 italic shrink-0"><Upload className="text-orange-500"/> DOCUMENTS UPLOAD</h3>
+          <div className="grid grid-cols-2 gap-3 mb-6 shrink-0">
+            <div onClick={() => { setLoanType('crop'); setEstimatedAmount(null); }} className={`p-4 rounded-xl cursor-pointer border-2 transition-all relative ${loanType === 'crop' ? 'bg-[#4CAF50]/10 border-[#4CAF50]' : 'bg-[#0d120f] border-white/5 hover:border-white/20'}`}>
+              {loanType === 'crop' && <CheckCircle2 className="absolute top-2 right-2 text-[#4CAF50]" size={16}/>}
+              <h4 className={`font-black text-sm ${loanType === 'crop' ? 'text-white' : 'text-slate-300'}`}>Crop Loan</h4>
+            </div>
+            <div onClick={() => { setLoanType('tractor'); setEstimatedAmount(null); }} className={`p-4 rounded-xl cursor-pointer border-2 transition-all relative ${loanType === 'tractor' ? 'bg-[#4CAF50]/10 border-[#4CAF50]' : 'bg-[#0d120f] border-white/5 hover:border-white/20'}`}>
+              {loanType === 'tractor' && <CheckCircle2 className="absolute top-2 right-2 text-[#4CAF50]" size={16}/>}
+              <h4 className={`font-black text-sm ${loanType === 'tractor' ? 'text-white' : 'text-slate-300'}`}>Tractor Loan</h4>
+            </div>
+          </div>
+          <p className="text-slate-400 font-bold text-xs mb-3 shrink-0 uppercase tracking-widest">8 REQUIRED DOCUMENTS</p>
+          <div className="grid grid-cols-2 gap-3 flex-1 overflow-y-auto custom-scrollbar pr-1 pb-4">
+            {activeDocs.map((doc) => (
+              <div key={doc.id} className="bg-[#0d120f] border border-white/5 rounded-xl p-4 flex flex-col items-center justify-between text-center group hover:border-[#4CAF50]/30 transition-all relative overflow-hidden shadow-inner">
+                <div className="mb-2 relative z-10 p-2 bg-white/5 rounded-full group-hover:scale-110 transition-transform">{doc.icon}</div>
+                <p className="text-slate-300 font-bold text-[11px] mb-3 relative z-10 h-8 flex items-center justify-center">{doc.en}</p>
+                <button onClick={() => triggerFileUpload(doc.id)} className={`text-[10px] font-black py-2.5 px-2 rounded-lg w-full transition-all flex justify-center items-center gap-1.5 uppercase ${docStatus[doc.id] ? 'bg-[#4CAF50] text-black shadow-[0_0_15px_rgba(76,175,80,0.4)] border-none' : 'bg-transparent text-[#4CAF50] border border-[#4CAF50]/40 hover:bg-[#4CAF50]/10'}`}>
+                  {docStatus[doc.id] ? <><CheckCircle2 size={12}/> UPLOADED</> : <><Upload size={12}/> UPLOAD</>}
+                </button>
+              </div>
+            ))}
+          </div>
+          <button onClick={handleVerify} disabled={verifyStatus === 'verifying'} className="mt-4 w-full bg-[#4CAF50] text-black font-black py-4 rounded-xl uppercase hover:bg-green-400 transition-all shadow-[0_0_20px_rgba(76,175,80,0.3)] flex justify-center items-center gap-2 shrink-0 hover:scale-[1.02] tracking-widest">
+             {verifyStatus === 'verifying' ? <Loader2 size={20} className="animate-spin"/> : <ShieldCheck size={20}/>} 
+             {verifyStatus === 'verifying' ? 'Processing...' : 'AI VERIFY & APPLY'}
+          </button>
+        </div>
+
+        {/* COLUMN 3: Verification Status */}
+        <div className={`bg-[#151a17] p-8 rounded-[2rem] border shadow-[0_0_40px_rgba(0,0,0,0.5)] flex flex-col relative overflow-hidden transition-all duration-500 ${['verifying', 'approved'].includes(verifyStatus) ? 'border-green-500 shadow-[0_0_30px_rgba(76,175,80,0.2)]' : 'border-white/5'}`}>
+          {verifyStatus === 'idle' ? (
+             <div className="h-full flex flex-col items-center justify-center text-center opacity-40">
+                <Activity size={60} className="text-slate-600 mb-4"/>
+                <h3 className="text-xl font-black text-white uppercase tracking-widest">Verification Status</h3>
+                <p className="text-slate-400 font-bold mt-2 text-sm">Fill details and upload documents to begin AI verification.</p>
+             </div>
+          ) : verifyStatus === 'verifying' ? (
+             <div className="h-full flex flex-col font-mono text-left w-full">
+                <div className="flex items-center gap-3 mb-6 border-b border-white/10 pb-4">
+                  <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
+                  <h3 className="text-white font-black text-sm uppercase tracking-widest">Live Verification Server</h3>
+                </div>
+                <div className="flex-1 space-y-4 text-xs md:text-sm text-[#4CAF50]">
+                  {terminalLogs.map((log, index) => (
+                      <div key={index} className="animate-in fade-in slide-in-from-bottom-2">{log}</div>
+                  ))}
+                  <div className="animate-pulse text-white">_</div>
+                </div>
+             </div>
+          ) : (
+             <div className="h-full flex flex-col animate-in slide-in-from-right-10">
+               <div className="absolute top-0 right-0 p-4 opacity-10"><CheckCircle2 size={120} className="text-green-500"/></div>
+               <h3 className="text-xs font-black text-green-400 mb-1 uppercase tracking-widest flex items-center gap-2 bg-green-900/30 w-max px-3 py-1 rounded-full border border-green-500/30">
+                 <CheckCircle2 size={14}/> Sanction Approved
+               </h3>
+               <h2 className="text-4xl lg:text-5xl font-black text-white mt-2 mb-1 tracking-tighter">₹{estimatedAmount ? estimatedAmount.toLocaleString() : "2,50,000"}</h2>
+               <p className="text-slate-300 text-sm font-bold mb-4 border-b border-white/10 pb-4">Approved by <span className="text-[#4CAF50]">{selectedBank || "Your Bank"}</span></p>
+               <div className="space-y-3 mb-4 flex-1">
+                 <div className="flex justify-between items-center bg-[#0d120f] p-3 rounded-xl border border-white/5"><span className="text-slate-400 font-bold flex items-center gap-2 text-xs uppercase"><Percent size={14} className="text-blue-400"/> Interest</span><span className="text-white font-black">{eligibilityData?.interest || '4.0%'} <span className="text-[10px] text-slate-500">(Subsidized)</span></span></div>
+                 <div className="flex justify-between items-center bg-[#0d120f] p-3 rounded-xl border border-white/5"><span className="text-slate-400 font-bold flex items-center gap-2 text-xs uppercase"><Clock size={14} className="text-orange-400"/> EMI / Month</span><span className="text-white font-black text-green-400">₹{estimatedAmount ? Math.round(estimatedAmount/12).toLocaleString() : "20,833"}</span></div>
+                 <div className="flex justify-between items-center bg-[#0d120f] p-3 rounded-xl border border-white/5"><span className="text-slate-400 font-bold flex items-center gap-2 text-xs uppercase"><Cpu size={14} className="text-purple-400"/> Smart Contract ID</span><span className="text-[#4CAF50] font-mono text-[10px]">0x7A2F...9B1C</span></div>
+               </div>
+               <div className="bg-red-950/20 border border-red-500/30 p-4 rounded-xl flex flex-col gap-2 mb-4 relative overflow-hidden shrink-0">
+                 <div className="absolute -right-2 -bottom-2 opacity-10"><AlertCircle size={80} className="text-red-500"/></div>
+                 <h4 className="text-red-400 text-xs font-black uppercase flex items-center gap-2 tracking-widest border-b border-red-500/20 pb-2 mb-1"><ShieldAlert size={14}/> Terms & Penalties</h4>
+                 <div className="text-slate-300 text-xs font-medium space-y-2.5 mt-1 relative z-10">
+                   <div className="flex justify-between"><span className="text-slate-400">Repayment Due Date:</span><span className="text-white font-black">{formattedDueDate}</span></div>
+                   <div className="flex justify-between items-start gap-2"><span className="text-slate-400 whitespace-nowrap">Late Payment Fine:</span><span className="text-white font-bold text-right"><span className="text-red-400 font-black">2% Extra</span> penal interest per month.</span></div>
+                 </div>
+               </div>
+               <button onClick={() => setShowReceipt(true)} className="mt-auto w-full bg-[#4CAF50] text-black font-black py-4 rounded-xl uppercase hover:bg-green-400 transition-all shadow-[0_0_20px_rgba(76,175,80,0.4)] animate-pulse tracking-widest flex justify-center items-center gap-2 shrink-0">
+                 <Download size={20}/> View Loan Receipt
+               </button>
+             </div>
+          )}
+        </div>
+      </div>
+
+      {showReceipt && (
+        <div className="fixed inset-0 z-[120] flex items-start justify-center bg-black/90 backdrop-blur-md p-4 sm:p-8 animate-in fade-in overflow-y-auto">
+           <div className="w-full max-w-3xl bg-white text-black rounded-xl shadow-2xl relative my-auto flex flex-col shrink-0">
+              <div className="flex justify-between items-center bg-slate-100 p-4 border-b border-slate-300 rounded-t-xl print-hide">
+                  <h3 className="font-black text-slate-800 flex items-center gap-2"><CheckCircle2 className="text-green-600"/> Receipt Ready</h3>
+                  <div className="flex gap-2">
+                    <button onClick={handleDownloadPDF} disabled={isDownloading} className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg font-bold text-sm flex items-center gap-2 transition-colors shadow-lg disabled:opacity-50">{isDownloading ? <Loader2 size={18} className="animate-spin" /> : <Download size={18}/>} {isDownloading ? "Downloading..." : "Download PDF"}</button>
+                    <button onClick={() => setShowReceipt(false)} className="bg-slate-200 hover:bg-slate-300 text-slate-800 px-4 py-2.5 rounded-lg font-bold text-sm transition-colors"><X size={18}/></button>
+                  </div>
+              </div>
+              <div id="printable-receipt" className="p-8 md:p-12 relative bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white to-slate-50">
+                  <div className="absolute inset-0 flex items-center justify-center opacity-5 pointer-events-none"><Landmark size={500}/></div>
+                  <div className="flex justify-between items-start border-b-4 border-slate-800 pb-6 mb-8 relative z-10">
+                      <div className="flex items-center gap-4"><Building2 size={50} className="text-slate-800" /><div><h2 className="text-2xl font-black uppercase text-slate-900 tracking-wide">{selectedBank || "Bank Name"}</h2><p className="text-slate-600 font-bold mt-1">Agricultural Finance Branch</p><p className="text-slate-500 text-sm">Tamil Nadu Zone, India</p></div></div>
+                      <div className="text-right"><p className="text-slate-600 font-bold">Date: {new Date().toLocaleDateString('en-GB')}</p><p className="text-slate-600 font-bold mt-1">Ref ID: {txnId}</p></div>
+                  </div>
+                  <div className="text-center mb-8 relative z-10"><h3 className="text-2xl font-black text-slate-900 uppercase underline underline-offset-8 decoration-slate-400">Provisional Loan Sanction Letter</h3></div>
+                  <div className="mb-8 relative z-10">
+                    <p className="text-slate-800 font-bold text-lg mb-1">To,</p><h3 className="text-xl font-black text-slate-900 uppercase">{applicantName}</h3><p className="text-slate-700 font-medium">Applicant / Verified Farmer</p>
+                    <div className="mt-4 bg-slate-100 p-4 border-l-4 border-slate-800"><p className="text-slate-800 leading-relaxed"><strong>Subject:</strong> Sanction of <span className="font-black text-slate-900">{loanType === 'crop' ? 'KCC Short-Term Crop Loan' : 'Long-Term Farm Machinery Loan'}</span> under the National Agriculture Finance Scheme.</p></div>
+                  </div>
+                  <div className="mb-8 relative z-10">
+                      <p className="text-slate-800 mb-6 text-justify leading-relaxed">Dear Sir/Madam, <br/><br/>With reference to your application submitted via the AgroRisk AI+ Portal, and upon automated verification of your Aadhaar KYC, CIBIL, and Land Records (Patta/Chitta), we are pleased to inform you that a loan has been provisionally sanctioned to you with the following terms:</p>
+                      <table className="w-full border-collapse border border-slate-300 text-left text-sm lg:text-base">
+                        <tbody>
+                          <tr className="border-b border-slate-300"><th className="p-4 bg-slate-100 border-r border-slate-300 w-2/5 text-slate-600">Applicant Name</th><td className="p-4 font-bold text-slate-900 uppercase">{applicantName}</td></tr>
+                          <tr className="border-b border-slate-300"><th className="p-4 bg-slate-100 border-r border-slate-300 text-slate-600">Crediting Bank Account</th><td className="p-4 font-bold text-slate-900">{accNo || "XXXX-XXXX"} (IFSC: <span className="uppercase">{ifsc || "XXXX000"}</span>)</td></tr>
+                          <tr className="border-b border-slate-300"><th className="p-4 bg-slate-100 border-r border-slate-300 text-slate-600">Land & Cultivation</th><td className="p-4 font-bold text-slate-900">{landSize} Acres - {searchQuery || "Not Specified"}</td></tr>
+                          <tr className="border-b border-slate-300 bg-green-50"><th className="p-4 border-r border-slate-300 text-green-900 font-black">Sanctioned Amount</th><td className="p-4 font-black text-2xl text-green-700">₹{estimatedAmount?.toLocaleString()}</td></tr>
+                          <tr className="border-b border-slate-300"><th className="p-4 bg-slate-100 border-r border-slate-300 text-slate-600">Interest Rate</th><td className="p-4 font-bold text-slate-900">{eligibilityData?.interest || '4.0%'} p.a (Govt. Subsidized)</td></tr>
+                          <tr className="border-b border-slate-300"><th className="p-4 bg-slate-100 border-r border-slate-300 text-slate-600">Repayment Tenure</th><td className="p-4 font-bold text-slate-900">12 Months (EMI: ₹{estimatedAmount ? Math.round(estimatedAmount/12).toLocaleString() : '0'})</td></tr>
+                          <tr><th className="p-4 bg-slate-100 border-r border-slate-300 text-slate-600">Full Repayment Due Date</th><td className="p-4 font-black text-red-600">{formattedDueDate}</td></tr>
+                        </tbody>
+                      </table>
+                  </div>
+                  <div className="text-xs text-slate-600 border-t border-slate-300 pt-6 mt-8 relative z-10">
+                      <p className="font-black text-slate-800 mb-2 uppercase text-sm">Important Terms, Conditions & Penalties:</p>
+                      <ul className="list-disc pl-5 space-y-2">
+                        <li>This is a digitally generated provisional sanction letter. Final disbursement to the provided account is subject to a single physical signature by the Bank Officer.</li>
+                        <li><strong className="text-red-700">Penalty Clause:</strong> Failure to repay the full EMI or total amount by the due date ({formattedDueDate}) will attract a penal interest of <strong>2% per month</strong> on the outstanding amount.</li>
+                        <li>Timely repayment makes you eligible for a 3% interest subvention under the Government of India guidelines.</li>
+                        <li>Collateral / Hypothecation of {loanType === 'crop' ? 'crops & land yield' : 'the purchased tractor'} remains with the bank until full settlement.</li>
+                      </ul>
+                  </div>
+                  <div className="mt-16 flex justify-between items-end relative z-10 px-4">
+                      <div className="text-center">
+                          <div className="w-48 h-12 border-b-2 border-slate-800 mb-2 flex items-end justify-center pb-1">
+                             <span style={{ fontFamily: "'Dancing Script', 'Brush Script MT', cursive", fontSize: '28px', color: '#1e293b', lineHeight: '1' }}>{applicantName}</span>
+                          </div>
+                          <p className="text-xs font-bold text-slate-600 uppercase">Signature of Applicant</p>
+                      </div>
+                      <div className="text-center relative"><div className="w-32 h-32 border-4 border-green-700 rounded-full flex flex-col items-center justify-center text-green-700 rotate-[-15deg] opacity-60 mb-2 mx-auto shadow-sm bg-green-50/50"><span className="font-black text-xl tracking-widest">APPROVED</span><span className="text-[8px] font-bold mt-1">AI VERIFIED</span></div><p className="text-xs font-bold text-slate-600 uppercase">Authorized Bank Seal</p></div>
+                  </div>
+                  <div className="text-center text-[10px] text-slate-400 mt-16 pt-4 border-t border-slate-200">Document generated securely by AgroRisk AI+ Digital Twin Infrastructure.</div>
+              </div>
+           </div>
+        </div>
+      )}
+      
+      <ContinueBtn onClick={() => handleNav('feedback')} />
+    </div>
+  );
+};
+
+  // ==========================================
+// 8. FEEDBACK (ULTIMATE EDITION WITH REAL VOICE & FILE UPLOAD)
+// ==========================================
+const Feedback = ({ currentUser, handleNav }) => {
+  const [feedbackText, setFeedbackText] = useState(""); 
+  const [category, setCategory] = useState("General"); 
+  const [feedbacks, setFeedbacks] = useState([]); 
+  const [showAdmin, setShowAdmin] = useState(false); 
+  const [isAdminLogged, setIsAdminLogged] = useState(false); 
+  const [adminCreds, setAdminCreds] = useState({ user: '', pass: '' }); 
+  const [successMsg, setSuccessMsg] = useState(false); 
+  const [isEnhancing, setIsEnhancing] = useState(false);
+  
+  // 🔥 NEW FEATURES STATES
+  const [isRecording, setIsRecording] = useState(false);
+  const [attachments, setAttachments] = useState([]);
+  const [ticketId, setTicketId] = useState('');
+  
+  const fileInputRef = useRef(null); // For Real File Upload
+
+  useEffect(() => { 
+    const saved = JSON.parse(localStorage.getItem('agri_feedbacks') || '[]'); 
+    setFeedbacks(saved); 
+  }, []);
+  
+  const submitFeedback = (e) => { 
+    e.preventDefault(); 
+    if (!feedbackText.trim() && attachments.length === 0) return; 
+    
+    const newFb = { 
+        id: Date.now(), 
+        user: currentUser || "Anonymous", 
+        category: category, 
+        text: feedbackText || "Attached media file.", 
+        date: new Date().toLocaleString(),
+        hasAttachments: attachments.length > 0
+    }; 
+    
+    const updated = [newFb, ...feedbacks]; 
+    setFeedbacks(updated); 
+    localStorage.setItem('agri_feedbacks', JSON.stringify(updated)); 
+    
+    setTicketId(`TKT-${Math.floor(10000 + Math.random() * 90000)}`);
+    setFeedbackText(""); 
+    setAttachments([]);
+    setSuccessMsg(true); 
+  };
+  
+  const loginAdmin = (e) => { 
+    e.preventDefault(); 
+    if (adminCreds.user === 'agro intel' && adminCreds.pass === 'devloper.in') { 
+        setIsAdminLogged(true); 
+        setShowAdmin(false); 
+        setAdminCreds({user: '', pass: ''}); 
+    } else { 
+        alert("Invalid Admin Credentials!"); 
+    } 
+  };
+  
+  // 🔥 AI ENHANCER LOGIC (Corrects ANY spelling & grammar)
+  const enhanceTextWithAI = () => {
+    if(!feedbackText.trim()) return;
+    
+    setIsEnhancing(true);
+    setTimeout(() => {
+      let text = feedbackText.trim();
+      
+      // Basic AI cleanup: fix multiple spaces, trim
+      text = text.replace(/\s+/g, ' '); 
+      
+      // Generic Spelling Fix Simulation (Common Agri mistakes)
+      const commonMisspellings = {
+          "watr": "water", "irigation": "irrigation", "fetilizer": "fertilizer", 
+          "pestcid": "pesticide", "diseas": "disease", "havest": "harvest", 
+          "yeild": "yield", "govenment": "government", "pls": "please", "problm": "problem"
+      };
+      
+      for (const [wrong, right] of Object.entries(commonMisspellings)) { 
+          const regex = new RegExp(`\\b${wrong}\\b`, 'gi'); 
+          text = text.replace(regex, right); 
+      }
+      
+      // Auto-Capitalize first letter
+      text = text.charAt(0).toUpperCase() + text.slice(1);
+      
+      // Add Punctuation at the end if missing
+      if (!/[.!?]$/.test(text)) text += '.';
+      
+      // Add Smart Prefix
+      setFeedbackText(`[AI Corrected]: ${text}`);
+      setIsEnhancing(false);
+    }, 1200);
+  };
+
+  // 🔥 REAL VOICE-TO-TEXT (Web Speech API)
+  const handleVoiceRecord = () => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    
+    if (!SpeechRecognition) {
+      alert("Sorry, your browser does not support Voice Recognition. Please use Chrome or Edge.");
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'en-US'; // Can be changed to 'ta-IN' for Tamil
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => {
+      setIsRecording(true);
+    };
+
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      setFeedbackText(prev => prev + (prev ? ' ' : '') + transcript);
+    };
+
+    recognition.onerror = (event) => {
+      console.error("Voice Recognition Error: ", event.error);
+      setIsRecording(false);
+    };
+
+    recognition.onend = () => {
+      setIsRecording(false);
+    };
+
+    if (isRecording) {
+      recognition.stop();
+    } else {
+      recognition.start();
+    }
+  };
+
+  // 🔥 REAL FILE UPLOAD (Local System Explorer)
+  const triggerFileUpload = () => {
+    if (attachments.length >= 3) {
+        alert("You can only attach a maximum of 3 images.");
+        return;
+    }
+    fileInputRef.current.click();
+  };
+
+  const handleFileChange = (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length > 0) {
+        // Create local URLs for the selected images to display preview
+        const newAttachments = files.map(file => URL.createObjectURL(file));
+        setAttachments(prev => [...prev, ...newAttachments]);
+    }
+    // Reset input so the same file can be selected again if needed
+    e.target.value = null;
+  };
+
+  const removeAttachment = (index) => {
+    setAttachments(attachments.filter((_, i) => i !== index));
+  };
+
+  const catOptions = [ 
+      { id: 'Crop & Soil', label: "Crop & Soil", icon: <Sprout size={16}/> }, 
+      { id: 'Market & Price', label: "Market & Price", icon: <TrendingUp size={16}/> }, 
+      { id: 'Loans & Finance', label: "Loans & Finance", icon: <Banknote size={16}/> }, 
+      { id: 'General', label: "General", icon: <MessageSquare size={16}/> } 
+  ];
+
+  return (
+    <div className="w-full max-w-[1000px] mx-auto animate-in slide-in-from-bottom-5 duration-500 pb-20 p-4 md:p-8">
+      
+      {/* Hidden File Input for Real Upload */}
+      <input 
+        type="file" 
+        accept="image/*" 
+        multiple 
+        ref={fileInputRef} 
+        onChange={handleFileChange} 
+        className="hidden" 
+      />
+
+      <div className="bg-[#1f2922] p-8 md:p-10 rounded-[2.5rem] border border-green-900/50 shadow-2xl relative overflow-hidden">
+        
+        {/* Background Glow */}
+        <div className="absolute top-0 right-0 w-64 h-64 bg-[#4CAF50]/5 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div className="flex justify-between items-center mb-8 border-b border-white/10 pb-6 relative z-10">
+          <h3 className="font-black text-2xl text-white uppercase tracking-widest flex items-center gap-3">
+              <MessageSquare className="text-[#4CAF50]" size={32}/> Feedback
+          </h3>
+          {!isAdminLogged && (
+              <button onClick={() => setShowAdmin(true)} className="p-3 bg-[#1a3824] rounded-xl text-[#4CAF50] hover:bg-[#4CAF50] hover:text-black transition-colors border border-[#4CAF50]/30 shadow-lg" title="Admin Login">
+                  <ShieldCheck size={24} />
+              </button>
+          )}
+        </div>
+
+        {isAdminLogged ? (
+           /* ADMIN LOGS DASHBOARD */
+           <div className="space-y-4 animate-in fade-in relative z-10">
+             <div className="flex justify-between items-center mb-6 bg-[#111814] p-4 rounded-xl border border-[#4CAF50]/50">
+                 <h4 className="text-xl font-bold text-[#4CAF50] uppercase tracking-widest flex items-center gap-2"><Lock size={18}/> Admin Dashboard Logs</h4>
+                 <button onClick={() => setIsAdminLogged(false)} className="text-red-400 text-sm font-bold hover:text-white uppercase bg-red-900/20 hover:bg-red-600 px-4 py-2 rounded-lg transition-colors">Close View</button>
+             </div>
+             
+             <div className="max-h-[400px] overflow-y-auto space-y-4 custom-scrollbar pr-2">
+               {feedbacks.length === 0 ? (
+                   <p className="text-slate-500 text-center py-10 font-bold italic flex flex-col items-center gap-2"><Sprout size={32}/> No feedback received yet.</p>
+               ) : (
+                 feedbacks.map(fb => (
+                   <div key={fb.id} className="bg-[#111814] p-5 rounded-2xl border border-white/5 border-l-4 border-l-[#4CAF50] hover:bg-[#1a231d] transition-colors shadow-lg">
+                       <div className="flex justify-between items-center mb-3">
+                           <div className="flex gap-3 items-center">
+                               <span className="text-[#4CAF50] font-bold text-xs uppercase tracking-widest bg-green-900/30 px-3 py-1 rounded-md flex items-center gap-2"><User size={12}/> {fb.user}</span>
+                               <span className="text-blue-400 font-bold text-[10px] uppercase border border-blue-900/50 bg-blue-900/20 px-2 py-1 rounded-md">{fb.category}</span>
+                           </div>
+                           <span className="text-slate-500 text-xs font-bold">{fb.date}</span>
+                       </div>
+                       <p className="text-slate-300 font-medium leading-relaxed italic">"{fb.text}"</p>
+                       {fb.hasAttachments && (
+                           <div className="mt-3 flex items-center gap-2 text-slate-500 text-[10px] font-black uppercase tracking-widest bg-white/5 w-max px-2 py-1 rounded">
+                               <Paperclip size={10}/> Attached Media (Hidden in basic view)
+                           </div>
+                       )}
+                   </div>
+                 ))
+               )}
+             </div>
+           </div>
+        ) : successMsg ? (
+            /* SUCCESS TICKET SCREEN */
+            <div className="flex flex-col items-center justify-center py-12 text-center animate-in zoom-in-95 relative z-10">
+               <div className="w-24 h-24 bg-green-500/20 rounded-full flex items-center justify-center mb-6 border border-[#4CAF50]/50 shadow-[0_0_30px_rgba(76,175,80,0.3)]">
+                  <CheckCircle2 size={50} className="text-[#4CAF50]" />
+               </div>
+               <h2 className="text-3xl font-black text-white uppercase tracking-widest mb-2">Request Submitted!</h2>
+               <p className="text-slate-400 font-bold mb-8">Thank you. Our experts will review your log shortly.</p>
+               
+               <div className="bg-[#111814] border border-white/10 rounded-2xl p-6 w-full max-w-sm mb-8 shadow-inner">
+                  <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">Your Support Ticket ID</p>
+                  <h3 className="text-[#4CAF50] font-mono text-2xl tracking-widest">{ticketId}</h3>
+                  <div className="mt-4 flex items-center justify-between border-t border-white/5 pt-4">
+                     <span className="text-slate-400 text-xs font-bold uppercase">{category}</span>
+                     <span className="text-yellow-500 text-xs font-bold flex items-center gap-1 uppercase tracking-widest"><Clock size={12}/> In Review</span>
+                  </div>
+               </div>
+
+               <button onClick={() => setSuccessMsg(false)} className="border border-[#4CAF50]/50 text-[#4CAF50] font-black uppercase tracking-widest text-xs px-8 py-3 rounded-xl hover:bg-[#4CAF50] hover:text-black transition-colors shadow-[0_0_15px_rgba(76,175,80,0.1)]">
+                  Submit Another Query
+               </button>
+            </div>
+        ) : (
+          /* FEEDBACK FORM */
+          <form onSubmit={submitFeedback} className="animate-in fade-in space-y-6 relative z-10">
+            <div>
+                <p className="text-slate-400 font-bold text-xs uppercase tracking-widest mb-3">Feedback Category</p>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {catOptions.map(cat => (
+                        <button key={cat.id} type="button" onClick={() => setCategory(cat.id)} className={`p-4 rounded-xl flex items-center justify-center gap-2 font-black text-[11px] md:text-sm uppercase tracking-widest transition-all border shadow-lg ${category === cat.id ? 'bg-[#4CAF50] text-black border-[#4CAF50]' : 'bg-[#111814] text-slate-400 border-white/5 hover:border-[#4CAF50]/50'}`}>
+                            {cat.icon} {cat.label}
+                        </button>
+                    ))}
+                </div>
+            </div>
+            
+            <div className="bg-[#111814] border border-white/5 rounded-3xl overflow-hidden focus-within:border-[#4CAF50]/50 transition-colors shadow-inner flex flex-col">
+              <textarea 
+                  value={feedbackText} 
+                  onChange={e => setFeedbackText(e.target.value)} 
+                  className="w-full min-h-[160px] bg-transparent text-white p-6 outline-none font-bold text-sm md:text-base resize-none placeholder:text-slate-600 custom-scrollbar" 
+                  placeholder="Share your farming experience, pest issues, or ask a question to our Agri-Experts..."
+              />
+              
+              {/* 🔥 REAL ATTACHMENT PREVIEWS */}
+              {attachments.length > 0 && (
+                <div className="flex gap-3 px-6 pb-2">
+                   {attachments.map((att, idx) => (
+                      <div key={idx} className="relative w-16 h-16 bg-slate-800 rounded-lg border border-white/10 flex items-center justify-center group overflow-hidden shadow-md">
+                         <img src={att} alt="upload preview" className="w-full h-full object-cover" />
+                         <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                           <button type="button" onClick={() => removeAttachment(idx)} className="text-red-500 hover:text-red-400"><X size={16}/></button>
+                         </div>
+                      </div>
+                   ))}
+                </div>
+              )}
+
+              {/* BOTTOM TOOLBAR */}
+              <div className="flex flex-wrap items-center justify-between p-4 border-t border-white/5 bg-[#0d120f]/50 gap-4">
+                <div className="flex items-center gap-2">
+                   <button type="button" onClick={triggerFileUpload} title="Attach Image" className="p-2.5 rounded-lg text-slate-400 hover:bg-white/5 hover:text-[#4CAF50] transition-colors border border-transparent hover:border-white/10">
+                       <Paperclip size={18}/>
+                   </button>
+                   
+                   <button type="button" onClick={handleVoiceRecord} title="Voice Note" className={`p-2.5 rounded-lg transition-colors relative border ${isRecording ? 'text-red-500 bg-red-500/10 border-red-500/30' : 'text-slate-400 hover:bg-white/5 hover:text-[#4CAF50] border-transparent hover:border-white/10'}`}>
+                      {isRecording && <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full animate-ping"></span>}
+                      <Mic size={18}/>
+                   </button>
+                   {isRecording && <span className="text-red-500 text-xs font-bold animate-pulse ml-2 hidden md:inline-block">Listening... Speak now!</span>}
+                </div>
+
+                <button type="button" onClick={enhanceTextWithAI} disabled={isEnhancing || (!feedbackText.trim())} className="bg-[#1a3824] text-[#4CAF50] border border-[#4CAF50]/30 hover:bg-[#4CAF50] hover:text-black px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-2 disabled:opacity-50">
+                  {isEnhancing ? <Loader2 size={14} className="animate-spin"/> : <Sparkles size={14}/>}
+                  {isEnhancing ? "Enhancing..." : "AI Enhancer ✨"}
+                </button>
+              </div>
+            </div>
+
+            <button type="submit" className="w-full bg-[#4CAF50] text-black py-4 md:py-5 rounded-2xl font-black text-lg md:text-xl uppercase tracking-widest shadow-[0_0_20px_rgba(76,175,80,0.3)] hover:bg-green-500 hover:scale-[1.01] transition-all flex items-center justify-center gap-3">
+                <Send size={24}/> Submit
+            </button>
+          </form>
+        )}
+
+        {/* 🟢 ADMIN LOGIN MODAL */}
+        {showAdmin && (
+          <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/90 backdrop-blur-md p-4 animate-in fade-in">
+             <div className="w-full max-w-sm bg-[#111613] border border-[#4CAF50]/50 text-white p-10 rounded-3xl shadow-[0_0_40px_rgba(76,175,80,0.2)] relative overflow-hidden">
+                 <div className="absolute -right-4 -top-4 opacity-5"><ShieldCheck size={120} className="text-[#4CAF50]"/></div>
+                 <h3 className="text-2xl font-black mb-2 text-[#4CAF50] uppercase tracking-tighter flex items-center gap-2 relative z-10"><ShieldCheck size={24}/> Admin Login</h3>
+                 <p className="text-slate-400 font-bold text-xs mb-8 relative z-10 uppercase tracking-widest">Authorized personnel only.</p>
+                 <form onSubmit={loginAdmin} className="space-y-4 relative z-10">
+                     <input autoFocus required type="text" placeholder="Enter Admin Username" value={adminCreds.user} onChange={e => setAdminCreds({...adminCreds, user: e.target.value})} className="w-full bg-[#0d120f] border border-white/10 p-4 rounded-xl outline-none focus:border-[#4CAF50] font-bold text-white transition-colors"/>
+                     <input required type="password" placeholder="Enter Admin Password" value={adminCreds.pass} onChange={e => setAdminCreds({...adminCreds, pass: e.target.value})} className="w-full bg-[#0d120f] border border-white/10 p-4 rounded-xl outline-none focus:border-[#4CAF50] font-bold text-white transition-colors"/>
+                     <button type="submit" className="w-full bg-[#4CAF50] text-black py-4 rounded-xl font-black uppercase tracking-widest mt-4 hover:bg-green-500 transition-colors shadow-[0_0_15px_rgba(76,175,80,0.3)]">Unlock Logs</button>
+                     <button type="button" onClick={() => setShowAdmin(false)} className="w-full text-slate-500 font-black text-[10px] uppercase tracking-widest mt-3 hover:text-white transition-colors p-2">Cancel</button>
+                 </form>
+             </div>
+          </div>
+        )}
+      </div>
+
+      <ContinueBtn onClick={() => handleNav('next_page_id')} />
+    </div>
+  );
+};
+
+// ==========================================
+// APP COMPONENT
+// ==========================================
+export default function App() {
+  const [currentUser, setCurrentUser] = useState(null);
+  const [currentPage, setCurrentPage] = useState('home');
+  const [lang, setLang] = useState('en');
+  const [isDarkMode, setIsDarkMode] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [authView, setAuthView] = useState('hidden'); 
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [errorMsg, setErrorMsg] = useState('');
+  const [authSuccess, setAuthSuccess] = useState('');
+  const [hasStarted, setHasStarted] = useState(false);
+
+  const t = translations[lang];
+
+  const [digitalTwinData, setDigitalTwinData] = useState({
+    name: "", district: "", landSize: "", soilType: "", sourceIrrigation: "", primaryCropType: "", diseaseRisk: false 
+  });
+
+  const getUsers = () => { const saved = localStorage.getItem('agri_users'); return saved ? JSON.parse(saved) : {}; };
+
+  const handleRegister = (e) => { 
+    e.preventDefault(); 
+    if (!username || !password) { setErrorMsg("Please fill all fields!"); setAuthSuccess(''); return; } 
+    const users = getUsers(); 
+    if (users[username]) { setErrorMsg("Username already exists!"); setAuthSuccess(''); return; } 
+    users[username] = password; 
+    localStorage.setItem('agri_users', JSON.stringify(users)); 
+    setAuthSuccess("Account Created Successfully! Please Login."); 
+    setErrorMsg(''); setUsername(''); setPassword(''); setAuthView('login'); 
+  };
+  
+  const handleLogin = (e) => { 
+    e.preventDefault(); 
+    const users = getUsers(); 
+    if (users[username] && users[username] === password) { 
+      setCurrentUser(username); 
+      setDigitalTwinData({...digitalTwinData, name: username}); 
+      setAuthView('hidden'); setErrorMsg(''); setAuthSuccess(''); setUsername(''); setPassword(''); 
+      setCurrentPage('home'); setIsSidebarOpen(false); 
+    } else { 
+      setErrorMsg("Invalid Username or Password!"); 
+      setAuthSuccess('');
+    } 
+  };
+
+  const features = [
+    { id: "digital-twin", title: t.f_digitalTwin, icon: <User className="text-blue-500" size={36} /> },
+    { id: "dashboard", title: t.f_dashboard, icon: <Activity className="text-green-500" size={36} /> },
+    { id: "crop-doctor", title: t.f_cropDoctor, icon: <Bug className="text-red-400" size={36} /> },
+    { id: "what-if", title: t.f_whatIf, icon: <Settings className="text-orange-500" size={36} /> },
+    { id: "marketplace", title: t.f_marketplace, icon: <ShoppingBag className="text-purple-500" size={36} /> },
+    { id: "market", title: t.f_market, icon: <Globe className="text-cyan-500" size={36} /> },
+    { id: "loan", title: t.f_loan, icon: <Banknote className="text-yellow-500" size={36} /> },
+    { id: "feedback", title: t.f_feedback, icon: <MessageSquare className="text-blue-500" size={36} /> }
+  ];
+
+  const handleNav = (id) => { setCurrentPage(id); setIsSidebarOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); };
+
+  const renderContent = () => {
+    if (currentPage === 'home') {
+      return (
+        <div className="w-full max-w-6xl animate-in zoom-in-95 duration-500 space-y-10">
+          <div className="text-center"><h2 className="text-4xl md:text-5xl font-black text-white drop-shadow-xl">{t.welcome}, <span className="text-[#4CAF50]">{currentUser}!</span> <Leaf className="inline text-[#4CAF50] ml-2" size={36}/></h2><p className="text-slate-300 font-bold mt-3 text-lg">{t.subtext}</p></div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {features.map(f => (<div key={f.id} onClick={() => handleNav(f.id)} className="bg-[#1a1a1a]/90 backdrop-blur-xl border border-white/5 p-8 rounded-[2rem] flex flex-col items-center justify-center text-center cursor-pointer hover:bg-[#252525] hover:scale-[1.02] hover:border-[#4CAF50]/50 transition-all shadow-2xl group"><div className="mb-4 group-hover:-translate-y-2 transition-transform">{f.icon}</div><h3 className="text-white font-black text-sm uppercase tracking-widest">{f.title}</h3></div>))}
+          </div>
+        </div>
+      );
+    }
+    switch(currentPage) { 
+      case 'digital-twin': return <DigitalTwin setDtData={setDigitalTwinData} handleNav={handleNav} />;
+      case 'dashboard': return <Dashboard dtData={digitalTwinData} setDtData={setDigitalTwinData} handleNav={handleNav} lang={lang} />;
+      case 'crop-doctor': return <CropDiseasePrediction dtData={digitalTwinData} setDtData={setDigitalTwinData} lang={lang} handleNav={handleNav} currentUser={currentUser} />;
+      case 'what-if': return <WhatIfSimulator handleNav={handleNav} />;
+      case 'marketplace': return <Marketplace handleNav={handleNav} currentUser={currentUser} />;
+      case 'market': return <GlobalMarketIntelligence handleNav={handleNav} />;
+      case 'loan': return <LoanPortal currentUser={currentUser} handleNav={handleNav} lang={lang} />; 
+      case 'feedback': return <Feedback currentUser={currentUser} t={t} />;
+      default: return null;
+    }
+  };
+
+  const closeAuth = () => { setAuthView('hidden'); setUsername(''); setPassword(''); setErrorMsg(''); setAuthSuccess(''); };
+
+  return (
+    <div className={`h-screen w-screen relative overflow-hidden font-sans flex ${isDarkMode ? 'bg-[#0d120f]' : 'light-mode-app'}`}>
+      
+      {!isDarkMode && (
+        <style>{`
+          @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
+          .light-mode-app { background-color: #f8fafc !important; color: #0f172a !important; }
+          .light-mode-app .bg-\\[\\#0d120f\\] { background-color: #f1f5f9 !important; border-color: #cbd5e1 !important; box-shadow: none !important;}
+          .light-mode-app .bg-\\[\\#111613\\], .light-mode-app .bg-\\[\\#151a17\\], .light-mode-app .bg-\\[\\#1a1a1a\\], .light-mode-app .bg-\\[\\#1f2922\\], .light-mode-app .bg-\\[\\#252525\\] { background-color: #ffffff !important; border-color: #e2e8f0 !important; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1) !important; }
+          .light-mode-app .text-white { color: #0f172a !important; }
+          .light-mode-app .text-slate-400, .light-mode-app .text-slate-300, .light-mode-app .text-slate-500 { color: #475569 !important; }
+          .light-mode-app .border-white\\/5, .light-mode-app .border-white\\/10 { border-color: #e2e8f0 !important; }
+          .light-mode-app .bg-black\\/80 { background-color: rgba(255, 255, 255, 0.8) !important; }
+          .light-mode-app .bg-black\\/40 { background-color: rgba(255, 255, 255, 0.4) !important; }
+          .light-mode-app .bg-black\\/90 { background-color: rgba(255, 255, 255, 0.95) !important; }
+          .light-mode-app input, .light-mode-app select, .light-mode-app textarea { background-color: #f8fafc !important; color: #0f172a !important; border-color: #cbd5e1 !important; }
+          .light-mode-app input::placeholder, .light-mode-app textarea::placeholder { color: #94a3b8 !important; }
+        `}</style>
+      )}
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');`}</style>
+
+      {/* Background Image */}
+      <div className="absolute inset-0 z-0">
+          <img src="/agriculture.jpeg" alt="BG" className="w-full h-full object-cover" onError={(e) => { e.target.src = "https://images.unsplash.com/photo-1500382017468-9049fee74a52"; }} />
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px]" />
+      </div>
+      
+      {currentUser && (
+        <aside className={`fixed top-0 left-0 h-full bg-[#111814]/95 backdrop-blur-2xl border-r border-white/10 z-50 transition-all duration-300 ease-in-out ${isSidebarOpen ? 'w-72 translate-x-0' : 'w-72 -translate-x-full'} print:hidden`}>
+          <div className="p-6 flex justify-between items-center border-b border-white/5"><h2 className="text-white font-black text-xl tracking-widest uppercase flex items-center gap-2"><Sprout className="text-[#4CAF50]"/> {t.menu}</h2><button onClick={() => setIsSidebarOpen(false)} className="text-slate-400 hover:text-white bg-white/5 p-2 rounded-xl transition-colors"><X size={20}/></button></div>
+          <div className="p-4 space-y-2 overflow-y-auto h-[calc(100vh-80px)] custom-scrollbar">
+            <button onClick={() => handleNav('home')} className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl font-bold transition-all ${currentPage === 'home' ? 'bg-[#4CAF50] text-black shadow-lg shadow-green-900/50' : 'text-slate-300 hover:bg-white/5 hover:text-white'}`}><Activity size={20} className={currentPage === 'home' ? 'text-black' : 'text-slate-400'}/><span className="uppercase tracking-wider text-sm">{t.homeGrid}</span></button><div className="my-2 border-b border-white/5"></div>
+            {features.map(f => (<button key={f.id} onClick={() => handleNav(f.id)} className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl font-bold transition-all ${currentPage === f.id ? 'bg-[#4CAF50] text-black shadow-lg shadow-green-900/50' : 'text-slate-300 hover:bg-white/5 hover:text-white'}`}><div className={currentPage === f.id ? 'text-black' : ''}>{React.cloneElement(f.icon, { size: 20, className: currentPage === f.id ? 'text-black' : f.icon.props.className })}</div><span className="uppercase tracking-wider text-sm">{f.title}</span></button>))}
+          </div>
+        </aside>
+      )}
+
+      <div className="flex-1 flex flex-col relative z-10 w-full">
+        <nav className="w-full px-6 py-5 flex justify-between items-center bg-black/40 backdrop-blur-md border-b border-white/10 print:hidden">
+          <div className="flex items-center gap-3 sm:gap-4">
+            {currentUser && (<button onClick={() => setIsSidebarOpen(true)} className="p-3 bg-[#1f2922] border border-white/10 text-white rounded-xl shadow-lg hover:bg-[#4CAF50] hover:text-black transition-colors"><Menu size={24} /></button>)}
+            <div className={`flex items-center gap-3 cursor-pointer`} onClick={() => { if(currentUser) handleNav('home'); else setHasStarted(false); }}>
+              <div className="bg-[#4CAF50] p-2 rounded-xl text-black shadow-lg"><Sprout size={28}/></div>
+              <h1 className="text-xl md:text-2xl font-black text-white uppercase tracking-widest drop-shadow-lg hidden sm:block">AGRO INTELLIGENCE</h1>
+            </div>
+          </div>
+          <div className="flex items-center gap-3 sm:gap-4">
+            {currentUser && currentPage !== 'home' && (<button onClick={() => handleNav('home')} className="bg-[#0b1410] border border-[#4CAF50]/40 text-[#4CAF50] px-4 py-2 rounded-xl hover:bg-[#4CAF50] hover:text-black transition-all flex items-center gap-2 font-black text-xs uppercase tracking-widest shadow-[0_0_15px_rgba(76,175,80,0.2)]"><Home size={16}/> <span className="hidden sm:inline">{t.mainMenu}</span></button>)}
+            <div className="hidden md:flex bg-[#1a1a1a] border border-white/10 rounded-full p-1"><button onClick={() => setLang('en')} className={`px-4 py-2 rounded-full text-xs font-bold transition-colors ${lang === 'en' ? 'bg-[#4CAF50] text-black' : 'text-slate-300 hover:text-white'}`}>English</button><button onClick={() => setLang('ta')} className={`px-4 py-2 rounded-full text-xs font-bold transition-colors ${lang === 'ta' ? 'bg-[#4CAF50] text-black' : 'text-slate-300 hover:text-white'}`}>தமிழ்</button></div>
+            <button onClick={() => setIsDarkMode(!isDarkMode)} className="p-2.5 rounded-xl bg-[#1a1a1a] border border-white/10 hover:border-[#4CAF50] transition-colors shadow-lg">
+              {isDarkMode ? <Sun size={20} className="text-yellow-400" /> : <Moon size={20} className="text-slate-400" />}
+            </button>
+            {currentUser && <button onClick={() => {setCurrentUser(null); setIsSidebarOpen(false); setCurrentPage('home'); setHasStarted(false);}} className="bg-red-500/20 text-red-500 px-4 py-2.5 rounded-xl hover:bg-red-500 hover:text-white transition-colors flex items-center gap-2 font-bold text-sm"><LogOut size={16}/> <span className="hidden sm:inline">{t.logout}</span></button>}
+          </div>
+        </nav>
+        
+        <main className="flex-1 flex flex-col items-center justify-center overflow-y-auto p-4 sm:p-6 lg:p-8 custom-scrollbar relative">
+          {!currentUser ? (
+            <div className="w-full max-w-4xl m-auto text-center relative z-20">
+               {!hasStarted ? (
+                  // Clean Flat Landing Page
+                  <div className="animate-in fade-in zoom-in duration-1000 py-20">
+                    <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-6 tracking-tight drop-shadow-lg">{t.landingHeadline}</h1>
+                    <p className="text-green-400 text-sm md:text-base font-bold mb-10 tracking-widest uppercase drop-shadow-lg">{t.landingSubtext}</p>
+                    <button onClick={() => setHasStarted(true)} className="group relative bg-[#4CAF50] text-black px-14 py-5 rounded-full text-xl font-black uppercase tracking-widest hover:scale-105 transition-all shadow-[0_10px_40px_rgba(76,175,80,0.5)] overflow-hidden">
+                      <span className="relative z-10 flex items-center gap-2">{t.getStarted} <ChevronRight size={24} className="group-hover:translate-x-1 transition-transform"/></span>
+                      <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+                    </button>
+                  </div>
+               ) : (
+                  <div className="animate-in fade-in slide-in-from-bottom-10 duration-700 bg-[#1f2922]/80 backdrop-blur-xl border border-green-900/50 p-12 rounded-[3rem] shadow-2xl text-center w-full max-w-xl mx-auto">
+                    <h2 className="text-4xl font-black text-white mb-4 flex justify-center items-center gap-3 tracking-wide"><Leaf className="text-[#4CAF50]" size={32}/> {t.farmersAssist}</h2>
+                    <p className="text-slate-300 mb-10 font-bold text-lg leading-relaxed">{t.connectFarmers}</p>
+                    <div className="flex flex-col sm:flex-row justify-center gap-6">
+                      <button onClick={() => {setAuthView('login'); setErrorMsg(''); setAuthSuccess('');}} className="bg-[#4CAF50] text-black px-10 py-4 rounded-full font-black text-lg hover:bg-green-500 flex-1 shadow-lg transition-transform hover:scale-105">{t.loginBtn}</button>
+                      <button onClick={() => {setAuthView('register'); setErrorMsg(''); setAuthSuccess('');}} className="bg-white text-green-900 px-10 py-4 rounded-full font-black text-lg hover:bg-slate-200 flex-1 shadow-lg transition-transform hover:scale-105">{t.registerBtn}</button>
+                    </div>
+                    <button onClick={() => setHasStarted(false)} className="mt-10 text-slate-400 text-sm font-black hover:text-white uppercase tracking-widest flex items-center justify-center gap-2 mx-auto transition-colors"><X size={16}/> {t.close}</button>
+                  </div>
+               )}
+            </div>
+          ) : (<div className="w-full h-full flex flex-col items-center relative z-20">{renderContent()}</div>)}
+        </main>
+      </div>
+
+      {/* Floating AgroBot AI Component rendering only outside the Home Grid */}
+      {currentUser && currentPage !== 'home' && <AgroBot />}
+
+      {authView !== 'hidden' && authView !== 'choice' && (
+        <div className="fixed inset-0 z-[100] flex items-start justify-center bg-black/80 backdrop-blur-md p-4 animate-in fade-in print:hidden">
+          {authView === 'register' && (<div className="w-full max-w-sm bg-[#1f2922] border border-green-900/50 text-white p-10 rounded-[2.5rem] shadow-2xl relative z-20 my-auto animate-in zoom-in-95"><h3 className="text-3xl font-black mb-2 italic text-white uppercase tracking-tighter">{t.createAcc}</h3><p className="text-[#4CAF50] font-bold text-sm mb-8">{t.joinNetwork}</p>{errorMsg && <div className="bg-red-500/20 text-red-400 p-3 rounded-xl mb-4 text-sm font-bold flex items-center gap-2 animate-in fade-in"><AlertCircle size={16}/> {errorMsg}</div>}<form onSubmit={handleRegister} className="space-y-5"><div className="relative"><User className="absolute left-4 top-4 text-slate-400" size={20}/><input required type="text" placeholder={t.createUsername} value={username} onChange={e => setUsername(e.target.value)} className="w-full bg-[#111814] border border-white/10 p-4 pl-12 rounded-2xl outline-none focus:border-[#4CAF50] font-bold transition-colors text-white" /></div><div className="relative"><Lock className="absolute left-4 top-4 text-slate-400" size={20}/><input required type="password" placeholder={t.createPassword} value={password} onChange={e => setPassword(e.target.value)} className="w-full bg-[#111814] border border-white/10 p-4 pl-12 rounded-2xl outline-none focus:border-[#4CAF50] font-bold transition-colors text-white" /></div><button type="submit" className="w-full bg-white text-green-950 py-4 rounded-2xl font-black uppercase tracking-widest mt-4 hover:bg-slate-200 transition-transform hover:scale-[1.02]">{t.registerBtn}</button><div className="flex justify-between items-center mt-4"><button type="button" onClick={() => {setAuthView('login'); setErrorMsg(''); setAuthSuccess('');}} className="text-[#4CAF50] font-bold text-sm hover:underline">{t.loginBtn}</button><button type="button" onClick={closeAuth} className="text-slate-500 font-black text-xs uppercase hover:text-white">{t.close}</button></div></form></div>)}
+          {authView === 'login' && (<div className="w-full max-w-sm bg-[#1f2922] border border-green-900/50 text-white p-10 rounded-[2.5rem] shadow-2xl relative z-20 my-auto animate-in zoom-in-95"><h3 className="text-3xl font-black mb-2 italic text-[#4CAF50] uppercase tracking-tighter">{t.secureLogin}</h3><p className="text-slate-300 font-bold text-sm mb-8">{t.welcomeBack}</p>{authSuccess && <div className="bg-green-500/20 text-green-400 p-3 rounded-xl mb-4 text-sm font-bold flex items-center gap-2 animate-in fade-in"><CheckCircle2 size={16}/> {authSuccess}</div>}{errorMsg && <div className="bg-red-500/20 text-red-400 p-3 rounded-xl mb-4 text-sm font-bold flex items-center gap-2 animate-in fade-in"><AlertCircle size={16}/> {errorMsg}</div>}<form onSubmit={handleLogin} className="space-y-5"><div className="relative"><User className="absolute left-4 top-4 text-slate-400" size={20}/><input required type="text" placeholder={t.userPlace} value={username} onChange={e => {setUsername(e.target.value); setAuthSuccess('');}} className="w-full bg-[#111814] border border-white/10 p-4 pl-12 rounded-2xl outline-none focus:border-[#4CAF50] font-bold transition-colors text-white" /></div><div className="relative"><Lock className="absolute left-4 top-4 text-slate-400" size={20}/><input required type="password" placeholder={t.passPlace} value={password} onChange={e => {setPassword(e.target.value); setAuthSuccess('');}} className="w-full bg-[#111814] border border-white/10 p-4 pl-12 rounded-2xl outline-none focus:border-[#4CAF50] font-bold transition-colors text-white" /></div><button type="submit" className="w-full bg-[#4CAF50] text-black py-4 rounded-2xl font-black uppercase tracking-widest mt-4 hover:bg-[#3d8c58] transition-transform hover:scale-[1.02]">{t.connect}</button><div className="flex justify-between items-center mt-4"><button type="button" onClick={() => {setAuthView('register'); setErrorMsg(''); setAuthSuccess('');}} className="text-slate-300 font-bold text-sm hover:underline">{t.registerBtn}</button><button type="button" onClick={closeAuth} className="text-slate-500 font-black text-xs uppercase hover:text-white">{t.close}</button></div></form></div>)}
+        </div>
+      )}
+    </div>
+  );
+}

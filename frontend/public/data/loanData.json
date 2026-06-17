@@ -1,0 +1,60 @@
+{
+  "loanTypes": [
+    {
+      "id": "crop",
+      "labelKey": "loan.type.crop",
+      "amount": {"min": 50000, "max": 250000},
+      "ratePct": {"min": 7, "max": 10},
+      "tenureMonths": {"min": 6, "max": 18},
+      "confidence": 66
+    },
+    {
+      "id": "equipment",
+      "labelKey": "loan.type.equipment",
+      "amount": {"min": 80000, "max": 400000},
+      "ratePct": {"min": 8, "max": 11},
+      "tenureMonths": {"min": 12, "max": 36},
+      "confidence": 61
+    },
+    {
+      "id": "irrigation",
+      "labelKey": "loan.type.irrigation",
+      "amount": {"min": 100000, "max": 500000},
+      "ratePct": {"min": 8, "max": 11},
+      "tenureMonths": {"min": 18, "max": 48},
+      "confidence": 58
+    },
+    {
+      "id": "warehouse",
+      "labelKey": "loan.type.warehouse",
+      "amount": {"min": 50000, "max": 300000},
+      "ratePct": {"min": 7, "max": 10},
+      "tenureMonths": {"min": 3, "max": 12},
+      "confidence": 63
+    },
+    {
+      "id": "kcc",
+      "labelKey": "loan.type.kcc",
+      "amount": {"min": 50000, "max": 300000},
+      "ratePct": {"min": 7, "max": 10},
+      "tenureMonths": {"min": 12, "max": 24},
+      "confidence": 64
+    },
+    {
+      "id": "insurance_linked",
+      "labelKey": "loan.type.insurance_linked",
+      "amount": {"min": 50000, "max": 250000},
+      "ratePct": {"min": 7, "max": 10},
+      "tenureMonths": {"min": 6, "max": 24},
+      "confidence": 60
+    }
+  ],
+  "documents": {
+    "identity": ["Aadhaar", "PAN", "Voter ID", "Driving License"],
+    "land": ["Patta/Chitta", "7/12 Extract", "RTC", "Sale Deed", "Lease Agreement"],
+    "bank": ["Passbook copy", "6‑month statement"],
+    "crop": ["Insurance record", "Sale receipt", "Kisan Credit Card"],
+    "income": ["Existing loan details", "Outstanding liabilities"]
+  },
+  "statusFlow": ["loan.track.pending", "loan.track.more_docs", "loan.track.review", "loan.track.decision"]
+}
