@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "buildCommand": "CI=false GENERATE_SOURCEMAP=false DISABLE_ESLINT_PLUGIN=true npm run build",
+  "outputDirectory": "build",
+  "cleanUrls": true,
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
