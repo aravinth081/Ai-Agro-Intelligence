@@ -249,7 +249,22 @@
     "ui.profile_buffer_suffix": "buffer",
     "ui.profile_loans_suffix": "loans",
     "ui.sim_option_yield": "Yield",
-    "ui.sim_option_profit": "Profit"
+    "ui.sim_option_profit": "Profit",
+    "Enter Land Size and Crop Type!": "Enter Land Size and Crop Type!",
+    "Calculate estimated loan first!": "Calculate estimated loan first!",
+    "Please fill in all Bank Account details!": "Please fill in all Bank Account details!",
+    "Please upload all 8 required documents for this loan type!": "Please upload all 8 required documents for this loan type!",
+    "Invalid Admin Credentials!": "Invalid Admin Credentials!",
+    "You can only attach a maximum of 3 images.": "You can only attach a maximum of 3 images.",
+    "Sorry, your browser does not support Voice Recognition. Please use Chrome or Edge.": "Sorry, your browser does not support Voice Recognition. Please use Chrome or Edge.",
+    "Not Specified": "Not Specified",
+    "2% per month": "2% per month",
+    "[AI Corrected]": "[AI Corrected]",
+    "Anonymous": "Anonymous",
+    "Bank Name": "Bank Name",
+    "Months": "Months",
+    "EMI": "EMI",
+    "p.a": "p.a"
   },
   "ta": {
     "app.name": "AgroRisk AI+ Marketplace",
@@ -495,6 +510,21 @@
     "loan.type.irrigation": "பாசன கடன்",
     "loan.type.warehouse": "களஞ்சிய ரசீது கடன்",
     "loan.type.kcc": "கிசான் கிரெடிட் கார்டு (சிமுலேஷன்)",
-    "loan.type.insurance_linked": "காப்பீடு‑இணைந்த கடன்"
+    "loan.type.insurance_linked": "காப்பீடு‑இணைந்த கடன்",
+    "Enter Land Size and Crop Type!": "நிலத்தின் அளவு மற்றும் பயிர் வகையை உள்ளிடவும்!",
+    "Calculate estimated loan first!": "முதலில் மதிப்பிடப்பட்ட கடனைக் கணக்கிடவும்!",
+    "Please fill in all Bank Account details!": "வங்கி கணக்கு விவரங்கள் அனைத்தையும் நிரப்பவும்!",
+    "Please upload all 8 required documents for this loan type!": "இந்தக் கடன் வகைக்குத் தேவையான 8 ஆவணங்களையும் பதிவேற்றவும்!",
+    "Invalid Admin Credentials!": "தவறான நிர்வாகி சான்றுகள்!",
+    "You can only attach a maximum of 3 images.": "நீங்கள் அதிகபட்சம் 3 படங்களை மட்டுமே இணைக்க முடியும்.",
+    "Sorry, your browser does not support Voice Recognition. Please use Chrome or Edge.": "மன்னிக்கவும், உங்கள் உலாவி குரல் அங்கீகாரத்தை ஆதரிக்கவில்லை. தயவுசெய்து Chrome அல்லது Edge ஐப் பயன்படுத்தவும்.",
+    "Not Specified": "குறிப்பிடப்படவில்லை",
+    "2% per month": "மாதத்திற்கு 2% அபராத வட்டி",
+    "[AI Corrected]": "[AI திருத்தப்பட்டது]",
+    "Anonymous": "அநாமதேயர்",
+    "Bank Name": "வங்கி பெயர்",
+    "Months": "மாதங்கள்",
+    "EMI": "மாத தவணை (EMI)",
+    "p.a": "ஆண்டுக்கு"
   }
 }

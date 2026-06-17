@@ -314,7 +314,247 @@ const translationMap = {
   "Erode": "ஈரோடு",
   "Madurai": "மதுரை",
   "Trichy": "திருச்சி",
-  "Conventional": "வழக்கமான முறை (ரசாயனம்)"
+  "Conventional": "வழக்கமான முறை (ரசாயனம்)",
+
+  // Market Intelligence
+  "Review your holding strategy. If export bans or tariff cuts are active, domestic supply will surge, depressing prices. Consider immediate liquidation or hedging via futures contracts.": "உங்கள் இருப்பு உத்தியை மதிப்பாய்வு செய்யவும். ஏற்றுமதி தடைகள் அல்லது கட்டணக் குறைப்புகள் செயலில் இருந்தால், உள்ளூர் விநியோகம் அதிகரித்து விலையைக் குறைக்கும். உடனடியாக விற்க அல்லது எதிர்கால ஒப்பந்தங்கள் மூலம் ஹெட்ஜ் செய்ய பரிசீலிக்கவும்.",
+  "Nodes: NCDEX, E-NAM, CBOT": "முனையங்கள்: NCDEX, E-NAM, CBOT",
+  "Macro Policy Impact Alert": "மேக்ரோ கொள்கை தாக்க எச்சரிக்கை",
+  "View Alert Desk": "கொள்கை எச்சரிக்கை விவரம்",
+  "AI Hold vs. Sell Strategy (Storage Optimizer)": "AI இருப்பு vs விற்பனை உத்தி (கிடங்கு மேம்படுத்தல்)",
+  "Optimal Hold Time": "உகந்த இருப்பு காலம்",
+  "Est. Storage Cost": "மதிப்பிடப்பட்ட சேமிப்பு செலவு",
+  "Net Extra Profit (After Storage)": "கூடுதல் நிகர லாபம் (சேமிப்புக்கு பின்)",
+  "Global Export Economics & FX": "உலகளாவிய ஏற்றுமதி பொருளாதாரம் & FX",
+  "USD/INR Rate": "USD/INR மாற்று விகிதம்",
+  "Grade-A Export Premium": "தரம்-A ஏற்றுமதி பிரீமியம்",
+  "Exporting Grade-A quality crop yields a massive premium. The current favorable USD/INR exchange rate further maximizes INR realization by ~2.4%.": "உயர்தர விளைபொருட்களை ஏற்றுமதி செய்வது கணிசமான லாபத்தை அளிக்கிறது. தற்போதைய சாதகமான டாலர்/ரூபாய் மாற்று விகிதம் இந்திய ரூபாய் வருவாயை மேலும் ~2.4% அதிகரிக்கிறது.",
+  "Trade Arbitrage Engine": "வர்த்தக ஆர்பிட்ரேஜ் இன்ஜின்",
+  "Profitable Trade Route Confirmed": "லாபகரமான வர்த்தக வழி உறுதிப்படுத்தப்பட்டது",
+  "Local Liquidation Advised": "உள்ளூர் விற்பனை பரிந்துரைக்கப்படுகிறது",
+  "Executing transit secures alpha margins despite freight constraints.": "போக்குவரத்து கட்டுப்பாடுகள் இருந்தாலும் இந்த வழித்தடத்தில் வர்த்தகம் செய்வது கூடுதல் லாபத்தை உறுதி செய்கிறது.",
+  "Spread deficit. The basis difference doesn't clear the transit freight cost.": "விலை வித்தியாசம் போக்குவரத்து செலவை விட குறைவாக உள்ளது. உள்ளூர் விற்பனையே உகந்தது.",
+  "Spread (Gross)": "விலை வித்தியாசம் (மொத்தம்)",
+  "Freight & Storage": "போக்குவரத்து & சேமிப்பு",
+  "Alpha (Net Profit)": "கூடுதல் நிகர லாபம்",
+  "Value Chain Margin Analysis": "மதிப்பு சங்கிலி விளிம்பு பகுப்பாய்வு",
+  "Farm Gate Price (You get)": "விவசாயிக்கு கிடைக்கும் விலை",
+  "Wholesale Mandi Price": "மண்டி மொத்த விலை",
+  "Retail Price (Consumer pays)": "நுகர்வோர் சில்லறை விலை",
+  "Institutional B2B Demand Radar": "நிறுவன B2B கொள்முதல் தேவை",
+  "Zone": "மண்டலம்",
+  "Req:": "தேவை:",
+  "Contract Bid:": "ஒப்பந்த விலை:",
+  "ESG Monetization": "சுற்றுச்சூழல் (ESG) வருவாய்",
+  "Est. Carbon Credit Value": "மதிப்பிடப்பட்ட கார்பன் கிரெடிட் மதிப்பு",
+  "Organic Market Premium": "இயற்கை சந்தை பிரீமியம்",
+  "Above MSP": "குறைந்தபட்ச ஆதரவு விலைக்கு மேல்",
+  "Grade & Value Graph": "தரம் & மதிப்பு வரைபடம்",
+  "Export Report": "அறிக்கையை ஏற்றுமதி செய்",
+  "Market & Futures": "சந்தை & எதிர்கால வர்த்தகம்",
+  "Climate & Agronomy": "காலநிலை & பயிர் அறிவியல்",
+  "Logistics & Warehousing": "போக்குவரத்து & கிடங்கு",
+  "Finance & Margins": "நிதி & லாப வரம்பு",
+  "Spot Price": "உடனடி சந்தை விலை",
+  "Next Month Futures": "அடுத்த மாத எதிர்கால விலை",
+  "30D AI Sentiment": "30 நாள் சந்தை போக்கு (AI)",
+  "Soil Moisture": "மண்ணின் ஈரப்பதம்",
+  "Avg Temp": "சராசரி வெப்பநிலை",
+  "Pest Risk": "பூச்சி தாக்குதல் ஆபத்து",
+  "Freight": "போக்குவரத்து செலவு",
+  "Cold Storage Used": "பயன்படுத்தப்பட்ட குளிர்பதன கிடங்கு",
+  "Spoilage Risk": "அழுகல் ஆபத்து",
+  "Profit Margin": "லாப வரம்பு",
+  "Labor Cost": "தொழிலாளர் கூலி",
+  "Govt Subsidy": "அரசு மானியம்",
+  "High Risk": "அதிக ஆபத்து",
+  "Low Risk": "குறைந்த ஆபத்து",
+  "Available": "கிடைக்கும்",
+  "None": "இல்லை",
+  "State": "மாநிலம்",
+  "Country": "நாடு",
+  "District": "மாவட்டம்",
+  "Village": "கிராமம்",
+  "Tons": "டன்",
+
+  // Loan Portal
+  "Bank API Verification Engine": "வங்கி API சரிபார்ப்பு இயந்திரம்",
+  "Contacting Bureau & Land Registry...": "நிலப் பதிவேடு மற்றும் கடன் விவரங்கள் சரிபார்க்கப்படுகிறது...",
+  "Querying NSDL / Experian CIBIL...": "NSDL / CIBIL விவரங்கள் சரிபார்க்கப்படுகிறது...",
+  "Verifying TN-Nilam Patta Data...": "தமிழ்நாடு நில பட்டா தரவு சரிபார்க்கப்படுகிறது...",
+  "Fetching DLTC Scale of Finance...": "பயிர் கடன் நிதி அளவு சரிபார்க்கப்படுகிறது...",
+  "Generating AI Quantum of Finance...": "AI கடன் அளவு கணக்கிடப்படுகிறது...",
+  "Eligibility Confirmed": "கடன் தகுதி உறுதி செய்யப்பட்டது",
+  "NPA Database Cleared • Geo-Tags Matched": "கடன் நிலுவை இல்லை • நில அளவீடுகள் பொருந்தின",
+  "CIBIL Score": "CIBIL மதிப்பெண்",
+  "Bureau Status": "பியூரோ நிலை",
+  "Est. Land Guideline Value": "மதிப்பிடப்பட்ட நில வழிகாட்டி மதிப்பு",
+  "Approved KCC /": "அங்கீகரிக்கப்பட்ட KCC /",
+  "Crop": "பயிர்",
+  "Tractor": "டிராக்டர்",
+  "Limit": "வரம்பு",
+  "Effective ROI:": "செயல்பாட்டு வட்டி விகிதம்:",
+  "(Post Subvention)": "(வட்டி தள்ளுபடிக்கு பின்)",
+  "Limit Breakdown (DLTC Norms)": "கடன் வரம்பு விவரம் (DLTC நெறிமுறைகள்)",
+  "Scale of Finance": "நிதியுதவி அளவு",
+  "Post-Harvest / Consumption (10%)": "அறுவடைக்கு பிந்தைய செலவுகள் (10%)",
+  "Maintenance & Insurance (20%)": "பராமரிப்பு மற்றும் காப்பீடு (20%)",
+  "Accept Banking Terms": "வங்கி விதிமுறைகளை ஏற்கிறேன்",
+  "DETAILS & BANK INFO": "விவரங்கள் & வங்கித் தகவல்",
+  "APPLICANT NAME": "விண்ணப்பதாரர் பெயர்",
+  "LAND (ACRES)": "நிலம் (ஏக்கர்)",
+  "CROP TYPE": "பயிர் வகை",
+  "CALCULATE ESTIMATE": "தகுதியை கணக்கிடு",
+  "Estimated Limit": "மதிப்பிடப்பட்ட கடன் வரம்பு",
+  "SELECT BANK": "வங்கியைத் தேர்ந்தெடு",
+  "-- Select Preferred Bank --": "-- விருப்பமான வங்கியைத் தேர்ந்தெடு --",
+  "ACCOUNT NUMBER": "கணக்கு எண்",
+  "IFSC CODE": "IFSC குறியீடு",
+  "Govt Agri-Loan Schemes & Subsidies": "அரசு விவசாய கடன் திட்டங்கள் & மானியங்கள்",
+  "DOCUMENTS UPLOAD": "ஆவணங்கள் பதிவேற்றம்",
+  "Crop Loan": "பயிர் கடன்",
+  "Tractor Loan": "டிராக்டர் கடன்",
+  "8 REQUIRED DOCUMENTS": "தேவையான 8 ஆவணங்கள்",
+  "UPLOADED": "பதிவேற்றப்பட்டது",
+  "UPLOAD": "பதிவேற்று",
+  "AI VERIFY & APPLY": "AI சரிபார்ப்பு & விண்ணப்பம்",
+  "Processing...": "சரிபார்க்கப்படுகிறது...",
+  "Verification Status": "சரிபார்ப்பு நிலை",
+  "Fill details and upload documents to begin AI verification.": "AI சரிபார்ப்பைத் தொடங்க விவரங்களை பூர்த்தி செய்து ஆவணங்களை பதிவேற்றவும்.",
+  "Live Verification Server": "நேரடி சரிபார்ப்பு சர்வர்",
+  "Sanction Approved": "கடன் அங்கீகரிக்கப்பட்டது",
+  "Approved by": "அங்கீகரித்த வங்கி:",
+  "Interest": "வட்டி",
+  "(Subsidized)": "(மானியம் பெற்றது)",
+  "EMI / Month": "மாதத் தவணை (EMI)",
+  "Smart Contract ID": "ஸ்மார்ட் ஒப்பந்த ஐடி",
+  "Terms & Penalties": "விதிமுறைகள் & அபராதங்கள்",
+  "Repayment Due Date:": "திருப்பிச் செலுத்தும் கடைசி தேதி:",
+  "Late Payment Fine:": "தாமத கட்டண அபராதம்:",
+  "2% Extra": "2% கூடுதல்",
+  "penal interest per month.": "அபராத வட்டி மாதத்திற்கு.",
+  "View Loan Receipt": "கடன் ரசீதைப் பார்",
+  "Receipt Ready": "ரசீது தயார்",
+  "Agricultural Finance Branch": "விவசாய நிதி கிளை",
+  "Tamil Nadu Zone, India": "தமிழ்நாடு மண்டலம், இந்தியா",
+  "Date:": "தேதி:",
+  "Ref ID:": "குறிப்பு ஐடி:",
+  "Provisional Loan Sanction Letter": "தற்காலிக கடன் அனுமதி கடிதம்",
+  "To,": "பெறுநர்,",
+  "Applicant / Verified Farmer": "விண்ணப்பதாரர் / சரிபார்க்கப்பட்ட விவசாயி",
+  "Subject:": "பொருள்:",
+  "Sanction of": "கடன் அனுமதி:",
+  "under the National Agriculture Finance Scheme.": "தேசிய விவசாய நிதி திட்டத்தின் கீழ்.",
+  "Dear Sir/Madam,": "மதிப்பிற்குரிய ஐயா/அம்மா,",
+  "With reference to your application submitted via the AgroRisk AI+ Portal, and upon automated verification of your Aadhaar KYC, CIBIL, and Land Records (Patta/Chitta), we are pleased to inform you that a loan has been provisionally sanctioned to you with the following terms:": "AgroRisk AI+ போர்டல் மூலம் சமர்ப்பிக்கப்பட்ட தங்களது விண்ணப்பத்தின் அடிப்படையில், ஆதார் KYC, CIBIL மற்றும் நிலப் பதிவேடுகள் (பட்டா/சிட்டா) ஆகியவற்றின் தானியங்கி சரிபார்ப்புக்குப் பின், பின்வரும் நிபந்தனைகளுடன் உங்களுக்கு தற்காலிகமாக கடன் அனுமதிக்கப்பட்டுள்ளது என்பதை மகிழ்ச்சியுடன் தெரிவித்துக் கொள்கிறோம்:",
+  "Repayment Tenure": "திருப்பிச் செலுத்தும் காலம்",
+  "Important Terms, Conditions & Penalties:": "முக்கிய விதிமுறைகள், நிபந்தனைகள் & அபராதங்கள்:",
+  "This is a digitally generated provisional sanction letter. Final disbursement to the provided account is subject to a single physical signature by the Bank Officer.": "இது டிஜிட்டல் முறையில் உருவாக்கப்பட்ட தற்காலிக அனுமதி கடிதம் ஆகும். வங்கி அதிகாரியின் நேரடி கையெழுத்துக்கு பின் கடன் தொகை தங்களது கணக்கில் வரவு வைக்கப்படும்.",
+  "Penalty Clause:": "அபராத விதிமுறை:",
+  "Failure to repay the full EMI or total amount by the due date": "குறிப்பிட்ட இறுதி தேதிக்குள் கடன் தொகையை செலுத்தத் தவறினால்",
+  "will attract a penal interest of": "நிலுவைத் தொகைக்கு மாதத்திற்கு",
+  "on the outstanding amount.": "அபராத வட்டி விதிக்கப்படும்.",
+  "Timely repayment makes you eligible for a 3% interest subvention under the Government of India guidelines.": "சரியான நேரத்தில் கடனைத் திருப்பிச் செலுத்துவதன் மூலம், இந்திய அரசின் வழிகாட்டுதல்களின்படி 3% வட்டி தள்ளுபடி பெற தகுதி பெறுவீர்கள்.",
+  "Collateral / Hypothecation of": "கடனுக்கான பிணை / அடமானம்",
+  "remains with the bank until full settlement.": "கடன் முழுமையாக முடியும் வரை வங்கியின் கட்டுப்பாட்டில் இருக்கும்.",
+  "Signature of Applicant": "விண்ணப்பதாரரின் கையொப்பம்",
+  "APPROVED": "அங்கீகரிக்கப்பட்டது",
+  "AI VERIFY": "AI சரிபார்க்கப்பட்டது",
+  "Authorized Bank Seal": "அங்கீகரிக்கப்பட்ட வங்கி முத்திரை",
+  "Document generated securely by AgroRisk AI+ Digital Twin Infrastructure.": "AgroRisk AI+ டிஜிட்டல் இரட்டை கட்டமைப்பால் இந்த ஆவணம் பாதுகாப்பாக உருவாக்கப்பட்டது.",
+  "Aadhaar Card": "ஆதார் அட்டை",
+  "PAN Card": "பான் அட்டை",
+  "Passport Photo": "பாஸ்போர்ட் புகைப்படம்",
+  "Patta / Chitta": "பட்டா / சிட்டா",
+  "Adangal (Crop)": "அடங்கல் (பயிர்)",
+  "EC Certificate": "வில்லங்கச் சான்றிதழ்",
+  "Tax Receipt": "வரி ரசீது",
+  "Bank Passbook": "வங்கி கணக்குப் புத்தகம்",
+  "Quotation": "விலைப்புள்ளி (Quotation)",
+  "Driving License": "ஓட்டுநர் உரிமம்",
+
+  // Feedback & Learning (Feedback)
+  "Admin Dashboard Logs": "நிர்வாகி கருத்து பதிவுகள்",
+  "Close View": "மூடு",
+  "No feedback received yet.": "இதுவரை கருத்துக்கள் எதுவும் வரவில்லை.",
+  "Attached Media (Hidden in basic view)": "ஊடக கோப்பு இணைக்கப்பட்டுள்ளது",
+  "Request Submitted!": "கருத்து சமர்ப்பிக்கப்பட்டது!",
+  "Thank you. Our experts will review your log shortly.": "நன்றி. எங்கள் நிபுணர்கள் விரைவில் பரிசீலிப்பார்கள்.",
+  "Your Support Ticket ID": "உங்கள் ஆதரவு சீட்டு ஐடி",
+  "In Review": "பரிசீலனையில் உள்ளது",
+  "Submit Another Query": "மற்றொரு கருத்து அனுப்பவும்",
+  "Share your farming experience, pest issues, or ask a question to our Agri-Experts...": "உங்கள் விவசாய அனுபவம், பூச்சி தாக்குதல் பற்றி எழுதவும் அல்லது எங்கள் வேளாண் நிபுணர்களிடம் கேள்வி கேட்கவும்...",
+  "Attach Image": "படம் இணைக்கவும்",
+  "Voice Note": "குரல் பதிவு",
+  "Listening... Speak now!": "கேட்கிறது... இப்போது பேசுங்கள்!",
+  "AI Enhancer ✨": "AI மேம்படுத்தி ✨",
+  "Enhancing...": "மேம்படுத்தப்படுகிறது...",
+  "Submit": "சமர்ப்பி",
+  "Admin Login": "நிர்வாகி உள்நுழைவு",
+  "Authorized personnel only.": "அங்கீகரிக்கப்பட்டவர்களுக்கு மட்டுமே.",
+  "Enter Admin Username": "நிர்வாகி பெயர்",
+  "Enter Admin Password": "நிர்வாகி கடவுச்சொல்",
+  "Unlock Logs": "பதிவுகளைத் திற",
+  "Cancel": "ரத்து செய்",
+  "Attached media file.": "ஊடக கோப்பு இணைக்கப்பட்டுள்ளது.",
+  "Crop & Soil": "பயிர் & மண்",
+  "Market & Price": "சந்தை & விலை",
+  "Loans & Finance": "கடன் & நிதி",
+  "General": "பொதுவானவை",
+  "Govt signals temporary ban on": "அரசு தற்காலிக தடை விதிக்கிறது: ",
+  "exports to control inflation.": "ஏற்றுமதி (பணவீக்கத்தைக் கட்டுப்படுத்த)",
+  "New cold storage subsidy announced for": "புதிய குளிர்சாதன கிடங்கு மானியம் அறிவிக்கப்பட்டுள்ளது: ",
+  "region.": "வட்டாரம்.",
+  "FCI procurement quotas increased for upcoming harvest season.": "வரவிருக்கும் அறுவடை காலத்திற்கு FCI கொள்முதல் ஒதுக்கீடு அதிகரிக்கப்பட்டுள்ளது.",
+  "Import duties slashed; domestic": "இறக்குமதி வரி குறைப்பு; உள்நாட்டு ",
+  "prices might witness pressure.": "விலை குறைய வாய்ப்புள்ளது.",
+  "Executing transit from": "போக்குவரத்து வழித்தடம்: ",
+  "to": " முதல் ",
+  "secures alpha margins despite freight constraints.": " வரை. போக்குவரத்து கட்டுப்பாடுகள் இருந்தாலும் இந்த வழித்தடத்தில் வர்த்தகம் செய்வது கூடுதல் லாபத்தை உறுதி செய்கிறது.",
+  "Liquidate inventory in": "எனவே, இங்கேயே விற்பனை செய்யவும்: ",
+  "Origin": "மூலம்",
+  "Destination": "இலக்கு",
+  "Search...": "தேடுக...",
+  "Full": "நிறைந்தது",
+  "Days": "நாட்கள்",
+  "crop": "பயிர்",
+  "tractor": "டிராக்டர்",
+  "Kisan Credit Card (KCC)": "கிசான் கிரெடிட் கார்டு (KCC)",
+  "Short-term credit limits for crops & expenses. Up to ₹3 Lakhs at 4% interest with prompt repayment.": "பயிர்கள் மற்றும் செலவுகளுக்கான குறுகிய கால கடன் வரம்புகள். உடனடி திருப்பிச் செலுத்துதலுடன் 4% வட்டியில் ₹3 லட்சம் வரை.",
+  "Agri Infrastructure Fund": "வேளாண் உள்கட்டமைப்பு நிதி",
+  "Financing facility for post-harvest management infrastructure. 3% interest subvention per annum.": "அறுவடைக்கு பிந்தைய மேலாண்மை உள்கட்டமைப்பிற்கான நிதி வசதி. ஆண்டுக்கு 3% வட்டி மானியம்.",
+  "PM KISAN Samman Nidhi": "பிஎம் கிசான் சம்மான் நிதி",
+  "Income support of ₹6,000 per year in three equal installments to all land-holding farmer families.": "அனைத்து நிலம் வைத்திருக்கும் விவசாய குடும்பங்களுக்கும் மூன்று சம தவணைகளில் ஆண்டிற்கு ₹6,000 வருமான ஆதரவு.",
+  "KCC Short-Term Crop Loan": "KCC குறுகிய கால பயிர் கடன்",
+  "Long-Term Farm Machinery Loan": "நீண்ட கால விவசாய இயந்திர கடன்",
+  "crops & land yield": "பயிர்கள் & நில மகசூல்",
+  "the purchased tractor": "வாங்கப்பட்ட டிராக்டர்",
+  "> INITIATING UIDAI AADHAAR E-KYC SYNC... [OK]": "> ஆதார் E-KYC ஒத்திசைவு தொடங்கப்படுகிறது... [சரி]",
+  "> VERIFYING LAND RECORDS (CHITTA/PATTA) via TN-REGISTRY... [MATCHED]": "> நில ஆவணங்கள் (பட்டா/சிட்டா) சரிபார்க்கப்படுகின்றன... [பொருந்தியது]",
+  "> PINGING SATELLITE (ISRO BHUVAN) FOR CROP VERIFICATION... [GEO-TAG ACQUIRED]": "> பயிர் சரிபார்ப்புக்காக செயற்கைக்கோள் (ISRO BHUVAN) இணைக்கப்படுகிறது... [புவிக்குறியீடு பெறப்பட்டது]",
+  "> NDVI INDEX: 0.72 (HEALTHY": "> NDVI குறியீடு: 0.72 (ஆரோக்கியமான",
+  "DETECTED) [OK]": "கண்டறியப்பட்டது) [சரி]",
+  "> RUNNING ANTI-FRAUD DE-DUPLICATION CHECK... [CLEARED]": "> மோசடி தடுப்பு சரிபார்ப்பு நடத்தப்படுகிறது... [தடுக்கப்பட்டது]",
+  "> CONNECTING TO": "> இணைப்பு துவங்குகிறது: ",
+  "CBS API... [SECURE]": "CBS API... [பாதுகாப்பானது]",
+  "> GENERATING SMART CONTRACT & PROVISIONAL SANCTION...": "> ஸ்மார்ட் ஒப்பந்தம் & தற்காலிக அனுமதி கடிதம் உருவாக்கப்படுகிறது...",
+  "Feedback Category": "கருத்து வகை",
+  "Feedback": "கருத்துக்கள்",
+  "Enter Land Size and Crop Type!": "நிலத்தின் அளவு மற்றும் பயிர் வகையை உள்ளிடவும்!",
+  "Calculate estimated loan first!": "முதலில் மதிப்பிடப்பட்ட கடனைக் கணக்கிடவும்!",
+  "Please fill in all Bank Account details!": "வங்கி கணக்கு விவரங்கள் அனைத்தையும் நிரப்பவும்!",
+  "Please upload all 8 required documents for this loan type!": "இந்தக் கடன் வகைக்குத் தேவையான 8 ஆவணங்களையும் பதிவேற்றவும்!",
+  "Invalid Admin Credentials!": "தவறான நிர்வாகி சான்றுகள்!",
+  "You can only attach a maximum of 3 images.": "நீங்கள் அதிகபட்சம் 3 படங்களை மட்டுமே இணைக்க முடியும்.",
+  "Sorry, your browser does not support Voice Recognition. Please use Chrome or Edge.": "மன்னிக்கவும், உங்கள் உலாவி குரல் அங்கீகாரத்தை ஆதரிக்கவில்லை. தயவுசெய்து Chrome அல்லது Edge ஐப் பயன்படுத்தவும்.",
+  "Not Specified": "குறிப்பிடப்படவில்லை",
+  "2% per month": "மாதத்திற்கு 2% அபராத வட்டி",
+  "[AI Corrected]": "[AI திருத்தப்பட்டது]",
+  "Anonymous": "அநாமதேயர்",
+  "Bank Name": "வங்கி பெயர்",
+  "Months": "மாதங்கள்",
+  "EMI": "மாத தவணை (EMI)",
+  "p.a": "ஆண்டுக்கு"
 };
 
 let currentAppLang = 'en';
@@ -2574,36 +2814,36 @@ const Marketplace = ({ handleNav, currentUser }) => {
       {/* ----------------- CART & CHECKOUT ----------------- */}
       {view === 'cart' && (
         <div className="bg-[#151a17] p-10 rounded-[2rem] border border-white/5 shadow-2xl animate-in slide-in-from-right-10 max-w-4xl mx-auto">
-          <div className="flex items-center gap-4 mb-8 border-b border-white/10 pb-6"><button onClick={() => setView('buy')} className="p-2 bg-[#1a231d] rounded-lg text-slate-400 hover:text-white"><X size={20}/></button><h3 className="font-black text-2xl text-white uppercase tracking-tight flex items-center gap-3"><ShoppingCart className="text-[#4CAF50]"/> Your Cart</h3></div>
-          {cart.length === 0 ? (<div className="text-center py-20 opacity-50 flex flex-col items-center"><ShoppingCart size={80} className="text-slate-600 mb-6"/><p className="text-2xl font-black text-white uppercase tracking-widest">Cart is empty</p><button onClick={() => setView('buy')} className="mt-6 text-[#4CAF50] font-bold border border-[#4CAF50]/30 px-6 py-2 rounded-xl hover:bg-[#4CAF50] hover:text-black transition-colors">Go to Store</button></div>) : (<div className="flex flex-col h-full"><div className="space-y-4 mb-8 max-h-[400px] overflow-y-auto custom-scrollbar pr-2">{cart.map((item) => (<div key={item.id} className="bg-[#0b1410] p-4 rounded-2xl border border-white/5 flex flex-wrap gap-4 justify-between items-center shadow-md"><div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 mb-8 border-b border-white/10 pb-6"><button onClick={() => setView('buy')} className="p-2 bg-[#1a231d] rounded-lg text-slate-400 hover:text-white"><X size={20}/></button><h3 className="font-black text-2xl text-white uppercase tracking-tight flex items-center gap-3"><ShoppingCart className="text-[#4CAF50]"/> {T("Your Cart")}</h3></div>
+          {cart.length === 0 ? (<div className="text-center py-20 opacity-50 flex flex-col items-center"><ShoppingCart size={80} className="text-slate-600 mb-6"/><p className="text-2xl font-black text-white uppercase tracking-widest">{T("Cart is empty")}</p><button onClick={() => setView('buy')} className="mt-6 text-[#4CAF50] font-bold border border-[#4CAF50]/30 px-6 py-2 rounded-xl hover:bg-[#4CAF50] hover:text-black transition-colors">{T("Go to Store")}</button></div>) : (<div className="flex flex-col h-full"><div className="space-y-4 mb-8 max-h-[400px] overflow-y-auto custom-scrollbar pr-2">{cart.map((item) => (<div key={item.id} className="bg-[#0b1410] p-4 rounded-2xl border border-white/5 flex flex-wrap gap-4 justify-between items-center shadow-md"><div className="flex items-center gap-4">
             <div className="w-16 h-16 bg-slate-100 rounded-xl border border-white/10 shadow-sm p-1 flex items-center justify-center"><img src={item.image} onError={(e) => { e.target.src="https://images.unsplash.com/photo-1595841696677-6489ff3f8cd1?w=300&h=300&fit=crop"; }} alt={item.name} className="w-full h-full object-contain" /></div>
-            <div><h5 className="font-bold text-white text-lg">{item.name}</h5><p className="text-xs text-slate-400 font-bold uppercase tracking-widest">{item.category} • ₹{item.price} {item.unit}</p></div></div><div className="flex items-center gap-6"><div className="flex items-center bg-[#1a231d] rounded-lg border border-white/10 p-1"><button onClick={() => updateQty(item.id, -1)} className="p-1.5 text-slate-400 hover:text-white"><Minus size={16}/></button><span className="w-8 text-center font-black text-white">{item.qty}</span><button onClick={() => updateQty(item.id, 1)} className="p-1.5 text-slate-400 hover:text-white"><Plus size={16}/></button></div><h5 className="font-black text-xl text-[#4CAF50] w-24 text-right">₹{item.price * item.qty}</h5><button onClick={() => removeFromCart(item.id)} className="text-red-500 hover:text-red-400 p-2"><X size={20}/></button></div></div>))}</div><div className="border-t border-white/10 pt-6 mt-auto"><div className="flex justify-between items-center mb-6 px-4"><span className="text-slate-400 font-black uppercase tracking-widest">Total Amount</span><span className="text-5xl font-black text-white drop-shadow-md">₹{totalAmount.toLocaleString()}</span></div><button onClick={() => setView('payment')} className="w-full bg-[#4CAF50] text-black font-black py-5 rounded-xl uppercase hover:bg-green-500 transition-all shadow-[0_0_30px_rgba(76,175,80,0.3)] flex justify-center items-center gap-3 text-xl hover:scale-[1.01]"><CreditCard size={28}/> Proceed to Secure Checkout</button></div></div>)}
+            <div><h5 className="font-bold text-white text-lg">{item.name}</h5><p className="text-xs text-slate-400 font-bold uppercase tracking-widest">{item.category} • ₹{item.price} {item.unit}</p></div></div><div className="flex items-center gap-6"><div className="flex items-center bg-[#1a231d] rounded-lg border border-white/10 p-1"><button onClick={() => updateQty(item.id, -1)} className="p-1.5 text-slate-400 hover:text-white"><Minus size={16}/></button><span className="w-8 text-center font-black text-white">{item.qty}</span><button onClick={() => updateQty(item.id, 1)} className="p-1.5 text-slate-400 hover:text-white"><Plus size={16}/></button></div><h5 className="font-black text-xl text-[#4CAF50] w-24 text-right">₹{item.price * item.qty}</h5><button onClick={() => removeFromCart(item.id)} className="text-red-500 hover:text-red-400 p-2"><X size={20}/></button></div></div>))}</div><div className="border-t border-white/10 pt-6 mt-auto"><div className="flex justify-between items-center mb-6 px-4"><span className="text-slate-400 font-black uppercase tracking-widest">{T("Total Amount")}</span><span className="text-5xl font-black text-white drop-shadow-md">₹{totalAmount.toLocaleString()}</span></div><button onClick={() => setView('payment')} className="w-full bg-[#4CAF50] text-black font-black py-5 rounded-xl uppercase hover:bg-green-500 transition-all shadow-[0_0_30px_rgba(76,175,80,0.3)] flex justify-center items-center gap-3 text-xl hover:scale-[1.01]"><CreditCard size={28}/> {T("Proceed to Secure Checkout")}</button></div></div>)}
         </div>
       )}
 
       {view === 'payment' && (
         <div className="bg-[#151a17] p-10 rounded-[2rem] border border-white/5 shadow-2xl animate-in zoom-in text-center max-w-md mx-auto">
-          <div className="flex justify-between items-center mb-6 border-b border-white/10 pb-4"><h3 className="font-black text-xl text-white uppercase tracking-tight flex items-center gap-2"><CreditCard className="text-[#4CAF50]"/> UPI Payment</h3><button onClick={() => setView('cart')} className="text-slate-400 hover:text-white bg-[#1a231d] p-2 rounded-lg"><X size={16}/></button></div>
-          <p className="text-slate-400 font-bold text-sm mb-6 leading-relaxed">Scan the QR code below using Google Pay, PhonePe, or Paytm to complete your order.</p>
+          <div className="flex justify-between items-center mb-6 border-b border-white/10 pb-4"><h3 className="font-black text-xl text-white uppercase tracking-tight flex items-center gap-2"><CreditCard className="text-[#4CAF50]"/> {T("UPI Payment")}</h3><button onClick={() => setView('cart')} className="text-slate-400 hover:text-white bg-[#1a231d] p-2 rounded-lg"><X size={16}/></button></div>
+          <p className="text-slate-400 font-bold text-sm mb-6 leading-relaxed">{T("Scan the QR code below using Google Pay, PhonePe, or Paytm to complete your order.")}</p>
           <div className="bg-white p-4 rounded-3xl inline-block mb-6 shadow-[0_0_40px_rgba(76,175,80,0.2)]"><img src={qrUrl} alt="UPI Payment QR" className="w-56 h-56 mx-auto rounded-xl" /></div>
-          <div className="bg-[#0b1410] border border-white/5 p-5 rounded-2xl mb-8 text-left shadow-inner"><p className="flex justify-between text-xs font-black uppercase tracking-widest border-b border-white/5 pb-3 mb-3"><span className="text-slate-500">Paying to:</span> <span className="text-white normal-case">{upiId}</span></p><p className="flex justify-between items-center"><span className="text-slate-500 text-xs font-black uppercase tracking-widest">Amount:</span> <span className="text-[#4CAF50] font-black text-2xl">₹{totalAmount.toLocaleString()}</span></p></div>
-          <button onClick={simulatePayment} className="w-full bg-[#4CAF50] text-black font-black py-4 rounded-xl uppercase hover:bg-green-500 transition-all shadow-lg flex justify-center items-center gap-2 hover:scale-[1.02]">I Have Completed Payment <ChevronRight size={20}/></button>
+          <div className="bg-[#0b1410] border border-white/5 p-5 rounded-2xl mb-8 text-left shadow-inner"><p className="flex justify-between text-xs font-black uppercase tracking-widest border-b border-white/5 pb-3 mb-3"><span className="text-slate-500">{T("Paying to:")}</span> <span className="text-white normal-case">{upiId}</span></p><p className="flex justify-between items-center"><span className="text-slate-500 text-xs font-black uppercase tracking-widest">{T("Amount:")}</span> <span className="text-[#4CAF50] font-black text-2xl">₹{totalAmount.toLocaleString()}</span></p></div>
+          <button onClick={simulatePayment} className="w-full bg-[#4CAF50] text-black font-black py-4 rounded-xl uppercase hover:bg-green-500 transition-all shadow-lg flex justify-center items-center gap-2 hover:scale-[1.02]">{T("I Have Completed Payment")} <ChevronRight size={20}/></button>
         </div>
       )}
 
       {/* ----------------- INVOICE & TRACKING ----------------- */}
       {view === 'invoice' && (
         <div className="w-full max-w-3xl mx-auto animate-in slide-in-from-bottom-10">
-           <div className="bg-white text-black p-10 md:p-14 rounded-3xl shadow-2xl relative overflow-hidden" id="printable-invoice-market"><div className="absolute top-0 right-0 p-10 opacity-5 pointer-events-none"><ShieldCheck size={250}/></div><div className="flex justify-between items-start border-b-4 border-slate-800 pb-6 mb-8 relative z-10"><div><h2 className="text-3xl font-black uppercase text-slate-900 tracking-tighter flex items-center gap-2"><Cpu className="text-green-700"/> AGRO INTELLIGENCE</h2><p className="text-slate-500 font-bold mt-1 text-sm tracking-widest uppercase">Official Marketplace Invoice</p></div><div className="text-right bg-slate-100 p-4 rounded-xl border border-slate-200"><p className="text-slate-800 font-black text-xl mb-1">INVOICE</p><p className="text-slate-600 font-bold text-xs uppercase tracking-widest mb-1">Txn ID: <span className="text-slate-900">{txnId}</span></p><p className="text-slate-600 font-bold text-xs uppercase tracking-widest">Date: <span className="text-slate-900">{new Date().toLocaleDateString('en-GB')}</span></p></div></div><div className="mb-10 relative z-10 bg-slate-50 p-6 rounded-xl border border-slate-200"><p className="text-slate-500 font-black text-[10px] uppercase tracking-widest mb-2">Billed To:</p><h4 className="font-black text-slate-900 text-2xl uppercase flex items-center gap-2"><User size={20} className="text-green-700"/> {currentUser || "Aravinth"}</h4><p className="text-slate-600 font-bold text-sm mt-1">Digital Twin Verified Farmer Account</p></div><table className="w-full border-collapse mb-10 relative z-10"><thead><tr className="bg-slate-800 text-white font-black text-xs uppercase tracking-widest text-left"><th className="p-4 rounded-tl-xl">Item Description</th><th className="p-4 text-center">Qty</th><th className="p-4 text-right">Unit Price</th><th className="p-4 text-right rounded-tr-xl">Total Amount</th></tr></thead><tbody>{cart.map((item, i) => (<tr key={i} className="border-b border-slate-200 text-slate-800 font-bold text-sm hover:bg-slate-50"><td className="p-4 flex items-center gap-4"><div className="w-10 h-10 bg-white rounded p-0.5"><img src={item.image} onError={(e) => { e.target.src="https://images.unsplash.com/photo-1595841696677-6489ff3f8cd1?w=300&h=300&fit=crop"; }} alt={item.name} className="w-full h-full object-contain" /></div> <span>{item.name} <br/><span className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">{item.category}</span></span></td><td className="p-4 text-center bg-slate-50">{item.qty}</td><td className="p-4 text-right">₹{item.price}</td><td className="p-4 text-right text-slate-900 font-black bg-slate-50">₹{item.price * item.qty}</td></tr>))}</tbody></table><div className="flex justify-end mb-12 relative z-10"><div className="w-72 bg-slate-100 p-6 rounded-2xl border-2 border-slate-300"><div className="flex justify-between items-center text-slate-600 font-bold text-sm mb-3"><span>Subtotal</span><span>₹{totalAmount}</span></div><div className="flex justify-between items-center text-slate-600 font-bold text-sm mb-4"><span>Taxes (0%)</span><span>₹0</span></div><div className="flex justify-between items-center border-t-2 border-slate-800 pt-4 mt-2"><span className="text-slate-900 font-black uppercase tracking-widest">Total Paid</span><span className="text-3xl font-black text-green-700">₹{totalAmount.toLocaleString()}</span></div></div></div><div className="text-center relative z-10 flex flex-col items-center justify-center p-6 bg-green-50 border border-green-200 rounded-2xl"><div className="bg-green-600 text-white p-3 rounded-full mb-3 shadow-lg"><CheckCircle2 size={32}/></div><p className="font-black text-green-900 uppercase tracking-widest text-lg">Payment Successful via UPI</p><p className="text-green-700 font-bold text-xs mt-1">Thank you for ordering through Agro Intelligence Marketplace.</p></div></div>
-           <div className="flex flex-col sm:flex-row gap-4 mt-6 justify-center"><button onClick={handleDownloadInvoice} className="bg-white text-black px-8 py-4 rounded-xl font-black uppercase tracking-widest text-sm shadow-lg hover:bg-slate-200 transition-colors flex justify-center items-center gap-2"><Download size={20}/> Download PDF Bill</button><button onClick={() => setView('tracking')} className="bg-[#4CAF50] text-black px-8 py-4 rounded-xl font-black uppercase tracking-widest text-sm shadow-[0_0_30px_rgba(76,175,80,0.4)] hover:bg-green-500 transition-all flex justify-center items-center gap-2 hover:scale-[1.02]"><Truck size={20}/> Track Order Status</button></div>
+           <div className="bg-white text-black p-10 md:p-14 rounded-3xl shadow-2xl relative overflow-hidden" id="printable-invoice-market"><div className="absolute top-0 right-0 p-10 opacity-5 pointer-events-none"><ShieldCheck size={250}/></div><div className="flex justify-between items-start border-b-4 border-slate-800 pb-6 mb-8 relative z-10"><div><h2 className="text-3xl font-black uppercase text-slate-900 tracking-tighter flex items-center gap-2"><Cpu className="text-green-700"/> {T("AGRO INTELLIGENCE")}</h2><p className="text-slate-500 font-bold mt-1 text-sm tracking-widest uppercase">{T("Official Marketplace Invoice")}</p></div><div className="text-right bg-slate-100 p-4 rounded-xl border border-slate-200"><p className="text-slate-800 font-black text-xl mb-1">{T("INVOICE")}</p><p className="text-slate-600 font-bold text-xs uppercase tracking-widest mb-1">{T("Txn ID:")} <span className="text-slate-900">{txnId}</span></p><p className="text-slate-600 font-bold text-xs uppercase tracking-widest">{T("Date:")} <span className="text-slate-900">{new Date().toLocaleDateString('en-GB')}</span></p></div></div><div className="mb-10 relative z-10 bg-slate-50 p-6 rounded-xl border border-slate-200"><p className="text-slate-500 font-black text-[10px] uppercase tracking-widest mb-2">{T("Billed To:")}</p><h4 className="font-black text-slate-900 text-2xl uppercase flex items-center gap-2"><User size={20} className="text-green-700"/> {currentUser || "Aravinth"}</h4><p className="text-slate-600 font-bold text-sm mt-1">{T("Digital Twin Verified Farmer Account")}</p></div><table className="w-full border-collapse mb-10 relative z-10"><thead><tr className="bg-slate-800 text-white font-black text-xs uppercase tracking-widest text-left"><th className="p-4 rounded-tl-xl">{T("Item Description")}</th><th className="p-4 text-center">{T("Qty")}</th><th className="p-4 text-right">{T("Unit Price")}</th><th className="p-4 text-right rounded-tr-xl">{T("Total Amount")}</th></tr></thead><tbody>{cart.map((item, i) => (<tr key={i} className="border-b border-slate-200 text-slate-800 font-bold text-sm hover:bg-slate-50"><td className="p-4 flex items-center gap-4"><div className="w-10 h-10 bg-white rounded p-0.5"><img src={item.image} onError={(e) => { e.target.src="https://images.unsplash.com/photo-1595841696677-6489ff3f8cd1?w=300&h=300&fit=crop"; }} alt={item.name} className="w-full h-full object-contain" /></div> <span>{item.name} <br/><span className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">{item.category}</span></span></td><td className="p-4 text-center bg-slate-50">{item.qty}</td><td className="p-4 text-right">₹{item.price}</td><td className="p-4 text-right text-slate-900 font-black bg-slate-50">₹{item.price * item.qty}</td></tr>))}</tbody></table><div className="flex justify-end mb-12 relative z-10"><div className="w-72 bg-slate-100 p-6 rounded-2xl border-2 border-slate-300"><div className="flex justify-between items-center text-slate-600 font-bold text-sm mb-3"><span>{T("Subtotal")}</span><span>₹{totalAmount}</span></div><div className="flex justify-between items-center text-slate-600 font-bold text-sm mb-4"><span>{T("Taxes (0%)")}</span><span>₹0</span></div><div className="flex justify-between items-center border-t-2 border-slate-800 pt-4 mt-2"><span className="text-slate-900 font-black uppercase tracking-widest">{T("Total Paid")}</span><span className="text-3xl font-black text-green-700">₹{totalAmount.toLocaleString()}</span></div></div></div><div className="text-center relative z-10 flex flex-col items-center justify-center p-6 bg-green-50 border border-green-200 rounded-2xl"><div className="bg-green-600 text-white p-3 rounded-full mb-3 shadow-lg"><CheckCircle2 size={32}/></div><p className="font-black text-green-900 uppercase tracking-widest text-lg">{T("Payment Successful via UPI")}</p><p className="text-green-700 font-bold text-xs mt-1">{T("Thank you for ordering through Agro Intelligence Marketplace.")}</p></div></div>
+           <div className="flex flex-col sm:flex-row gap-4 mt-6 justify-center"><button onClick={handleDownloadInvoice} className="bg-white text-black px-8 py-4 rounded-xl font-black uppercase tracking-widest text-sm shadow-lg hover:bg-slate-200 transition-colors flex justify-center items-center gap-2"><Download size={20}/> {T("Download PDF Bill")}</button><button onClick={() => setView('tracking')} className="bg-[#4CAF50] text-black px-8 py-4 rounded-xl font-black uppercase tracking-widest text-sm shadow-[0_0_30px_rgba(76,175,80,0.4)] hover:bg-green-500 transition-all flex justify-center items-center gap-2 hover:scale-[1.02]"><Truck size={20}/> {T("Track Order Status")}</button></div>
         </div>
       )}
 
       {/* 🔥 DYNAMIC TRACKING VIEW WITH LIVE DATES */}
       {view === 'tracking' && (
         <div className="w-full max-w-2xl mx-auto bg-[#151a17] p-10 rounded-[3rem] border border-white/5 shadow-2xl animate-in slide-in-from-bottom-10">
-           <div className="flex justify-between items-center mb-8 border-b border-white/10 pb-6"><h3 className="font-black text-2xl text-white uppercase tracking-tight flex items-center gap-3"><Map className="text-blue-400" size={28}/> Order Tracking</h3><button onClick={() => {setCart([]); setView('hub');}} className="p-2.5 bg-[#1a231d] rounded-xl text-slate-400 hover:text-white transition-colors border border-white/5"><Home size={20}/></button></div>
-           <div className="bg-gradient-to-r from-[#0b1410] to-[#111613] border border-white/5 p-6 rounded-2xl mb-10 flex justify-between items-center shadow-inner"><div><p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">Order Reference ID</p><p className="text-white font-black text-lg">{txnId}</p></div><div className="text-right"><p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">Estimated Delivery</p><p className="text-[#4CAF50] font-black text-xl">{trackDate3}</p></div></div>
+           <div className="flex justify-between items-center mb-8 border-b border-white/10 pb-6"><h3 className="font-black text-2xl text-white uppercase tracking-tight flex items-center gap-3"><Map className="text-blue-400" size={28}/> {T("Order Tracking")}</h3><button onClick={() => {setCart([]); setView('hub');}} className="p-2.5 bg-[#1a231d] rounded-xl text-slate-400 hover:text-white transition-colors border border-white/5"><Home size={20}/></button></div>
+           <div className="bg-gradient-to-r from-[#0b1410] to-[#111613] border border-white/5 p-6 rounded-2xl mb-10 flex justify-between items-center shadow-inner"><div><p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">{T("Order Reference ID")}</p><p className="text-white font-black text-lg">{txnId}</p></div><div className="text-right"><p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">{T("Estimated Delivery")}</p><p className="text-[#4CAF50] font-black text-xl">{trackDate3}</p></div></div>
            
            <div className="relative pl-10 space-y-12 before:absolute before:inset-y-0 before:left-[2.65rem] before:w-1 before:bg-white/10 before:-z-10 py-4">
                
@@ -2611,7 +2851,7 @@ const Marketplace = ({ handleNav, currentUser }) => {
                <div className="relative z-10 flex items-center gap-8">
                    <div className="bg-[#4CAF50] p-4 rounded-full text-black shadow-[0_0_20px_rgba(76,175,80,0.6)] outline outline-8 outline-[#151a17]"><Receipt size={28}/></div>
                    <div className="flex-1 flex flex-col sm:flex-row justify-between sm:items-center gap-2">
-                       <div><h4 className="text-white font-black uppercase tracking-widest text-lg mb-1">Order Confirmed</h4><p className="text-slate-400 text-sm font-bold">Payment received successfully via UPI.</p></div>
+                       <div><h4 className="text-white font-black uppercase tracking-widest text-lg mb-1">{T("Order Confirmed")}</h4><p className="text-slate-400 text-sm font-bold">{T("Payment received successfully via UPI.")}</p></div>
                        <span className="text-[#4CAF50] font-black text-sm uppercase tracking-widest bg-[#4CAF50]/10 px-3 py-1.5 rounded-lg border border-[#4CAF50]/30">{trackDate0}</span>
                    </div>
                </div>
@@ -2620,8 +2860,8 @@ const Marketplace = ({ handleNav, currentUser }) => {
                <div className="relative z-10 flex items-center gap-8">
                    <div className="bg-blue-500 p-4 rounded-full text-white shadow-[0_0_20px_rgba(59,130,246,0.6)] outline outline-8 outline-[#151a17] animate-pulse"><Package size={28}/></div>
                    <div className="flex-1 flex flex-col sm:flex-row justify-between sm:items-center gap-2">
-                       <div><h4 className="text-white font-black uppercase tracking-widest text-lg mb-1">Processing & Packed</h4><p className="text-blue-200 text-sm font-bold">Seller is preparing your items for dispatch.</p></div>
-                       <span className="text-blue-400 font-black text-xs uppercase tracking-widest">Exp. {trackDate1}</span>
+                       <div><h4 className="text-white font-black uppercase tracking-widest text-lg mb-1">{T("Processing & Packed")}</h4><p className="text-blue-200 text-sm font-bold">{T("Seller is preparing your items for dispatch.")}</p></div>
+                       <span className="text-blue-400 font-black text-xs uppercase tracking-widest">{T("Exp.")} {trackDate1}</span>
                    </div>
                </div>
 
@@ -2629,8 +2869,8 @@ const Marketplace = ({ handleNav, currentUser }) => {
                <div className="relative z-10 flex items-center gap-8 opacity-40 grayscale">
                    <div className="bg-slate-700 p-4 rounded-full text-slate-300 outline outline-8 outline-[#151a17]"><Truck size={28}/></div>
                    <div className="flex-1 flex flex-col sm:flex-row justify-between sm:items-center gap-2">
-                       <div><h4 className="text-white font-black uppercase tracking-widest text-lg mb-1">Out for Delivery</h4><p className="text-slate-400 text-sm font-bold">Waiting for courier pickup from warehouse.</p></div>
-                       <span className="text-slate-500 font-black text-xs uppercase tracking-widest">Exp. {trackDate2}</span>
+                       <div><h4 className="text-white font-black uppercase tracking-widest text-lg mb-1">{T("Out for Delivery")}</h4><p className="text-slate-400 text-sm font-bold">{T("Waiting for courier pickup from warehouse.")}</p></div>
+                       <span className="text-slate-500 font-black text-xs uppercase tracking-widest">{T("Exp.")} {trackDate2}</span>
                    </div>
                </div>
 
@@ -2638,13 +2878,13 @@ const Marketplace = ({ handleNav, currentUser }) => {
                <div className="relative z-10 flex items-center gap-8 opacity-40 grayscale">
                    <div className="bg-slate-700 p-4 rounded-full text-slate-300 outline outline-8 outline-[#151a17]"><Check size={28}/></div>
                    <div className="flex-1 flex flex-col sm:flex-row justify-between sm:items-center gap-2">
-                       <div><h4 className="text-white font-black uppercase tracking-widest text-lg mb-1">Delivered</h4><p className="text-slate-400 text-sm font-bold">Item reached your registered farm location.</p></div>
-                       <span className="text-slate-500 font-black text-xs uppercase tracking-widest">Exp. {trackDate3}</span>
+                       <div><h4 className="text-white font-black uppercase tracking-widest text-lg mb-1">{T("Delivered")}</h4><p className="text-slate-400 text-sm font-bold">{T("Item reached your registered farm location.")}</p></div>
+                       <span className="text-slate-500 font-black text-xs uppercase tracking-widest">{T("Exp.")} {trackDate3}</span>
                    </div>
                </div>
 
            </div>
-           <button onClick={() => {setCart([]); setView('hub');}} className="mt-12 w-full bg-[#1a231d] text-[#4CAF50] font-black py-5 rounded-xl uppercase tracking-widest hover:bg-[#4CAF50] hover:text-black transition-all border border-[#4CAF50]/30 shadow-lg text-lg">Return to Marketplace</button>
+           <button onClick={() => {setCart([]); setView('hub');}} className="mt-12 w-full bg-[#1a231d] text-[#4CAF50] font-black py-5 rounded-xl uppercase tracking-widest hover:bg-[#4CAF50] hover:text-black transition-all border border-[#4CAF50]/30 shadow-lg text-lg">{T("Return to Marketplace")}</button>
         </div>
       )}
     </div>
@@ -2732,23 +2972,31 @@ const GlobalMarketIntelligence = ({ handleNav }) => {
       const suggestedPivot = altCrops[Math.floor(Math.random() * altCrops.length)];
       const pivotBoost = `+${Math.floor(Math.random() * 30 + 15)}%`;
 
-      const policies = [
-          `Govt signals temporary ban on ${crop} exports to control inflation.`,
-          `New cold storage subsidy announced for ${target.name} region.`,
-          `FCI procurement quotas increased for upcoming harvest season.`,
-          `Import duties slashed; domestic ${crop} prices might witness pressure.`
-      ];
+      const policyIndex = Math.floor(Math.random() * 4);
 
       setCompareResult({ 
         locA: statA, locB: statB, 
         arbitrage: {
             source: source.name, target: target.name, isProfitable: netArbitrageProfit > 0,
             grossDiff: priceDifference, transportCost: crossTransportCost, netProfit: netArbitrageProfit,
-            pivotCrop: suggestedPivot, pivotBoost: pivotBoost, policyAlert: policies[Math.floor(Math.random() * policies.length)]
+            pivotCrop: suggestedPivot, pivotBoost: pivotBoost, policyIndex: policyIndex
         }
       });
       setIsComparing(false);
     }, 1500);
+  };
+
+  const getPolicyAlert = (result) => {
+    if (!result || result.arbitrage.policyIndex === undefined) return '';
+    const idx = result.arbitrage.policyIndex;
+    const targetName = result.arbitrage.target;
+    const policies = [
+      T("Govt signals temporary ban on") + " " + T(crop) + " " + T("exports to control inflation."),
+      T("New cold storage subsidy announced for") + " " + T(targetName) + " " + T("region."),
+      T("FCI procurement quotas increased for upcoming harvest season."),
+      T("Import duties slashed; domestic") + " " + T(crop) + " " + T("prices might witness pressure.")
+    ];
+    return policies[idx];
   };
 
   const generatePDF = (action = 'preview') => {
@@ -2758,39 +3006,39 @@ const GlobalMarketIntelligence = ({ handleNav }) => {
 
     doc.setFillColor(11, 20, 16); doc.rect(0, 0, 210, 40, 'F');
     doc.setTextColor(76, 175, 80); doc.setFontSize(22); doc.setFont("helvetica", "bold");
-    doc.text("GLOBAL MARKET INTELLIGENCE", 105, y, null, null, "center");
+    doc.text(T("GLOBAL MARKET INTELLIGENCE"), 105, y, null, null, "center");
     y += 10;
     doc.setTextColor(200, 200, 200); doc.setFontSize(10); doc.setFont("helvetica", "normal");
-    doc.text(`Commodity: ${crop.toUpperCase()} | Volume: ${qty} KG | Date: ${new Date().toLocaleDateString()}`, 105, y, null, null, "center");
+    doc.text(`${T("Commodity")}: ${T(crop).toUpperCase()} | ${T("Volume")}: ${qty} KG | ${T("Date")}: ${new Date().toLocaleDateString()}`, 105, y, null, null, "center");
     y += 6;
-    doc.text(`Comparison Nodes: ${compareResult.locA.name.toUpperCase()} vs ${compareResult.locB.name.toUpperCase()}`, 105, y, null, null, "center");
+    doc.text(`${T("Comparison Nodes")}: ${T(compareResult.locA.name).toUpperCase()} vs ${T(compareResult.locB.name).toUpperCase()}`, 105, y, null, null, "center");
     y += 15;
 
     doc.setFillColor(240, 255, 240);
     if(!compareResult.arbitrage.isProfitable) doc.setFillColor(255, 240, 240);
     doc.rect(15, y, 180, 25, 'F');
     doc.setTextColor(0, 0, 0); doc.setFont("helvetica", "bold"); doc.setFontSize(12);
-    doc.text("AI TRADE VERDICT:", 20, y + 8);
+    doc.text(T("AI TRADE VERDICT:"), 20, y + 8);
     doc.setFont("helvetica", "normal"); doc.setFontSize(10);
-    doc.text(compareResult.arbitrage.isProfitable ? `Profitable Route: Export from ${compareResult.arbitrage.source} to ${compareResult.arbitrage.target}` : `Spread Deficit: Liquidate locally in ${compareResult.locA.market.price > compareResult.locB.market.price ? compareResult.locA.name : compareResult.locB.name}`, 20, y + 15);
+    doc.text(compareResult.arbitrage.isProfitable ? `${T("Profitable Route")}: ${T("Export from")} ${T(compareResult.arbitrage.source)} ${T("to")} ${T(compareResult.arbitrage.target)}` : `${T("Spread Deficit")}: ${T("Liquidate locally in")} ${T(compareResult.locA.market.price > compareResult.locB.market.price ? compareResult.locA.name : compareResult.locB.name)}`, 20, y + 15);
     if(compareResult.arbitrage.isProfitable) {
         doc.setTextColor(34, 139, 34); doc.setFont("helvetica", "bold");
-        doc.text(`Estimated Net Alpha (Profit): +Rs. ${compareResult.arbitrage.netProfit} (After Transport)`, 20, y + 22);
+        doc.text(`${T("Estimated Net Alpha (Profit)")}: +Rs. ${compareResult.arbitrage.netProfit} (${T("After Transport")})`, 20, y + 22);
     }
     y += 35;
 
     const addTableHeader = (title) => {
       doc.setFillColor(76, 175, 80); doc.rect(15, y, 180, 8, 'F');
       doc.setTextColor(255, 255, 255); doc.setFontSize(10); doc.setFont("helvetica", "bold");
-      doc.text(title, 20, y + 6);
-      doc.text(compareResult.locA.name.toUpperCase(), 90, y + 6);
-      doc.text(compareResult.locB.name.toUpperCase(), 150, y + 6);
+      doc.text(T(title), 20, y + 6);
+      doc.text(T(compareResult.locA.name).toUpperCase(), 90, y + 6);
+      doc.text(T(compareResult.locB.name).toUpperCase(), 150, y + 6);
       y += 12;
     };
 
     const addRow = (label, valA, valB) => {
       doc.setTextColor(0, 0, 0); doc.setFont("helvetica", "normal"); doc.setFontSize(9);
-      doc.text(label, 20, y); doc.text(String(valA), 90, y); doc.text(String(valB), 150, y);
+      doc.text(T(label), 20, y); doc.text(String(valA), 90, y); doc.text(String(valB), 150, y);
       doc.setDrawColor(220, 220, 220); doc.line(15, y+2, 195, y+2);
       y += 8;
     };
@@ -2814,11 +3062,11 @@ const GlobalMarketIntelligence = ({ handleNav }) => {
     addRow("Est. Freight Cost", `Rs. ${compareResult.locA.supply.transportCost}`, `Rs. ${compareResult.locB.supply.transportCost}`);
     addRow("Cold Storage Usage", `${compareResult.locA.supply.storageCapacity}% Full`, `${compareResult.locB.supply.storageCapacity}% Full`);
     addRow("Spoilage Risk Est.", `${compareResult.locA.supply.spoilage}%`, `${compareResult.locB.supply.spoilage}%`);
-    addRow("Pest Attack Risk", compareResult.locA.weather.pestRisk, compareResult.locB.weather.pestRisk);
-    addRow("Optimal Hold Strategy", `${compareResult.locA.advanced.holdDays} Days`, `${compareResult.locB.advanced.holdDays} Days`);
+    addRow("Pest Attack Risk", T(compareResult.locA.weather.pestRisk), T(compareResult.locB.weather.pestRisk));
+    addRow("Optimal Hold Strategy", `${compareResult.locA.advanced.holdDays} ${T("Days")}`, `${compareResult.locB.advanced.holdDays} ${T("Days")}`);
 
     doc.setFontSize(8); doc.setTextColor(150, 150, 150);
-    doc.text("*This is an AI-generated econometric forecast based on simulated NCDEX & E-NAM sync data.", 105, 290, null, null, "center");
+    doc.text(T("*This is an AI-generated econometric forecast based on simulated NCDEX & E-NAM sync data."), 105, 290, null, null, "center");
 
     if (action === 'preview') {
         const pdfBlob = doc.output('bloburl');
@@ -2832,9 +3080,9 @@ const GlobalMarketIntelligence = ({ handleNav }) => {
   const getGraphData = () => {
     if (!compareResult) return [];
     return [
-      { name: `Farm Gate Price`, [compareResult.locA.name]: compareResult.locA.market.price, [compareResult.locB.name]: compareResult.locB.market.price },
-      { name: `Grade-A (Export)`, [compareResult.locA.name]: compareResult.locA.market.gradeA, [compareResult.locB.name]: compareResult.locB.market.gradeA },
-      { name: `Retail Price`, [compareResult.locA.name]: compareResult.locA.market.retail, [compareResult.locB.name]: compareResult.locB.market.retail }
+      { name: T("Farm Gate Price"), [T(compareResult.locA.name)]: compareResult.locA.market.price, [T(compareResult.locB.name)]: compareResult.locB.market.price },
+      { name: T("Grade-A (Export)"), [T(compareResult.locA.name)]: compareResult.locA.market.gradeA, [T(compareResult.locB.name)]: compareResult.locB.market.gradeA },
+      { name: T("Retail Price"), [T(compareResult.locA.name)]: compareResult.locA.market.retail, [T(compareResult.locB.name)]: compareResult.locB.market.retail }
     ];
   };
 
@@ -2866,20 +3114,20 @@ const GlobalMarketIntelligence = ({ handleNav }) => {
                 <div className="p-8 bg-[#0b1410]">
                     <div className="bg-red-950/20 border border-red-500/20 p-6 rounded-2xl mb-6">
                         <p className="text-red-400 font-black text-xs uppercase tracking-widest mb-2">{T("Active Alert Directive")}</p>
-                        <h2 className="text-xl font-bold text-white leading-relaxed">{compareResult.arbitrage.policyAlert}</h2>
+                        <h2 className="text-xl font-bold text-white leading-relaxed">{getPolicyAlert(compareResult)}</h2>
                     </div>
                     <div className="grid grid-cols-2 gap-4">
                         <div className="bg-[#111613] border border-white/5 p-4 rounded-xl">
                             <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">{T("Estimated Market Impact")}</p>
-                            <h4 className="text-red-400 font-black text-lg">-4.5% to +2.1% Volatility</h4>
+                            <h4 className="text-red-400 font-black text-lg">{T("-4.5% to +2.1% Volatility")}</h4>
                         </div>
                         <div className="bg-[#111613] border border-white/5 p-4 rounded-xl">
                             <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">{T("Affected Commodity")}</p>
-                            <h4 className="text-white font-black text-lg">{crop.toUpperCase()}</h4>
+                            <h4 className="text-white font-black text-lg">{T(crop).toUpperCase()}</h4>
                         </div>
                         <div className="bg-[#111613] border border-white/5 p-4 rounded-xl col-span-2">
                             <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">{T("AI Recommendation")}</p>
-                            <p className="text-slate-300 text-sm font-bold mt-1">Review your holding strategy. If export bans or tariff cuts are active, domestic supply will surge, depressing prices. Consider immediate liquidation or hedging via futures contracts.</p>
+                            <p className="text-slate-300 text-sm font-bold mt-1">{T("Review your holding strategy. If export bans or tariff cuts are active, domestic supply will surge, depressing prices. Consider immediate liquidation or hedging via futures contracts.")}</p>
                         </div>
                     </div>
                 </div>
@@ -2895,7 +3143,7 @@ const GlobalMarketIntelligence = ({ handleNav }) => {
             <div className="bg-[#1a231d] w-full max-w-4xl h-[85vh] rounded-3xl border border-[#4CAF50]/30 shadow-2xl flex flex-col overflow-hidden">
                 <div className="p-4 border-b border-white/10 flex justify-between items-center bg-[#111613]"><h3 className="text-white font-black uppercase flex items-center gap-2 tracking-widest"><FileText className="text-[#4CAF50]"/> {T("Intelligence Report")}</h3><button onClick={() => setShowPdfModal(false)} className="text-slate-400 hover:text-white"><X size={24}/></button></div>
                 <div className="flex-1 bg-slate-800 relative"><iframe src={pdfUrl} width="100%" height="100%" className="border-none" title="PDF Preview"></iframe></div>
-                <div className="p-6 border-t border-white/10 bg-[#111613] flex justify-end gap-4"><button onClick={() => setShowPdfModal(false)} className="px-6 py-3 rounded-xl font-bold text-slate-400 hover:text-white uppercase text-xs tracking-widest border border-white/10">Close</button><button onClick={() => generatePDF('download')} className="bg-[#4CAF50] text-black px-8 py-3 rounded-xl font-black uppercase text-xs tracking-widest hover:scale-105 transition-transform flex items-center gap-2 shadow-lg"><Download size={16}/> Download PDF</button></div>
+                <div className="p-6 border-t border-white/10 bg-[#111613] flex justify-end gap-4"><button onClick={() => setShowPdfModal(false)} className="px-6 py-3 rounded-xl font-bold text-slate-400 hover:text-white uppercase text-xs tracking-widest border border-white/10">{T("Close")}</button><button onClick={() => generatePDF('download')} className="bg-[#4CAF50] text-black px-8 py-3 rounded-xl font-black uppercase text-xs tracking-widest hover:scale-105 transition-transform flex items-center gap-2 shadow-lg"><Download size={16}/> {T("Download PDF")}</button></div>
             </div>
         </div>
       )}
@@ -2907,17 +3155,17 @@ const GlobalMarketIntelligence = ({ handleNav }) => {
         </div>
         <div className="hidden md:flex flex-col items-end gap-2">
             <div className="flex items-center gap-2 bg-[#1a231d] border border-[#4CAF50]/30 px-4 py-2 rounded-full"><div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div><span className="text-[10px] font-black uppercase text-[#4CAF50] tracking-widest">{T("Live Exchange Sync")}</span></div>
-            <span className="text-[9px] text-slate-500 font-bold tracking-widest uppercase">Nodes: NCDEX, E-NAM, CBOT</span>
+            <span className="text-[9px] text-slate-500 font-bold tracking-widest uppercase">{T("Nodes: NCDEX, E-NAM, CBOT")}</span>
         </div>
       </div>
 
       <div className="bg-[#111613] p-8 rounded-[2rem] border border-[#4CAF50]/20 shadow-2xl mb-8">
         <div className="grid grid-cols-1 md:grid-cols-8 gap-6 items-end">
-          <div className="md:col-span-2"><label className="text-slate-500 text-[10px] font-black uppercase tracking-widest block mb-2">{T("Target Commodity")}</label><div className="relative"><Sprout size={16} className="absolute left-4 top-4 text-slate-500"/><input type="text" value={crop} onChange={(e) => setCrop(e.target.value)} placeholder="Ex: Paddy" className="w-full bg-[#0d120f] border border-white/10 p-4 pl-12 rounded-xl outline-none focus:border-[#4CAF50] text-sm font-bold text-white transition-all"/></div></div>
+          <div className="md:col-span-2"><label className="text-slate-500 text-[10px] font-black uppercase tracking-widest block mb-2">{T("Target Commodity")}</label><div className="relative"><Sprout size={16} className="absolute left-4 top-4 text-slate-500"/><input type="text" value={crop} onChange={(e) => setCrop(e.target.value)} placeholder={T("Ex: Paddy")} className="w-full bg-[#0d120f] border border-white/10 p-4 pl-12 rounded-xl outline-none focus:border-[#4CAF50] text-sm font-bold text-white transition-all"/></div></div>
           <div className="md:col-span-1"><label className="text-[#4CAF50] text-[10px] font-black uppercase tracking-widest block mb-2">{T("Volume (KG)")}</label><div className="relative"><Package size={16} className="absolute left-4 top-4 text-[#4CAF50]"/><input type="number" value={qty} onChange={(e) => setQty(e.target.value)} placeholder="100" className="w-full bg-[#0d120f] border border-[#4CAF50]/30 p-4 pl-12 rounded-xl outline-none focus:border-[#4CAF50] text-sm font-bold text-white transition-all shadow-[0_0_10px_rgba(76,175,80,0.1)]"/></div></div>
-          <div className="md:col-span-2"><label className="text-slate-500 text-[10px] font-black uppercase tracking-widest block mb-2">{T("Origin Node")}</label><div className="relative"><MapPin size={16} className="absolute left-4 top-4 text-slate-500"/><input type="text" value={locA} onChange={(e) => setLocA(e.target.value)} placeholder="Origin" className="w-full bg-[#0d120f] border border-white/10 p-4 pl-12 rounded-xl outline-none focus:border-[#4CAF50] text-sm font-bold text-white transition-all"/></div></div>
-          <div className="md:col-span-1 flex justify-center pb-4 text-slate-500 font-black italic">VS</div>
-          <div className="md:col-span-2"><label className="text-slate-500 text-[10px] font-black uppercase tracking-widest block mb-2">{T("Destination Node")}</label><div className="relative"><MapPin size={16} className="absolute left-4 top-4 text-slate-500"/><input type="text" value={locB} onChange={(e) => setLocB(e.target.value)} placeholder="Destination" className="w-full bg-[#0d120f] border border-white/10 p-4 pl-12 rounded-xl outline-none focus:border-[#4CAF50] text-sm font-bold text-white transition-all"/></div></div>
+          <div className="md:col-span-2"><label className="text-slate-500 text-[10px] font-black uppercase tracking-widest block mb-2">{T("Origin Node")}</label><div className="relative"><MapPin size={16} className="absolute left-4 top-4 text-slate-500"/><input type="text" value={locA} onChange={(e) => setLocA(e.target.value)} placeholder={T("Origin")} className="w-full bg-[#0d120f] border border-white/10 p-4 pl-12 rounded-xl outline-none focus:border-[#4CAF50] text-sm font-bold text-white transition-all"/></div></div>
+          <div className="md:col-span-1 flex justify-center pb-4 text-slate-500 font-black italic">{T("VS")}</div>
+          <div className="md:col-span-2"><label className="text-slate-500 text-[10px] font-black uppercase tracking-widest block mb-2">{T("Destination Node")}</label><div className="relative"><MapPin size={16} className="absolute left-4 top-4 text-slate-500"/><input type="text" value={locB} onChange={(e) => setLocB(e.target.value)} placeholder={T("Destination")} className="w-full bg-[#0d120f] border border-white/10 p-4 pl-12 rounded-xl outline-none focus:border-[#4CAF50] text-sm font-bold text-white transition-all"/></div></div>
         </div>
         <div className="mt-8 flex justify-center">
           <button onClick={runComparison} disabled={isComparing || !locA || !locB || !crop || !qty} className="bg-[#4CAF50] text-black font-black px-12 py-4 rounded-xl uppercase text-sm hover:scale-[1.02] transition-transform shadow-[0_0_30px_rgba(76,175,80,0.3)] flex items-center gap-3 disabled:opacity-50">
@@ -2933,31 +3181,31 @@ const GlobalMarketIntelligence = ({ handleNav }) => {
              <div className="flex items-center gap-4">
                  <div className="p-3 bg-red-500/20 rounded-full"><AlertTriangle size={20} className="text-red-500 animate-pulse"/></div>
                  <div>
-                     <h4 className="text-red-400 font-black text-xs uppercase tracking-widest mb-1">Macro Policy Impact Alert</h4>
-                     <p className="text-slate-300 font-bold text-sm">{compareResult.arbitrage.policyAlert}</p>
+                     <h4 className="text-red-400 font-black text-xs uppercase tracking-widest mb-1">{T("Macro Policy Impact Alert")}</h4>
+                     <p className="text-slate-300 font-bold text-sm">{getPolicyAlert(compareResult)}</p>
                  </div>
              </div>
              {/* 🔥 UPDATED: VIEW ALERT DESK BUTTON 🔥 */}
-             <button onClick={() => setShowAlertDesk(true)} className="hidden md:block border border-red-500/50 text-red-400 hover:bg-red-500 hover:text-white px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-colors shadow-lg hover:shadow-red-500/50">View Alert Desk</button>
+             <button onClick={() => setShowAlertDesk(true)} className="hidden md:block border border-red-500/50 text-red-400 hover:bg-red-500 hover:text-white px-4 py-2 rounded-lg text-[10px] font-black uppercase tracking-widest transition-colors shadow-lg hover:shadow-red-500/50">{T("View Alert Desk")}</button>
           </div>
 
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
               <div className="bg-[#111613] p-8 rounded-[2rem] border border-white/5 shadow-2xl relative overflow-hidden flex flex-col justify-center">
                  <div className="absolute -right-10 -top-10 opacity-5"><Clock size={180}/></div>
-                 <h3 className="text-white font-black text-xs uppercase tracking-widest mb-6 flex items-center gap-2 relative z-10"><Database size={16} className="text-blue-400"/> AI Hold vs. Sell Strategy (Storage Optimizer)</h3>
+                 <h3 className="text-white font-black text-xs uppercase tracking-widest mb-6 flex items-center gap-2 relative z-10"><Database size={16} className="text-blue-400"/> {T("AI Hold vs. Sell Strategy (Storage Optimizer)")}</h3>
                  <div className="grid grid-cols-2 gap-4 relative z-10">
                      <div className="bg-[#0d120f] border border-white/10 p-4 rounded-xl">
-                         <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">Optimal Hold Time</p>
-                         <h4 className="text-white font-black text-2xl">{compareResult.locA.advanced.holdDays} <span className="text-sm font-bold text-slate-400">Days</span></h4>
+                         <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">{T("Optimal Hold Time")}</p>
+                         <h4 className="text-white font-black text-2xl">{compareResult.locA.advanced.holdDays} <span className="text-sm font-bold text-slate-400">{T("Days")}</span></h4>
                      </div>
                      <div className="bg-[#0d120f] border border-white/10 p-4 rounded-xl">
-                         <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">Est. Storage Cost</p>
+                         <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">{T("Est. Storage Cost")}</p>
                          <h4 className="text-red-400 font-black text-xl">-₹{compareResult.locA.advanced.storageTotalCost}</h4>
                      </div>
                  </div>
                  <div className="mt-4 bg-green-950/20 border border-[#4CAF50]/30 p-4 rounded-xl relative z-10">
                      <div className="flex justify-between items-center">
-                         <span className="text-slate-300 text-xs font-bold uppercase tracking-widest">Net Extra Profit (After Storage)</span>
+                         <span className="text-slate-300 text-xs font-bold uppercase tracking-widest">{T("Net Extra Profit (After Storage)")}</span>
                          <span className="text-[#4CAF50] font-black text-xl">+₹{compareResult.locA.advanced.holdNetProfit}</span>
                      </div>
                  </div>
@@ -2965,19 +3213,19 @@ const GlobalMarketIntelligence = ({ handleNav }) => {
 
               <div className="bg-[#111613] p-8 rounded-[2rem] border border-white/5 shadow-2xl relative overflow-hidden flex flex-col justify-center">
                  <div className="absolute -right-4 -bottom-4 opacity-5"><Globe size={180}/></div>
-                 <h3 className="text-white font-black text-xs uppercase tracking-widest mb-6 flex items-center gap-2 relative z-10"><Globe size={16} className="text-purple-400"/> Global Export Economics & FX</h3>
+                 <h3 className="text-white font-black text-xs uppercase tracking-widest mb-6 flex items-center gap-2 relative z-10"><Globe size={16} className="text-purple-400"/> {T("Global Export Economics & FX")}</h3>
                  <div className="grid grid-cols-2 gap-4 relative z-10">
                      <div className="bg-[#0d120f] border border-white/10 p-4 rounded-xl">
-                         <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">USD/INR Rate</p>
+                         <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">{T("USD/INR Rate")}</p>
                          <h4 className="text-white font-black text-xl">₹{compareResult.locA.advanced.usdRate}</h4>
                      </div>
                      <div className="bg-[#0d120f] border border-white/10 p-4 rounded-xl">
-                         <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">Grade-A Export Premium</p>
+                         <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">{T("Grade-A Export Premium")}</p>
                          <h4 className="text-yellow-500 font-black text-xl">₹{compareResult.locA.advanced.exportPremium}</h4>
                      </div>
                  </div>
                  <p className="text-slate-400 text-xs font-bold mt-4 leading-relaxed relative z-10">
-                     Exporting Grade-A quality {crop} yields a massive premium. The current favorable USD/INR exchange rate further maximizes INR realization by ~2.4%.
+                     {T("Exporting Grade-A quality crop yields a massive premium. The current favorable USD/INR exchange rate further maximizes INR realization by ~2.4%.").replace("crop", T(crop))}
                  </p>
               </div>
           </div>
@@ -2987,42 +3235,42 @@ const GlobalMarketIntelligence = ({ handleNav }) => {
                  {compareResult.arbitrage.isProfitable && <div className="absolute top-0 left-0 w-1 h-full bg-[#4CAF50] shadow-[0_0_20px_#4CAF50]"></div>}
                  <div className="flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
                     <div>
-                       <h3 className="text-white font-black text-xs uppercase tracking-widest mb-2 flex items-center gap-2"><Cpu size={16} className="text-blue-400"/> Trade Arbitrage Engine</h3>
+                       <h3 className="text-white font-black text-xs uppercase tracking-widest mb-2 flex items-center gap-2"><Cpu size={16} className="text-blue-400"/> {T("Trade Arbitrage Engine")}</h3>
                        <h2 className="text-2xl md:text-3xl font-black text-white tracking-tight">
-                           {compareResult.arbitrage.isProfitable ? "Profitable Trade Route Confirmed" : "Local Liquidation Advised"}
+                           {compareResult.arbitrage.isProfitable ? T("Profitable Trade Route Confirmed") : T("Local Liquidation Advised")}
                        </h2>
                        <p className="text-slate-400 text-sm font-bold mt-2 leading-relaxed max-w-xl">
                            {compareResult.arbitrage.isProfitable 
-                              ? `Executing transit from ${compareResult.arbitrage.source} to ${compareResult.arbitrage.target} secures alpha margins despite freight constraints.` 
-                              : `Spread deficit. The basis difference doesn't clear the transit freight cost. Liquidate inventory in ${compareResult.locA.market.price > compareResult.locB.market.price ? compareResult.locA.name : compareResult.locB.name}.`}
+                              ? T("Executing transit from") + " " + T(compareResult.arbitrage.source) + " " + T("to") + " " + T(compareResult.arbitrage.target) + " " + T("secures alpha margins despite freight constraints.")
+                              : T("Spread deficit. The basis difference doesn't clear the transit freight cost.") + " " + T("Liquidate inventory in") + " " + T(compareResult.locA.market.price > compareResult.locB.market.price ? compareResult.locA.name : compareResult.locB.name) + "."}
                        </p>
                     </div>
                     {compareResult.arbitrage.isProfitable && (
                         <div className="bg-[#0d120f] border border-[#4CAF50]/30 p-5 rounded-2xl min-w-[250px] shadow-inner">
-                            <div className="flex justify-between items-center mb-3 border-b border-white/5 pb-2"><span className="text-slate-500 text-[10px] font-black uppercase tracking-widest">Spread (Gross)</span><span className="text-white font-bold text-sm">+₹{compareResult.arbitrage.grossDiff}</span></div>
-                            <div className="flex justify-between items-center mb-3 border-b border-white/5 pb-2"><span className="text-slate-500 text-[10px] font-black uppercase tracking-widest">Freight & Storage</span><span className="text-red-400 font-bold text-sm">-₹{compareResult.arbitrage.transportCost}</span></div>
-                            <div className="flex justify-between items-center mt-2"><span className="text-[#4CAF50] text-xs font-black uppercase tracking-widest">Alpha (Net Profit)</span><span className="text-[#4CAF50] font-black text-2xl">₹{compareResult.arbitrage.netProfit}</span></div>
+                            <div className="flex justify-between items-center mb-3 border-b border-white/5 pb-2"><span className="text-slate-500 text-[10px] font-black uppercase tracking-widest">{T("Spread (Gross)")}</span><span className="text-white font-bold text-sm">+₹{compareResult.arbitrage.grossDiff}</span></div>
+                            <div className="flex justify-between items-center mb-3 border-b border-white/5 pb-2"><span className="text-slate-500 text-[10px] font-black uppercase tracking-widest">{T("Freight & Storage")}</span><span className="text-red-400 font-bold text-sm">-₹{compareResult.arbitrage.transportCost}</span></div>
+                            <div className="flex justify-between items-center mt-2"><span className="text-[#4CAF50] text-xs font-black uppercase tracking-widest">{T("Alpha (Net Profit)")}</span><span className="text-[#4CAF50] font-black text-2xl">₹{compareResult.arbitrage.netProfit}</span></div>
                         </div>
                     )}
                  </div>
               </div>
 
               <div className="bg-[#111613] p-8 rounded-[2rem] border border-white/5 shadow-2xl relative overflow-hidden">
-                 <h3 className="text-white font-black text-xs uppercase tracking-widest mb-6 flex items-center gap-2"><Layers size={16} className="text-orange-400"/> Value Chain Margin Analysis</h3>
+                 <h3 className="text-white font-black text-xs uppercase tracking-widest mb-6 flex items-center gap-2"><Layers size={16} className="text-orange-400"/> {T("Value Chain Margin Analysis")}</h3>
                  <div className="relative pl-6 space-y-6 before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-white/10">
                      <div className="relative">
                          <div className="absolute -left-[29px] top-1 w-4 h-4 bg-[#4CAF50] rounded-full border-4 border-[#111613]"></div>
-                         <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">Farm Gate Price (You get)</p>
+                         <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">{T("Farm Gate Price (You get)")}</p>
                          <h4 className="text-white font-black text-lg">₹{compareResult.locA.market.price}</h4>
                      </div>
                      <div className="relative">
                          <div className="absolute -left-[29px] top-1 w-4 h-4 bg-yellow-500 rounded-full border-4 border-[#111613]"></div>
-                         <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">Wholesale Mandi Price</p>
+                         <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">{T("Wholesale Mandi Price")}</p>
                          <h4 className="text-white font-black text-lg">₹{compareResult.locA.market.wholesale} <span className="text-yellow-500 text-[10px] ml-2">+{( (compareResult.locA.market.wholesale - compareResult.locA.market.price)/compareResult.locA.market.price * 100 ).toFixed(1)}%</span></h4>
                      </div>
                      <div className="relative">
                          <div className="absolute -left-[29px] top-1 w-4 h-4 bg-red-500 rounded-full border-4 border-[#111613]"></div>
-                         <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">Retail Price (Consumer pays)</p>
+                         <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">{T("Retail Price (Consumer pays)")}</p>
                          <h4 className="text-white font-black text-lg">₹{compareResult.locA.market.retail} <span className="text-red-500 text-[10px] ml-2">+{( (compareResult.locA.market.retail - compareResult.locA.market.wholesale)/compareResult.locA.market.wholesale * 100 ).toFixed(1)}%</span></h4>
                      </div>
                  </div>
@@ -3031,32 +3279,32 @@ const GlobalMarketIntelligence = ({ handleNav }) => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="md:col-span-2 bg-[#111613] p-8 rounded-[2rem] border border-white/5 shadow-2xl">
-                  <h4 className="text-white font-black uppercase text-sm mb-6 tracking-widest flex items-center gap-2"><Building2 size={18} className="text-purple-400"/> Institutional B2B Demand Radar</h4>
+                  <h4 className="text-white font-black uppercase text-sm mb-6 tracking-widest flex items-center gap-2"><Building2 size={18} className="text-purple-400"/> {T("Institutional B2B Demand Radar")}</h4>
                   <div className="grid grid-cols-2 gap-6">
                       <div className="bg-[#0d120f] border border-white/5 p-5 rounded-2xl">
-                          <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-3 border-b border-white/5 pb-2">{compareResult.locA.name} Zone</p>
+                          <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-3 border-b border-white/5 pb-2">{T(compareResult.locA.name)} {T("Zone")}</p>
                           <h5 className="text-white font-bold text-base mb-1">{compareResult.locA.b2b.topBuyer}</h5>
-                          <p className="text-[#4CAF50] text-xs font-black uppercase tracking-widest">Req: {compareResult.locA.b2b.demandVol} Tons</p>
-                          <p className="text-slate-400 text-sm font-bold mt-2">Contract Bid: ₹{compareResult.locA.b2b.contractPrice}</p>
+                          <p className="text-[#4CAF50] text-xs font-black uppercase tracking-widest">{T("Req:")} {compareResult.locA.b2b.demandVol} {T("Tons")}</p>
+                          <p className="text-slate-400 text-sm font-bold mt-2">{T("Contract Bid:")} ₹{compareResult.locA.b2b.contractPrice}</p>
                       </div>
                       <div className="bg-[#0d120f] border border-white/5 p-5 rounded-2xl">
-                          <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-3 border-b border-white/5 pb-2">{compareResult.locB.name} Zone</p>
+                          <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-3 border-b border-white/5 pb-2">{T(compareResult.locB.name)} {T("Zone")}</p>
                           <h5 className="text-white font-bold text-base mb-1">{compareResult.locB.b2b.topBuyer}</h5>
-                          <p className="text-[#4CAF50] text-xs font-black uppercase tracking-widest">Req: {compareResult.locB.b2b.demandVol} Tons</p>
-                          <p className="text-slate-400 text-sm font-bold mt-2">Contract Bid: ₹{compareResult.locB.b2b.contractPrice}</p>
+                          <p className="text-[#4CAF50] text-xs font-black uppercase tracking-widest">{T("Req:")} {compareResult.locB.b2b.demandVol} {T("Tons")}</p>
+                          <p className="text-slate-400 text-sm font-bold mt-2">{T("Contract Bid:")} ₹{compareResult.locB.b2b.contractPrice}</p>
                       </div>
                   </div>
               </div>
               <div className="bg-[#111613] p-8 rounded-[2rem] border border-white/5 shadow-2xl flex flex-col justify-center">
-                  <h4 className="text-white font-black uppercase text-sm mb-6 tracking-widest flex items-center gap-2"><Leaf size={18} className="text-[#4CAF50]"/> ESG Monetization</h4>
+                  <h4 className="text-white font-black uppercase text-sm mb-6 tracking-widest flex items-center gap-2"><Leaf size={18} className="text-[#4CAF50]"/> {T("ESG Monetization")}</h4>
                   <div className="space-y-4">
                       <div className="bg-green-950/20 border border-[#4CAF50]/20 p-4 rounded-xl">
-                          <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1">Est. Carbon Credit Value</p>
+                          <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1">{T("Est. Carbon Credit Value")}</p>
                           <h5 className="text-[#4CAF50] font-black text-2xl">₹{compareResult.locA.esg.carbonCreditEst.toLocaleString()}</h5>
                       </div>
                       <div className="bg-yellow-950/20 border border-yellow-500/20 p-4 rounded-xl">
-                          <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1">Organic Market Premium</p>
-                          <h5 className="text-yellow-500 font-black text-xl">{compareResult.locA.esg.organicPremium} <span className="text-[10px] text-slate-500">Above MSP</span></h5>
+                          <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1">{T("Organic Market Premium")}</p>
+                          <h5 className="text-yellow-500 font-black text-xl">{compareResult.locA.esg.organicPremium} <span className="text-[10px] text-slate-500">{T("Above MSP")}</span></h5>
                       </div>
                   </div>
               </div>
@@ -3064,8 +3312,8 @@ const GlobalMarketIntelligence = ({ handleNav }) => {
 
           <div className="bg-[#111613] p-8 rounded-[2rem] border border-white/5 shadow-2xl">
              <div className="flex justify-between items-center mb-6 border-b border-white/5 pb-6">
-                 <h3 className="text-xl font-black uppercase text-white flex items-center gap-2"><BarChart2 className="text-[#4CAF50]"/> Grade & Value Graph</h3>
-                 <button onClick={() => generatePDF('preview')} className="text-xs font-black uppercase tracking-widest text-black bg-[#4CAF50] flex items-center gap-2 px-6 py-3 rounded-xl transition-all shadow-[0_0_15px_rgba(76,175,80,0.5)] hover:scale-105"><Eye size={16}/> Export Report</button>
+                 <h3 className="text-xl font-black uppercase text-white flex items-center gap-2"><BarChart2 className="text-[#4CAF50]"/> {T("Grade & Value Graph")}</h3>
+                 <button onClick={() => generatePDF('preview')} className="text-xs font-black uppercase tracking-widest text-black bg-[#4CAF50] flex items-center gap-2 px-6 py-3 rounded-xl transition-all shadow-[0_0_15px_rgba(76,175,80,0.5)] hover:scale-105"><Eye size={16}/> {T("Export Report")}</button>
              </div>
              <div className="h-80 w-full">
                  <ResponsiveContainer width="100%" height="100%">
@@ -3075,8 +3323,8 @@ const GlobalMarketIntelligence = ({ handleNav }) => {
                          <YAxis stroke="#64748b" fontSize={10} tickLine={false} axisLine={false}/>
                          <Tooltip contentStyle={{backgroundColor: '#0d120f', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '12px', color: 'white', fontWeight: 'bold'}} cursor={{fill: 'rgba(255,255,255,0.02)'}} />
                          <Legend wrapperStyle={{fontSize: '11px', fontWeight: 'bold'}} />
-                         <Bar dataKey={compareResult.locA.name} fill="#4CAF50" radius={[6, 6, 0, 0]} barSize={40} />
-                         <Bar dataKey={compareResult.locB.name} fill="#3b82f6" radius={[6, 6, 0, 0]} barSize={40} />
+                         <Bar dataKey={T(compareResult.locA.name)} fill="#4CAF50" radius={[6, 6, 0, 0]} barSize={40} />
+                         <Bar dataKey={T(compareResult.locB.name)} fill="#3b82f6" radius={[6, 6, 0, 0]} barSize={40} />
                      </BarChart>
                  </ResponsiveContainer>
              </div>
@@ -3085,32 +3333,32 @@ const GlobalMarketIntelligence = ({ handleNav }) => {
           <div className="bg-[#111613] p-8 rounded-[2rem] border border-white/5 shadow-2xl">
              <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
                <div className="space-y-4">
-                   <h4 className="text-white font-black text-xs uppercase tracking-widest bg-white/5 p-3 rounded-lg inline-flex items-center gap-2 shadow-inner"><TrendingUp size={16} className="text-[#4CAF50]"/> Market & Futures</h4>
-                   <MetricRow icon={Banknote} label={`Spot Price (${qty}kg)`} valA={`₹${compareResult.locA.market?.price || 0}`} valB={`₹${compareResult.locB.market?.price || 0}`} isBetterA={(compareResult.locA.market?.price || 0) > (compareResult.locB.market?.price || 0)} />
-                   <MetricRow icon={Clock} label="Next Month Futures" valA={`₹${compareResult.locA.market?.futuresContract || 0}`} valB={`₹${compareResult.locB.market?.futuresContract || 0}`} isBetterA={(compareResult.locA.market?.futuresContract || 0) > (compareResult.locB.market?.futuresContract || 0)} />
-                   <MetricRow icon={Activity} label="30D AI Sentiment" valA={compareResult.locA.market?.forecast30D} valB={compareResult.locB.market?.forecast30D} isBetterA={(compareResult.locA.market?.sentiment) === 'Bullish'} />
-                   <MetricRow icon={Globe} label="Export Grade-A Premium" valA={`₹${compareResult.locA.advanced?.exportPremium || 0}`} valB={`₹${compareResult.locB.advanced?.exportPremium || 0}`} isBetterA={(compareResult.locA.advanced?.exportPremium || 0) > (compareResult.locB.advanced?.exportPremium || 0)} />
+                   <h4 className="text-white font-black text-xs uppercase tracking-widest bg-white/5 p-3 rounded-lg inline-flex items-center gap-2 shadow-inner"><TrendingUp size={16} className="text-[#4CAF50]"/> {T("Market & Futures")}</h4>
+                   <MetricRow icon={Banknote} label={T("Spot Price") + " (" + qty + "kg)"} valA={`₹${compareResult.locA.market?.price || 0}`} valB={`₹${compareResult.locB.market?.price || 0}`} isBetterA={(compareResult.locA.market?.price || 0) > (compareResult.locB.market?.price || 0)} />
+                   <MetricRow icon={Clock} label={T("Next Month Futures")} valA={`₹${compareResult.locA.market?.futuresContract || 0}`} valB={`₹${compareResult.locB.market?.futuresContract || 0}`} isBetterA={(compareResult.locA.market?.futuresContract || 0) > (compareResult.locB.market?.futuresContract || 0)} />
+                   <MetricRow icon={Activity} label={T("30D AI Sentiment")} valA={compareResult.locA.market?.forecast30D} valB={compareResult.locB.market?.forecast30D} isBetterA={(compareResult.locA.market?.sentiment) === 'Bullish'} />
+                   <MetricRow icon={Globe} label={T("Grade-A Export Premium")} valA={`₹${compareResult.locA.advanced?.exportPremium || 0}`} valB={`₹${compareResult.locB.advanced?.exportPremium || 0}`} isBetterA={(compareResult.locA.advanced?.exportPremium || 0) > (compareResult.locB.advanced?.exportPremium || 0)} />
                </div>
                
                <div className="space-y-4">
-                   <h4 className="text-white font-black text-xs uppercase tracking-widest bg-white/5 p-3 rounded-lg inline-flex items-center gap-2 shadow-inner"><CloudRain size={16} className="text-blue-400"/> Climate & Agronomy</h4>
-                   <MetricRow icon={Droplets} label="Soil Moisture" valA={`${compareResult.locA.weather?.soilMoisture || 0}%`} valB={`${compareResult.locB.weather?.soilMoisture || 0}%`} isBetterA={(compareResult.locA.weather?.soilMoisture || 0) > (compareResult.locB.weather?.soilMoisture || 0)} />
-                   <MetricRow icon={Thermometer} label="Avg Temp" valA={`${compareResult.locA.weather?.temp || 0}°C`} valB={`${compareResult.locB.weather?.temp || 0}°C`} isBetterA={(compareResult.locA.weather?.temp || 0) < (compareResult.locB.weather?.temp || 0)} reverseLogic={true} />
-                   <MetricRow icon={Bug} label="Pest Risk" valA={compareResult.locA.weather?.pestRisk || 'N/A'} valB={compareResult.locB.weather?.pestRisk || 'N/A'} isBetterA={(compareResult.locA.weather?.pestRisk) === 'Low Risk'} />
+                   <h4 className="text-white font-black text-xs uppercase tracking-widest bg-white/5 p-3 rounded-lg inline-flex items-center gap-2 shadow-inner"><CloudRain size={16} className="text-blue-400"/> {T("Climate & Agronomy")}</h4>
+                   <MetricRow icon={Droplets} label={T("Soil Moisture")} valA={`${compareResult.locA.weather?.soilMoisture || 0}%`} valB={`${compareResult.locB.weather?.soilMoisture || 0}%`} isBetterA={(compareResult.locA.weather?.soilMoisture || 0) > (compareResult.locB.weather?.soilMoisture || 0)} />
+                   <MetricRow icon={Thermometer} label={T("Avg Temp")} valA={`${compareResult.locA.weather?.temp || 0}°C`} valB={`${compareResult.locB.weather?.temp || 0}°C`} isBetterA={(compareResult.locA.weather?.temp || 0) < (compareResult.locB.weather?.temp || 0)} reverseLogic={true} />
+                   <MetricRow icon={Bug} label={T("Pest Risk")} valA={T(compareResult.locA.weather?.pestRisk || 'N/A')} valB={T(compareResult.locB.weather?.pestRisk || 'N/A')} isBetterA={(compareResult.locA.weather?.pestRisk) === 'Low Risk'} />
                </div>
                
                <div className="space-y-4">
-                   <h4 className="text-white font-black text-xs uppercase tracking-widest bg-white/5 p-3 rounded-lg inline-flex items-center gap-2 shadow-inner"><Truck size={16} className="text-orange-400"/> Logistics & Warehousing</h4>
-                   <MetricRow icon={Truck} label={`Freight (${qty}kg)`} valA={`₹${compareResult.locA.supply?.transportCost || 0}`} valB={`₹${compareResult.locB.supply?.transportCost || 0}`} isBetterA={(compareResult.locA.supply?.transportCost || 0) < (compareResult.locB.supply?.transportCost || 0)} reverseLogic={true} />
-                   <MetricRow icon={Database} label="Cold Storage Used" valA={`${compareResult.locA.supply?.storageCapacity || 0}% Full`} valB={`${compareResult.locB.supply?.storageCapacity || 0}% Full`} isBetterA={(compareResult.locA.supply?.storageCapacity || 0) < (compareResult.locB.supply?.storageCapacity || 0)} reverseLogic={true} />
-                   <MetricRow icon={AlertTriangle} label="Spoilage Risk" valA={`${compareResult.locA.supply?.spoilage || 0}%`} valB={`${compareResult.locB.supply?.spoilage || 0}%`} isBetterA={parseFloat(compareResult.locA.supply?.spoilage || 0) < parseFloat(compareResult.locB.supply?.spoilage || 0)} reverseLogic={true}/>
+                   <h4 className="text-white font-black text-xs uppercase tracking-widest bg-white/5 p-3 rounded-lg inline-flex items-center gap-2 shadow-inner"><Truck size={16} className="text-orange-400"/> {T("Logistics & Warehousing")}</h4>
+                   <MetricRow icon={Truck} label={T("Freight") + " (" + qty + "kg)"} valA={`₹${compareResult.locA.supply?.transportCost || 0}`} valB={`₹${compareResult.locB.supply?.transportCost || 0}`} isBetterA={(compareResult.locA.supply?.transportCost || 0) < (compareResult.locB.supply?.transportCost || 0)} reverseLogic={true} />
+                   <MetricRow icon={Database} label={T("Cold Storage Used")} valA={(compareResult.locA.supply?.storageCapacity || 0) + "% " + T("Full")} valB={(compareResult.locB.supply?.storageCapacity || 0) + "% " + T("Full")} isBetterA={(compareResult.locA.supply?.storageCapacity || 0) < (compareResult.locB.supply?.storageCapacity || 0)} reverseLogic={true} />
+                   <MetricRow icon={AlertTriangle} label={T("Spoilage Risk")} valA={`${compareResult.locA.supply?.spoilage || 0}%`} valB={`${compareResult.locB.supply?.spoilage || 0}%`} isBetterA={parseFloat(compareResult.locA.supply?.spoilage || 0) < parseFloat(compareResult.locB.supply?.spoilage || 0)} reverseLogic={true}/>
                </div>
                
                <div className="space-y-4">
-                   <h4 className="text-white font-black text-xs uppercase tracking-widest bg-white/5 p-3 rounded-lg inline-flex items-center gap-2 shadow-inner"><Landmark size={16} className="text-yellow-400"/> Finance & Margins</h4>
-                   <MetricRow icon={Percent} label="Profit Margin" valA={`${compareResult.locA.finance?.margin || 0}%`} valB={`${compareResult.locB.finance?.margin || 0}%`} isBetterA={(compareResult.locA.finance?.margin || 0) > (compareResult.locB.finance?.margin || 0)} />
-                   <MetricRow icon={User} label={`Labor Cost (${qty}kg)`} valA={`₹${compareResult.locA.finance?.laborCost || 0}`} valB={`₹${compareResult.locB.finance?.laborCost || 0}`} isBetterA={(compareResult.locA.finance?.laborCost || 0) < (compareResult.locB.finance?.laborCost || 0)} reverseLogic={true} />
-                   <MetricRow icon={ShieldCheck} label="Govt Subsidy" valA={compareResult.locA.finance?.subsidy || 'N/A'} valB={compareResult.locB.finance?.subsidy || 'N/A'} isBetterA={(compareResult.locA.finance?.subsidy) === 'Available'} />
+                   <h4 className="text-white font-black text-xs uppercase tracking-widest bg-white/5 p-3 rounded-lg inline-flex items-center gap-2 shadow-inner"><Landmark size={16} className="text-yellow-400"/> {T("Finance & Margins")}</h4>
+                   <MetricRow icon={Percent} label={T("Profit Margin")} valA={`${compareResult.locA.finance?.margin || 0}%`} valB={`${compareResult.locB.finance?.margin || 0}%`} isBetterA={(compareResult.locA.finance?.margin || 0) > (compareResult.locB.finance?.margin || 0)} />
+                   <MetricRow icon={User} label={T("Labor Cost") + " (" + qty + "kg)"} valA={`₹${compareResult.locA.finance?.laborCost || 0}`} valB={`₹${compareResult.locB.finance?.laborCost || 0}`} isBetterA={(compareResult.locA.finance?.laborCost || 0) < (compareResult.locB.finance?.laborCost || 0)} reverseLogic={true} />
+                   <MetricRow icon={ShieldCheck} label={T("Govt Subsidy")} valA={T(compareResult.locA.finance?.subsidy || 'N/A')} valB={T(compareResult.locB.finance?.subsidy || 'N/A')} isBetterA={(compareResult.locA.finance?.subsidy) === 'Available'} />
                </div>
              </div>
           </div>
@@ -3134,6 +3382,21 @@ const LoanPortal = ({ currentUser, handleNav }) => {
   const [accNo, setAccNo] = useState("");
   const [ifsc, setIfsc] = useState("");
   const [loanType, setLoanType] = useState("crop");
+
+  const translateTerminalLog = (log) => {
+    if (!log) return '';
+    if (log.startsWith("> NDVI INDEX")) {
+      return currentAppLang === 'ta' 
+        ? `> NDVI குறியீடு: 0.72 (ஆரோக்கியமான ${T(searchQuery).toUpperCase()} கண்டறியப்பட்டது) [சரி]` 
+        : log;
+    }
+    if (log.startsWith("> CONNECTING TO")) {
+      return currentAppLang === 'ta' 
+        ? `> இணைப்பு துவங்குகிறது: ${T(selectedBank).toUpperCase()} CBS API... [பாதுகாப்பானது]` 
+        : log;
+    }
+    return T(log);
+  };
   
   // Eligibility Engine States
   const [estimatedAmount, setEstimatedAmount] = useState(null);
@@ -3172,7 +3435,7 @@ const LoanPortal = ({ currentUser, handleNav }) => {
 
   // AI ELIGIBILITY CHECK
   const handleCalculate = () => { 
-    if(!landSize || !searchQuery) { alert("Enter Land Size and Crop Type!"); return; }
+    if(!landSize || !searchQuery) { alert(T("Enter Land Size and Crop Type!")); return; }
     
     setShowEligibility(true);
     setScanStep(1); 
@@ -3214,10 +3477,10 @@ const LoanPortal = ({ currentUser, handleNav }) => {
 
   // AI TERMINAL VERIFICATION
   const handleVerify = () => {
-    if(!estimatedAmount) { alert("Calculate estimated loan first!"); return; }
-    if(!selectedBank || !accNo || !ifsc) { alert("Please fill in all Bank Account details!"); return; }
+    if(!estimatedAmount) { alert(T("Calculate estimated loan first!")); return; }
+    if(!selectedBank || !accNo || !ifsc) { alert(T("Please fill in all Bank Account details!")); return; }
     const allUploaded = activeDocs.every(doc => docStatus[doc.id] === true);
-    if(!allUploaded) { alert("Please upload all 8 required documents for this loan type!"); return; }
+    if(!allUploaded) { alert(T("Please upload all 8 required documents for this loan type!")); return; }
     
     setVerifyStatus("verifying");
     setTerminalLogs([]);
@@ -3263,7 +3526,7 @@ const LoanPortal = ({ currentUser, handleNav }) => {
         <div className="fixed inset-0 z-[200] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 animate-in fade-in print-hide">
           <div className="bg-[#111613] w-full max-w-2xl rounded-3xl border border-[#4CAF50]/30 shadow-[0_0_50px_rgba(76,175,80,0.15)] overflow-hidden flex flex-col">
             <div className="p-4 border-b border-white/5 bg-[#0d120f] flex justify-between items-center">
-              <h3 className="text-white font-black uppercase flex items-center gap-2 tracking-widest text-sm"><Cpu className="text-[#4CAF50]"/> Bank API Verification Engine</h3>
+              <h3 className="text-white font-black uppercase flex items-center gap-2 tracking-widest text-sm"><Cpu className="text-[#4CAF50]"/> {T("Bank API Verification Engine")}</h3>
               <button onClick={() => setShowEligibility(false)} className="text-slate-400 hover:text-white"><X size={20}/></button>
             </div>
             
@@ -3275,19 +3538,19 @@ const LoanPortal = ({ currentUser, handleNav }) => {
                     <Database size={32} className="text-[#4CAF50] animate-pulse" />
                   </div>
                   <div className="text-center space-y-3">
-                    <h4 className="text-white font-black uppercase tracking-widest text-lg mb-4 text-[#4CAF50]">Contacting Bureau & Land Registry...</h4>
+                    <h4 className="text-white font-black uppercase tracking-widest text-lg mb-4 text-[#4CAF50]">{T("Contacting Bureau & Land Registry...")}</h4>
                     <div className="text-left bg-[#0d120f] p-4 rounded-xl border border-white/5 inline-block space-y-2 min-w-[300px]">
                         <p className={`text-[11px] font-black uppercase tracking-widest flex items-center gap-2 transition-all ${scanStep >= 1 ? 'text-[#4CAF50]' : 'text-slate-600'}`}>
-                            {scanStep >= 1 ? <CheckCircle2 size={14}/> : <Loader2 size={14} className="animate-spin"/>} Querying NSDL / Experian CIBIL...
+                            {scanStep >= 1 ? <CheckCircle2 size={14}/> : <Loader2 size={14} className="animate-spin"/>} {T("Querying NSDL / Experian CIBIL...")}
                         </p>
                         <p className={`text-[11px] font-black uppercase tracking-widest flex items-center gap-2 transition-all ${scanStep >= 2 ? 'text-[#4CAF50]' : 'text-slate-600'}`}>
-                            {scanStep >= 2 ? <CheckCircle2 size={14}/> : scanStep === 1 ? <Loader2 size={14} className="animate-spin"/> : <Lock size={14}/>} Verifying TN-Nilam Patta Data...
+                            {scanStep >= 2 ? <CheckCircle2 size={14}/> : scanStep === 1 ? <Loader2 size={14} className="animate-spin"/> : <Lock size={14}/>} {T("Verifying TN-Nilam Patta Data...")}
                         </p>
                         <p className={`text-[11px] font-black uppercase tracking-widest flex items-center gap-2 transition-all ${scanStep >= 3 ? 'text-[#4CAF50]' : 'text-slate-600'}`}>
-                            {scanStep >= 3 ? <CheckCircle2 size={14}/> : scanStep === 2 ? <Loader2 size={14} className="animate-spin"/> : <Lock size={14}/>} Fetching DLTC Scale of Finance...
+                            {scanStep >= 3 ? <CheckCircle2 size={14}/> : scanStep === 2 ? <Loader2 size={14} className="animate-spin"/> : <Lock size={14}/>} {T("Fetching DLTC Scale of Finance...")}
                         </p>
                         <p className={`text-[11px] font-black uppercase tracking-widest flex items-center gap-2 transition-all ${scanStep >= 4 ? 'text-[#4CAF50]' : 'text-slate-600'}`}>
-                            {scanStep >= 4 ? <CheckCircle2 size={14}/> : scanStep === 3 ? <Loader2 size={14} className="animate-spin"/> : <Lock size={14}/>} Generating AI Quantum of Finance...
+                            {scanStep >= 4 ? <CheckCircle2 size={14}/> : scanStep === 3 ? <Loader2 size={14} className="animate-spin"/> : <Lock size={14}/>} {T("Generating AI Quantum of Finance...")}
                         </p>
                     </div>
                   </div>
@@ -3296,48 +3559,48 @@ const LoanPortal = ({ currentUser, handleNav }) => {
                 <div className="animate-in zoom-in-95 duration-500 w-full">
                   <div className="text-center mb-6">
                     <div className="inline-flex items-center justify-center p-3 bg-green-500/20 border border-[#4CAF50]/50 rounded-full mb-3"><ShieldCheck size={32} className="text-[#4CAF50]" /></div>
-                    <h2 className="text-2xl font-black text-white uppercase tracking-wider mb-1">Eligibility Confirmed</h2>
-                    <p className="text-[#4CAF50] text-xs font-bold uppercase tracking-widest">NPA Database Cleared • Geo-Tags Matched</p>
+                    <h2 className="text-2xl font-black text-white uppercase tracking-wider mb-1">{T("Eligibility Confirmed")}</h2>
+                    <p className="text-[#4CAF50] text-xs font-bold uppercase tracking-widest">{T("NPA Database Cleared • Geo-Tags Matched")}</p>
                   </div>
 
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                     <div className="bg-[#0b1410] border border-white/10 rounded-xl p-3 text-center">
-                        <p className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">CIBIL Score</p>
+                        <p className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">{T("CIBIL Score")}</p>
                         <h4 className="text-white font-black text-lg">{eligibilityData.cibilScore}</h4>
                     </div>
                     <div className="bg-[#0b1410] border border-white/10 rounded-xl p-3 text-center">
-                        <p className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">Bureau Status</p>
-                        <h4 className="text-[#4CAF50] font-black text-[10px] mt-2 uppercase">{eligibilityData.bureauStatus}</h4>
+                        <p className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">{T("Bureau Status")}</p>
+                        <h4 className="text-[#4CAF50] font-black text-[10px] mt-2 uppercase">{T(eligibilityData.bureauStatus)}</h4>
                     </div>
                     <div className="bg-[#0b1410] border border-white/10 rounded-xl p-3 text-center col-span-2">
-                        <p className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">Est. Land Guideline Value ({landSize} Ac)</p>
-                        <h4 className="text-white font-black text-lg">₹{(eligibilityData.landValueEst / 100000).toFixed(1)} Lakhs</h4>
+                        <p className="text-slate-500 text-[9px] font-black uppercase tracking-widest mb-1">{T("Est. Land Guideline Value")} ({landSize} {T("Acres")})</p>
+                        <h4 className="text-white font-black text-lg">₹{(eligibilityData.landValueEst / 100000).toFixed(1)} {T("Lakhs")}</h4>
                     </div>
                   </div>
 
                   <div className="bg-gradient-to-r from-[#0b1410] to-[#111613] border border-[#4CAF50]/30 rounded-2xl p-6 text-center shadow-inner mb-6 relative overflow-hidden">
-                    <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1">Approved KCC / {loanType} Limit</p>
+                    <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest mb-1">{T("Approved KCC /")} {T(loanType === 'crop' ? 'Crop' : 'Tractor')} {T("Limit")}</p>
                     <h1 className="text-5xl font-black text-[#4CAF50] tracking-tighter">₹{eligibilityData.maxLimit.toLocaleString()}</h1>
-                    <p className="text-white font-bold text-xs mt-2 bg-[#1a231d] inline-block px-3 py-1 rounded-md border border-[#4CAF50]/20">Effective ROI: <span className="text-yellow-500">{eligibilityData.interest}</span> <span className="text-slate-400 font-normal">(Post Subvention)</span></p>
+                    <p className="text-white font-bold text-xs mt-2 bg-[#1a231d] inline-block px-3 py-1 rounded-md border border-[#4CAF50]/20">{T("Effective ROI:")} <span className="text-yellow-500">{eligibilityData.interest}</span> <span className="text-slate-400 font-normal">{T("(Post Subvention)")}</span></p>
                   </div>
 
                   <div className="bg-[#0d120f] p-4 rounded-xl border border-white/5 space-y-3">
                     <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest border-b border-white/5 pb-2 flex justify-between">
-                        <span>Limit Breakdown (DLTC Norms)</span>
-                        <span className="text-[#4CAF50]">{eligibilityData.riskTier}</span>
+                        <span>{T("Limit Breakdown (DLTC Norms)")}</span>
+                        <span className="text-[#4CAF50]">{T(eligibilityData.riskTier)}</span>
                     </p>
                     <div className="flex justify-between items-center text-xs font-bold">
-                      <span className="text-slate-300">Scale of Finance ({searchQuery})</span>
+                      <span className="text-slate-300">{T("Scale of Finance")} ({T(searchQuery)})</span>
                       <span className="text-white">₹{eligibilityData.cropLimit.toLocaleString()}</span>
                     </div>
                     {loanType === 'crop' && (
                       <>
                         <div className="flex justify-between items-center text-xs font-bold">
-                          <span className="text-slate-300">Post-Harvest / Consumption (10%)</span>
+                          <span className="text-slate-300">{T("Post-Harvest / Consumption (10%)")}</span>
                           <span className="text-white">+ ₹{eligibilityData.postHarvest.toLocaleString()}</span>
                         </div>
                         <div className="flex justify-between items-center text-xs font-bold">
-                          <span className="text-slate-300">Maintenance & Insurance (20%)</span>
+                          <span className="text-slate-300">{T("Maintenance & Insurance (20%)")}</span>
                           <span className="text-white">+ ₹{eligibilityData.maintenance.toLocaleString()}</span>
                         </div>
                       </>
@@ -3350,7 +3613,7 @@ const LoanPortal = ({ currentUser, handleNav }) => {
             {scanStep === 5 && (
               <div className="p-4 border-t border-white/5 bg-[#0d120f] flex justify-end gap-3">
                 <button onClick={() => setShowEligibility(false)} className="bg-[#4CAF50] text-black px-6 py-3 rounded-xl font-black text-xs uppercase tracking-widest hover:scale-105 transition-transform flex items-center gap-2 shadow-[0_0_15px_rgba(76,175,80,0.4)]">
-                  <CheckCircle2 size={14}/> Accept Banking Terms
+                  <CheckCircle2 size={14}/> {T("Accept Banking Terms")}
                 </button>
               </div>
             )}
@@ -3363,22 +3626,22 @@ const LoanPortal = ({ currentUser, handleNav }) => {
         {/* COLUMN 1: Details Form */}
         <div className="flex flex-col gap-6 h-full">
            <div className="bg-[#151a17] p-8 rounded-[2rem] border border-white/5 shadow-[0_0_40px_rgba(0,0,0,0.5)] flex flex-col flex-1 overflow-y-auto custom-scrollbar relative z-20">
-             <h3 className="text-xl font-black text-white mb-6 uppercase flex items-center gap-3"><Settings className="text-[#4CAF50]"/> DETAILS & BANK INFO</h3>
+             <h3 className="text-xl font-black text-white mb-6 uppercase flex items-center gap-3"><Settings className="text-[#4CAF50]"/> {T("DETAILS & BANK INFO")}</h3>
              <div className="space-y-5 flex-1 flex flex-col">
                <div>
-                 <label className="text-slate-400 font-bold block mb-2 text-xs uppercase">APPLICANT NAME</label>
+                 <label className="text-slate-400 font-bold block mb-2 text-xs uppercase">{T("APPLICANT NAME")}</label>
                  <div className="w-full bg-[#111814] border border-white/5 p-3.5 rounded-xl text-white font-bold flex items-center gap-3 shadow-inner">
                     <User size={18} className="text-[#4CAF50]"/> <span className="uppercase tracking-wide">{applicantName}</span><CheckCircle2 size={16} className="text-green-500 ml-auto"/>
                  </div>
                </div>
                <div className="grid grid-cols-2 gap-4">
                  <div>
-                   <label className="text-slate-400 font-bold block mb-2 text-xs uppercase">LAND (ACRES)</label>
+                   <label className="text-slate-400 font-bold block mb-2 text-xs uppercase">{T("LAND (ACRES)")}</label>
                    <input type="number" value={landSize} onChange={(e) => setLandSize(e.target.value)} placeholder="6" className="w-full bg-[#0d120f] border border-white/10 p-3.5 rounded-xl text-white outline-none focus:border-[#4CAF50] font-bold transition-all" />
                  </div>
                  <div className="relative">
-                   <label className="text-slate-400 font-bold block mb-2 text-xs uppercase">CROP TYPE</label>
-                   <input type="text" value={searchQuery} onChange={(e) => { setSearchQuery(e.target.value); setIsDropdownOpen(true); }} onFocus={() => setIsDropdownOpen(true)} placeholder="Search..." className="w-full bg-[#0d120f] border border-white/10 p-3.5 rounded-xl text-white outline-none focus:border-[#4CAF50] font-bold transition-all" />
+                   <label className="text-slate-400 font-bold block mb-2 text-xs uppercase">{T("CROP TYPE")}</label>
+                   <input type="text" value={searchQuery} onChange={(e) => { setSearchQuery(e.target.value); setIsDropdownOpen(true); }} onFocus={() => setIsDropdownOpen(true)} placeholder={T("Search...")} className="w-full bg-[#0d120f] border border-white/10 p-3.5 rounded-xl text-white outline-none focus:border-[#4CAF50] font-bold transition-all" />
                    {isDropdownOpen && filteredCrops.length > 0 && (
                      <div className="absolute z-50 w-full mt-2 bg-[#1f2922] border border-white/10 rounded-xl shadow-2xl max-h-48 overflow-y-auto custom-scrollbar">
                        {filteredCrops.map((c, i) => (
@@ -3390,51 +3653,51 @@ const LoanPortal = ({ currentUser, handleNav }) => {
                </div>
                
                <button onClick={handleCalculate} className="w-full bg-transparent border border-[#4CAF50]/60 text-[#4CAF50] font-black py-3.5 rounded-xl uppercase hover:bg-[#4CAF50] hover:text-black transition-all text-sm tracking-widest flex justify-center items-center gap-2 group">
-                 <Activity size={18} className="group-hover:animate-pulse"/> CALCULATE ESTIMATE
+                 <Activity size={18} className="group-hover:animate-pulse"/> {T("CALCULATE ESTIMATE")}
                </button>
                
                {estimatedAmount && (
                  <div className="bg-gradient-to-r from-green-900/20 to-[#0d120f] border border-green-500/30 p-4 rounded-xl text-center animate-in zoom-in">
-                   <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">Estimated Limit</p>
+                   <p className="text-slate-400 text-xs font-bold uppercase tracking-widest">{T("Estimated Limit")}</p>
                    <h4 className="text-3xl font-black text-green-400 mt-1">₹{estimatedAmount.toLocaleString()}</h4>
                  </div>
                )}
                <hr className="border-white/5 my-2" />
                <div>
-                 <label className="text-slate-400 font-bold block mb-2 text-xs uppercase">SELECT BANK</label>
+                 <label className="text-slate-400 font-bold block mb-2 text-xs uppercase">{T("SELECT BANK")}</label>
                  <div className="relative">
                    <Building2 className="absolute left-3 top-3.5 text-slate-500" size={18}/>
                    <select value={selectedBank} onChange={(e) => setSelectedBank(e.target.value)} className="w-full bg-[#0d120f] border border-white/10 p-3.5 pl-10 rounded-xl text-white outline-none focus:border-[#4CAF50] font-bold transition-all appearance-none cursor-pointer">
-                     <option value="" disabled>-- Select Preferred Bank --</option>
-                     {BANK_LIST.map((b, i) => <option key={i} value={b}>{b}</option>)}
+                     <option value="" disabled>{T("-- Select Preferred Bank --")}</option>
+                     {BANK_LIST.map((b, i) => <option key={i} value={b}>{T(b)}</option>)}
                    </select>
                  </div>
                </div>
                <div>
-                 <label className="text-slate-400 font-bold block mb-2 text-xs uppercase">ACCOUNT NUMBER</label>
+                 <label className="text-slate-400 font-bold block mb-2 text-xs uppercase">{T("ACCOUNT NUMBER")}</label>
                  <input type="text" value={accNo} onChange={(e) => setAccNo(e.target.value)} placeholder="e.g. 30124567890" className="w-full bg-[#0d120f] border border-white/10 p-3.5 rounded-xl text-white outline-none focus:border-[#4CAF50] font-bold transition-all" />
                </div>
                <div>
-                 <label className="text-slate-400 font-bold block mb-2 text-xs uppercase">IFSC CODE</label>
+                 <label className="text-slate-400 font-bold block mb-2 text-xs uppercase">{T("IFSC CODE")}</label>
                  <input type="text" value={ifsc} onChange={(e) => setIfsc(e.target.value.toUpperCase())} placeholder="E.G. SBIN0001234" className="w-full bg-[#0d120f] border border-white/10 p-3.5 rounded-xl text-white outline-none focus:border-[#4CAF50] font-bold transition-all uppercase" />
                </div>
              </div>
            </div>
 
            <div className="bg-[#151a17] p-6 rounded-[2rem] border border-white/5 shadow-lg shrink-0">
-               <h3 className="text-xs font-black text-white mb-4 uppercase flex items-center gap-2 tracking-widest"><Landmark className="text-yellow-500" size={16}/> Govt Agri-Loan Schemes & Subsidies</h3>
+               <h3 className="text-xs font-black text-white mb-4 uppercase flex items-center gap-2 tracking-widest"><Landmark className="text-yellow-500" size={16}/> {T("Govt Agri-Loan Schemes & Subsidies")}</h3>
                <div className="space-y-3">
                  <div className="bg-[#0b1410] p-3.5 rounded-xl border border-white/5 border-l-2 border-l-yellow-500 hover:bg-[#111814] transition-colors">
-                    <h4 className="text-yellow-400 font-black text-[10px] uppercase tracking-widest mb-1">Kisan Credit Card (KCC)</h4>
-                    <p className="text-slate-400 text-[10px] font-bold leading-relaxed">Short-term credit limits for crops & expenses. Up to ₹3 Lakhs at 4% interest with prompt repayment.</p>
+                    <h4 className="text-yellow-400 font-black text-[10px] uppercase tracking-widest mb-1">{T("Kisan Credit Card (KCC)")}</h4>
+                    <p className="text-slate-400 text-[10px] font-bold leading-relaxed">{T("Short-term credit limits for crops & expenses. Up to ₹3 Lakhs at 4% interest with prompt repayment.")}</p>
                  </div>
                  <div className="bg-[#0b1410] p-3.5 rounded-xl border border-white/5 border-l-2 border-l-blue-500 hover:bg-[#111814] transition-colors">
-                    <h4 className="text-blue-400 font-black text-[10px] uppercase tracking-widest mb-1">Agri Infrastructure Fund</h4>
-                    <p className="text-slate-400 text-[10px] font-bold leading-relaxed">Financing facility for post-harvest management infrastructure. 3% interest subvention per annum.</p>
+                    <h4 className="text-blue-400 font-black text-[10px] uppercase tracking-widest mb-1">{T("Agri Infrastructure Fund")}</h4>
+                    <p className="text-slate-400 text-[10px] font-bold leading-relaxed">{T("Financing facility for post-harvest management infrastructure. 3% interest subvention per annum.")}</p>
                  </div>
                  <div className="bg-[#0b1410] p-3.5 rounded-xl border border-white/5 border-l-2 border-l-green-500 hover:bg-[#111814] transition-colors">
-                    <h4 className="text-green-400 font-black text-[10px] uppercase tracking-widest mb-1">PM KISAN Samman Nidhi</h4>
-                    <p className="text-slate-400 text-[10px] font-bold leading-relaxed">Income support of ₹6,000 per year in three equal installments to all land-holding farmer families.</p>
+                    <h4 className="text-green-400 font-black text-[10px] uppercase tracking-widest mb-1">{T("PM KISAN Samman Nidhi")}</h4>
+                    <p className="text-slate-400 text-[10px] font-bold leading-relaxed">{T("Income support of ₹6,000 per year in three equal installments to all land-holding farmer families.")}</p>
                  </div>
                </div>
            </div>
@@ -3442,32 +3705,32 @@ const LoanPortal = ({ currentUser, handleNav }) => {
 
         {/* COLUMN 2: Documents Upload */}
         <div className={`bg-[#151a17] p-8 rounded-[2rem] border shadow-[0_0_40px_rgba(0,0,0,0.5)] flex flex-col relative overflow-hidden transition-all duration-500 ${verifyStatus === 'idle' ? 'border-[#4CAF50]/30' : 'border-white/5 opacity-50 grayscale pointer-events-none'}`}>
-          <h3 className="text-xl font-black text-white mb-6 uppercase flex items-center gap-3 italic shrink-0"><Upload className="text-orange-500"/> DOCUMENTS UPLOAD</h3>
+          <h3 className="text-xl font-black text-white mb-6 uppercase flex items-center gap-3 italic shrink-0"><Upload className="text-orange-500"/> {T("DOCUMENTS UPLOAD")}</h3>
           <div className="grid grid-cols-2 gap-3 mb-6 shrink-0">
             <div onClick={() => { setLoanType('crop'); setEstimatedAmount(null); }} className={`p-4 rounded-xl cursor-pointer border-2 transition-all relative ${loanType === 'crop' ? 'bg-[#4CAF50]/10 border-[#4CAF50]' : 'bg-[#0d120f] border-white/5 hover:border-white/20'}`}>
               {loanType === 'crop' && <CheckCircle2 className="absolute top-2 right-2 text-[#4CAF50]" size={16}/>}
-              <h4 className={`font-black text-sm ${loanType === 'crop' ? 'text-white' : 'text-slate-300'}`}>Crop Loan</h4>
+              <h4 className={`font-black text-sm ${loanType === 'crop' ? 'text-white' : 'text-slate-300'}`}>{T("Crop Loan")}</h4>
             </div>
             <div onClick={() => { setLoanType('tractor'); setEstimatedAmount(null); }} className={`p-4 rounded-xl cursor-pointer border-2 transition-all relative ${loanType === 'tractor' ? 'bg-[#4CAF50]/10 border-[#4CAF50]' : 'bg-[#0d120f] border-white/5 hover:border-white/20'}`}>
               {loanType === 'tractor' && <CheckCircle2 className="absolute top-2 right-2 text-[#4CAF50]" size={16}/>}
-              <h4 className={`font-black text-sm ${loanType === 'tractor' ? 'text-white' : 'text-slate-300'}`}>Tractor Loan</h4>
+              <h4 className={`font-black text-sm ${loanType === 'tractor' ? 'text-white' : 'text-slate-300'}`}>{T("Tractor Loan")}</h4>
             </div>
           </div>
-          <p className="text-slate-400 font-bold text-xs mb-3 shrink-0 uppercase tracking-widest">8 REQUIRED DOCUMENTS</p>
+          <p className="text-slate-400 font-bold text-xs mb-3 shrink-0 uppercase tracking-widest">{T("8 REQUIRED DOCUMENTS")}</p>
           <div className="grid grid-cols-2 gap-3 flex-1 overflow-y-auto custom-scrollbar pr-1 pb-4">
             {activeDocs.map((doc) => (
               <div key={doc.id} className="bg-[#0d120f] border border-white/5 rounded-xl p-4 flex flex-col items-center justify-between text-center group hover:border-[#4CAF50]/30 transition-all relative overflow-hidden shadow-inner">
                 <div className="mb-2 relative z-10 p-2 bg-white/5 rounded-full group-hover:scale-110 transition-transform">{doc.icon}</div>
-                <p className="text-slate-300 font-bold text-[11px] mb-3 relative z-10 h-8 flex items-center justify-center">{doc.en}</p>
+                <p className="text-slate-300 font-bold text-[11px] mb-3 relative z-10 h-8 flex items-center justify-center">{T(doc.en)}</p>
                 <button onClick={() => triggerFileUpload(doc.id)} className={`text-[10px] font-black py-2.5 px-2 rounded-lg w-full transition-all flex justify-center items-center gap-1.5 uppercase ${docStatus[doc.id] ? 'bg-[#4CAF50] text-black shadow-[0_0_15px_rgba(76,175,80,0.4)] border-none' : 'bg-transparent text-[#4CAF50] border border-[#4CAF50]/40 hover:bg-[#4CAF50]/10'}`}>
-                  {docStatus[doc.id] ? <><CheckCircle2 size={12}/> UPLOADED</> : <><Upload size={12}/> UPLOAD</>}
+                  {docStatus[doc.id] ? <><CheckCircle2 size={12}/> {T("UPLOADED")}</> : <><Upload size={12}/> {T("UPLOAD")}</>}
                 </button>
               </div>
             ))}
           </div>
           <button onClick={handleVerify} disabled={verifyStatus === 'verifying'} className="mt-4 w-full bg-[#4CAF50] text-black font-black py-4 rounded-xl uppercase hover:bg-green-400 transition-all shadow-[0_0_20px_rgba(76,175,80,0.3)] flex justify-center items-center gap-2 shrink-0 hover:scale-[1.02] tracking-widest">
              {verifyStatus === 'verifying' ? <Loader2 size={20} className="animate-spin"/> : <ShieldCheck size={20}/>} 
-             {verifyStatus === 'verifying' ? 'Processing...' : 'AI VERIFY & APPLY'}
+             {verifyStatus === 'verifying' ? T('Processing...') : T('AI VERIFY & APPLY')}
           </button>
         </div>
 
@@ -3476,18 +3739,18 @@ const LoanPortal = ({ currentUser, handleNav }) => {
           {verifyStatus === 'idle' ? (
              <div className="h-full flex flex-col items-center justify-center text-center opacity-40">
                 <Activity size={60} className="text-slate-600 mb-4"/>
-                <h3 className="text-xl font-black text-white uppercase tracking-widest">Verification Status</h3>
-                <p className="text-slate-400 font-bold mt-2 text-sm">Fill details and upload documents to begin AI verification.</p>
+                <h3 className="text-xl font-black text-white uppercase tracking-widest">{T("Verification Status")}</h3>
+                <p className="text-slate-400 font-bold mt-2 text-sm">{T("Fill details and upload documents to begin AI verification.")}</p>
              </div>
           ) : verifyStatus === 'verifying' ? (
              <div className="h-full flex flex-col font-mono text-left w-full">
                 <div className="flex items-center gap-3 mb-6 border-b border-white/10 pb-4">
                   <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
-                  <h3 className="text-white font-black text-sm uppercase tracking-widest">Live Verification Server</h3>
+                  <h3 className="text-white font-black text-sm uppercase tracking-widest">{T("Live Verification Server")}</h3>
                 </div>
                 <div className="flex-1 space-y-4 text-xs md:text-sm text-[#4CAF50]">
                   {terminalLogs.map((log, index) => (
-                      <div key={index} className="animate-in fade-in slide-in-from-bottom-2">{log}</div>
+                      <div key={index} className="animate-in fade-in slide-in-from-bottom-2">{translateTerminalLog(log)}</div>
                   ))}
                   <div className="animate-pulse text-white">_</div>
                 </div>
@@ -3496,25 +3759,25 @@ const LoanPortal = ({ currentUser, handleNav }) => {
              <div className="h-full flex flex-col animate-in slide-in-from-right-10">
                <div className="absolute top-0 right-0 p-4 opacity-10"><CheckCircle2 size={120} className="text-green-500"/></div>
                <h3 className="text-xs font-black text-green-400 mb-1 uppercase tracking-widest flex items-center gap-2 bg-green-900/30 w-max px-3 py-1 rounded-full border border-green-500/30">
-                 <CheckCircle2 size={14}/> Sanction Approved
+                 <CheckCircle2 size={14}/> {T("Sanction Approved")}
                </h3>
                <h2 className="text-4xl lg:text-5xl font-black text-white mt-2 mb-1 tracking-tighter">₹{estimatedAmount ? estimatedAmount.toLocaleString() : "2,50,000"}</h2>
-               <p className="text-slate-300 text-sm font-bold mb-4 border-b border-white/10 pb-4">Approved by <span className="text-[#4CAF50]">{selectedBank || "Your Bank"}</span></p>
+               <p className="text-slate-300 text-sm font-bold mb-4 border-b border-white/10 pb-4">{T("Approved by")} <span className="text-[#4CAF50]">{T(selectedBank) || T("Your Bank")}</span></p>
                <div className="space-y-3 mb-4 flex-1">
-                 <div className="flex justify-between items-center bg-[#0d120f] p-3 rounded-xl border border-white/5"><span className="text-slate-400 font-bold flex items-center gap-2 text-xs uppercase"><Percent size={14} className="text-blue-400"/> Interest</span><span className="text-white font-black">{eligibilityData?.interest || '4.0%'} <span className="text-[10px] text-slate-500">(Subsidized)</span></span></div>
-                 <div className="flex justify-between items-center bg-[#0d120f] p-3 rounded-xl border border-white/5"><span className="text-slate-400 font-bold flex items-center gap-2 text-xs uppercase"><Clock size={14} className="text-orange-400"/> EMI / Month</span><span className="text-white font-black text-green-400">₹{estimatedAmount ? Math.round(estimatedAmount/12).toLocaleString() : "20,833"}</span></div>
-                 <div className="flex justify-between items-center bg-[#0d120f] p-3 rounded-xl border border-white/5"><span className="text-slate-400 font-bold flex items-center gap-2 text-xs uppercase"><Cpu size={14} className="text-purple-400"/> Smart Contract ID</span><span className="text-[#4CAF50] font-mono text-[10px]">0x7A2F...9B1C</span></div>
+                 <div className="flex justify-between items-center bg-[#0d120f] p-3 rounded-xl border border-white/5"><span className="text-slate-400 font-bold flex items-center gap-2 text-xs uppercase"><Percent size={14} className="text-blue-400"/> {T("Interest")}</span><span className="text-white font-black">{eligibilityData?.interest || '4.0%'} <span className="text-[10px] text-slate-500">{T("(Subsidized)")}</span></span></div>
+                 <div className="flex justify-between items-center bg-[#0d120f] p-3 rounded-xl border border-white/5"><span className="text-slate-400 font-bold flex items-center gap-2 text-xs uppercase"><Clock size={14} className="text-orange-400"/> {T("EMI / Month")}</span><span className="text-white font-black text-green-400">₹{estimatedAmount ? Math.round(estimatedAmount/12).toLocaleString() : "20,833"}</span></div>
+                 <div className="flex justify-between items-center bg-[#0d120f] p-3 rounded-xl border border-white/5"><span className="text-slate-400 font-bold flex items-center gap-2 text-xs uppercase"><Cpu size={14} className="text-purple-400"/> {T("Smart Contract ID")}</span><span className="text-[#4CAF50] font-mono text-[10px]">0x7A2F...9B1C</span></div>
                </div>
                <div className="bg-red-950/20 border border-red-500/30 p-4 rounded-xl flex flex-col gap-2 mb-4 relative overflow-hidden shrink-0">
                  <div className="absolute -right-2 -bottom-2 opacity-10"><AlertCircle size={80} className="text-red-500"/></div>
-                 <h4 className="text-red-400 text-xs font-black uppercase flex items-center gap-2 tracking-widest border-b border-red-500/20 pb-2 mb-1"><ShieldAlert size={14}/> Terms & Penalties</h4>
+                 <h4 className="text-red-400 text-xs font-black uppercase flex items-center gap-2 tracking-widest border-b border-red-500/20 pb-2 mb-1"><ShieldAlert size={14}/> {T("Terms & Penalties")}</h4>
                  <div className="text-slate-300 text-xs font-medium space-y-2.5 mt-1 relative z-10">
-                   <div className="flex justify-between"><span className="text-slate-400">Repayment Due Date:</span><span className="text-white font-black">{formattedDueDate}</span></div>
-                   <div className="flex justify-between items-start gap-2"><span className="text-slate-400 whitespace-nowrap">Late Payment Fine:</span><span className="text-white font-bold text-right"><span className="text-red-400 font-black">2% Extra</span> penal interest per month.</span></div>
+                   <div className="flex justify-between"><span className="text-slate-400">{T("Repayment Due Date:")}</span><span className="text-white font-black">{formattedDueDate}</span></div>
+                   <div className="flex justify-between items-start gap-2"><span className="text-slate-400 whitespace-nowrap">{T("Late Payment Fine:")}</span><span className="text-white font-bold text-right"><span className="text-red-400 font-black">{T("2% Extra")}</span> {T("penal interest per month.")}</span></div>
                  </div>
                </div>
                <button onClick={() => setShowReceipt(true)} className="mt-auto w-full bg-[#4CAF50] text-black font-black py-4 rounded-xl uppercase hover:bg-green-400 transition-all shadow-[0_0_20px_rgba(76,175,80,0.4)] animate-pulse tracking-widest flex justify-center items-center gap-2 shrink-0">
-                 <Download size={20}/> View Loan Receipt
+                 <Download size={20}/> {T("View Loan Receipt")}
                </button>
              </div>
           )}
@@ -3524,45 +3787,45 @@ const LoanPortal = ({ currentUser, handleNav }) => {
       {showReceipt && (
         <div className="fixed inset-0 z-[120] flex items-start justify-center bg-black/90 backdrop-blur-md p-4 sm:p-8 animate-in fade-in overflow-y-auto">
            <div className="w-full max-w-3xl bg-white text-black rounded-xl shadow-2xl relative my-auto flex flex-col shrink-0">
-              <div className="flex justify-between items-center bg-slate-100 p-4 border-b border-slate-300 rounded-t-xl print-hide">
-                  <h3 className="font-black text-slate-800 flex items-center gap-2"><CheckCircle2 className="text-green-600"/> Receipt Ready</h3>
+             <div className="flex justify-between items-center bg-slate-100 p-4 border-b border-slate-300 rounded-t-xl print-hide">
+                  <h3 className="font-black text-slate-800 flex items-center gap-2"><CheckCircle2 className="text-green-600"/> {T("Receipt Ready")}</h3>
                   <div className="flex gap-2">
-                    <button onClick={handleDownloadPDF} disabled={isDownloading} className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg font-bold text-sm flex items-center gap-2 transition-colors shadow-lg disabled:opacity-50">{isDownloading ? <Loader2 size={18} className="animate-spin" /> : <Download size={18}/>} {isDownloading ? "Downloading..." : "Download PDF"}</button>
+                    <button onClick={handleDownloadPDF} disabled={isDownloading} className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg font-bold text-sm flex items-center gap-2 transition-colors shadow-lg disabled:opacity-50">{isDownloading ? <Loader2 size={18} className="animate-spin" /> : <Download size={18}/>} {isDownloading ? T("Downloading...") : T("Download PDF")}</button>
                     <button onClick={() => setShowReceipt(false)} className="bg-slate-200 hover:bg-slate-300 text-slate-800 px-4 py-2.5 rounded-lg font-bold text-sm transition-colors"><X size={18}/></button>
                   </div>
               </div>
               <div id="printable-receipt" className="p-8 md:p-12 relative bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white to-slate-50">
                   <div className="absolute inset-0 flex items-center justify-center opacity-5 pointer-events-none"><Landmark size={500}/></div>
                   <div className="flex justify-between items-start border-b-4 border-slate-800 pb-6 mb-8 relative z-10">
-                      <div className="flex items-center gap-4"><Building2 size={50} className="text-slate-800" /><div><h2 className="text-2xl font-black uppercase text-slate-900 tracking-wide">{selectedBank || "Bank Name"}</h2><p className="text-slate-600 font-bold mt-1">Agricultural Finance Branch</p><p className="text-slate-500 text-sm">Tamil Nadu Zone, India</p></div></div>
-                      <div className="text-right"><p className="text-slate-600 font-bold">Date: {new Date().toLocaleDateString('en-GB')}</p><p className="text-slate-600 font-bold mt-1">Ref ID: {txnId}</p></div>
+                      <div className="flex items-center gap-4"><Building2 size={50} className="text-slate-800" /><div><h2 className="text-2xl font-black uppercase text-slate-900 tracking-wide">{T(selectedBank) || T("Bank Name")}</h2><p className="text-slate-660 font-bold mt-1">{T("Agricultural Finance Branch")}</p><p className="text-slate-500 text-sm">{T("Tamil Nadu Zone, India")}</p></div></div>
+                      <div className="text-right"><p className="text-slate-660 font-bold">{T("Date:")} {new Date().toLocaleDateString('en-GB')}</p><p className="text-slate-600 font-bold mt-1">{T("Ref ID:")} {txnId}</p></div>
                   </div>
-                  <div className="text-center mb-8 relative z-10"><h3 className="text-2xl font-black text-slate-900 uppercase underline underline-offset-8 decoration-slate-400">Provisional Loan Sanction Letter</h3></div>
+                  <div className="text-center mb-8 relative z-10"><h3 className="text-2xl font-black text-slate-900 uppercase underline underline-offset-8 decoration-slate-400">{T("Provisional Loan Sanction Letter")}</h3></div>
                   <div className="mb-8 relative z-10">
-                    <p className="text-slate-800 font-bold text-lg mb-1">To,</p><h3 className="text-xl font-black text-slate-900 uppercase">{applicantName}</h3><p className="text-slate-700 font-medium">Applicant / Verified Farmer</p>
-                    <div className="mt-4 bg-slate-100 p-4 border-l-4 border-slate-800"><p className="text-slate-800 leading-relaxed"><strong>Subject:</strong> Sanction of <span className="font-black text-slate-900">{loanType === 'crop' ? 'KCC Short-Term Crop Loan' : 'Long-Term Farm Machinery Loan'}</span> under the National Agriculture Finance Scheme.</p></div>
+                    <p className="text-slate-800 font-bold text-lg mb-1">{T("To,")}</p><h3 className="text-xl font-black text-slate-900 uppercase">{applicantName}</h3><p className="text-slate-700 font-medium">{T("Applicant / Verified Farmer")}</p>
+                    <div className="mt-4 bg-slate-100 p-4 border-l-4 border-slate-800"><p className="text-slate-800 leading-relaxed"><strong>{T("Subject:")}</strong> {T("Sanction of")} <span className="font-black text-slate-900">{T(loanType === 'crop' ? 'KCC Short-Term Crop Loan' : 'Long-Term Farm Machinery Loan')}</span> {T("under the National Agriculture Finance Scheme.")}</p></div>
                   </div>
                   <div className="mb-8 relative z-10">
-                      <p className="text-slate-800 mb-6 text-justify leading-relaxed">Dear Sir/Madam, <br/><br/>With reference to your application submitted via the AgroRisk AI+ Portal, and upon automated verification of your Aadhaar KYC, CIBIL, and Land Records (Patta/Chitta), we are pleased to inform you that a loan has been provisionally sanctioned to you with the following terms:</p>
+                      <p className="text-slate-800 mb-6 text-justify leading-relaxed">{T("Dear Sir/Madam,")} <br/><br/>{T("With reference to your application submitted via the AgroRisk AI+ Portal, and upon automated verification of your Aadhaar KYC, CIBIL, and Land Records (Patta/Chitta), we are pleased to inform you that a loan has been provisionally sanctioned to you with the following terms:")}</p>
                       <table className="w-full border-collapse border border-slate-300 text-left text-sm lg:text-base">
                         <tbody>
-                          <tr className="border-b border-slate-300"><th className="p-4 bg-slate-100 border-r border-slate-300 w-2/5 text-slate-600">Applicant Name</th><td className="p-4 font-bold text-slate-900 uppercase">{applicantName}</td></tr>
-                          <tr className="border-b border-slate-300"><th className="p-4 bg-slate-100 border-r border-slate-300 text-slate-600">Crediting Bank Account</th><td className="p-4 font-bold text-slate-900">{accNo || "XXXX-XXXX"} (IFSC: <span className="uppercase">{ifsc || "XXXX000"}</span>)</td></tr>
-                          <tr className="border-b border-slate-300"><th className="p-4 bg-slate-100 border-r border-slate-300 text-slate-600">Land & Cultivation</th><td className="p-4 font-bold text-slate-900">{landSize} Acres - {searchQuery || "Not Specified"}</td></tr>
-                          <tr className="border-b border-slate-300 bg-green-50"><th className="p-4 border-r border-slate-300 text-green-900 font-black">Sanctioned Amount</th><td className="p-4 font-black text-2xl text-green-700">₹{estimatedAmount?.toLocaleString()}</td></tr>
-                          <tr className="border-b border-slate-300"><th className="p-4 bg-slate-100 border-r border-slate-300 text-slate-600">Interest Rate</th><td className="p-4 font-bold text-slate-900">{eligibilityData?.interest || '4.0%'} p.a (Govt. Subsidized)</td></tr>
-                          <tr className="border-b border-slate-300"><th className="p-4 bg-slate-100 border-r border-slate-300 text-slate-600">Repayment Tenure</th><td className="p-4 font-bold text-slate-900">12 Months (EMI: ₹{estimatedAmount ? Math.round(estimatedAmount/12).toLocaleString() : '0'})</td></tr>
-                          <tr><th className="p-4 bg-slate-100 border-r border-slate-300 text-slate-600">Full Repayment Due Date</th><td className="p-4 font-black text-red-600">{formattedDueDate}</td></tr>
+                          <tr className="border-b border-slate-300"><th className="p-4 bg-slate-100 border-r border-slate-300 w-2/5 text-slate-600">{T("Applicant Name")}</th><td className="p-4 font-bold text-slate-900 uppercase">{applicantName}</td></tr>
+                          <tr className="border-b border-slate-300"><th className="p-4 bg-slate-100 border-r border-slate-300 text-slate-600">{T("Crediting Bank Account")}</th><td className="p-4 font-bold text-slate-900">{accNo || "XXXX-XXXX"} (IFSC: <span className="uppercase">{ifsc || "XXXX000"}</span>)</td></tr>
+                          <tr className="border-b border-slate-300"><th className="p-4 bg-slate-100 border-r border-slate-300 text-slate-600">{T("Land & Cultivation")}</th><td className="p-4 font-bold text-slate-900">{landSize} {T("Acres")} - {T(searchQuery) || T("Not Specified")}</td></tr>
+                          <tr className="border-b border-slate-300 bg-green-50"><th className="p-4 border-r border-slate-300 text-green-900 font-black">{T("Sanctioned Amount")}</th><td className="p-4 font-black text-2xl text-green-700">₹{estimatedAmount?.toLocaleString()}</td></tr>
+                          <tr className="border-b border-slate-300"><th className="p-4 bg-slate-100 border-r border-slate-300 text-slate-600">{T("Interest Rate")}</th><td className="p-4 font-bold text-slate-900">{eligibilityData?.interest || '4.0%'} {T("p.a")} ({T("Govt. Subsidized")})</td></tr>
+                          <tr className="border-b border-slate-300"><th className="p-4 bg-slate-100 border-r border-slate-300 text-slate-600">{T("Repayment Tenure")}</th><td className="p-4 font-bold text-slate-900">12 {T("Months")} ({T("EMI")}: ₹{estimatedAmount ? Math.round(estimatedAmount/12).toLocaleString() : '0'})</td></tr>
+                          <tr><th className="p-4 bg-slate-100 border-r border-slate-300 text-slate-600">{T("Full Repayment Due Date")}</th><td className="p-4 font-black text-red-600">{formattedDueDate}</td></tr>
                         </tbody>
                       </table>
                   </div>
                   <div className="text-xs text-slate-600 border-t border-slate-300 pt-6 mt-8 relative z-10">
-                      <p className="font-black text-slate-800 mb-2 uppercase text-sm">Important Terms, Conditions & Penalties:</p>
+                      <p className="font-black text-slate-800 mb-2 uppercase text-sm">{T("Important Terms, Conditions & Penalties:")}</p>
                       <ul className="list-disc pl-5 space-y-2">
-                        <li>This is a digitally generated provisional sanction letter. Final disbursement to the provided account is subject to a single physical signature by the Bank Officer.</li>
-                        <li><strong className="text-red-700">Penalty Clause:</strong> Failure to repay the full EMI or total amount by the due date ({formattedDueDate}) will attract a penal interest of <strong>2% per month</strong> on the outstanding amount.</li>
-                        <li>Timely repayment makes you eligible for a 3% interest subvention under the Government of India guidelines.</li>
-                        <li>Collateral / Hypothecation of {loanType === 'crop' ? 'crops & land yield' : 'the purchased tractor'} remains with the bank until full settlement.</li>
+                        <li>{T("This is a digitally generated provisional sanction letter. Final disbursement to the provided account is subject to a single physical signature by the Bank Officer.")}</li>
+                        <li><strong className="text-red-700">{T("Penalty Clause:")}</strong> {T("Failure to repay the full EMI or total amount by the due date")} ({formattedDueDate}) {T("will attract a penal interest of")} <strong>{T("2% per month")}</strong> {T("on the outstanding amount.")}</li>
+                        <li>{T("Timely repayment makes you eligible for a 3% interest subvention under the Government of India guidelines.")}</li>
+                        <li>{T("Collateral / Hypothecation of")} {T(loanType === 'crop' ? 'crops & land yield' : 'the purchased tractor')} {T("remains with the bank until full settlement.")}</li>
                       </ul>
                   </div>
                   <div className="mt-16 flex justify-between items-end relative z-10 px-4">
@@ -3570,11 +3833,11 @@ const LoanPortal = ({ currentUser, handleNav }) => {
                           <div className="w-48 h-12 border-b-2 border-slate-800 mb-2 flex items-end justify-center pb-1">
                              <span style={{ fontFamily: "'Dancing Script', 'Brush Script MT', cursive", fontSize: '28px', color: '#1e293b', lineHeight: '1' }}>{applicantName}</span>
                           </div>
-                          <p className="text-xs font-bold text-slate-600 uppercase">Signature of Applicant</p>
+                          <p className="text-xs font-bold text-slate-600 uppercase">{T("Signature of Applicant")}</p>
                       </div>
-                      <div className="text-center relative"><div className="w-32 h-32 border-4 border-green-700 rounded-full flex flex-col items-center justify-center text-green-700 rotate-[-15deg] opacity-60 mb-2 mx-auto shadow-sm bg-green-50/50"><span className="font-black text-xl tracking-widest">APPROVED</span><span className="text-[8px] font-bold mt-1">AI VERIFIED</span></div><p className="text-xs font-bold text-slate-600 uppercase">Authorized Bank Seal</p></div>
+                      <div className="text-center relative"><div className="w-32 h-32 border-4 border-green-700 rounded-full flex flex-col items-center justify-center text-green-700 rotate-[-15deg] opacity-60 mb-2 mx-auto shadow-sm bg-green-50/50"><span className="font-black text-xl tracking-widest">{T("APPROVED")}</span><span className="text-[8px] font-bold mt-1">{T("AI VERIFY")}</span></div><p className="text-xs font-bold text-slate-600 uppercase">{T("Authorized Bank Seal")}</p></div>
                   </div>
-                  <div className="text-center text-[10px] text-slate-400 mt-16 pt-4 border-t border-slate-200">Document generated securely by AgroRisk AI+ Digital Twin Infrastructure.</div>
+                  <div className="text-center text-[10px] text-slate-400 mt-16 pt-4 border-t border-slate-200">{T("Document generated securely by AgroRisk AI+ Digital Twin Infrastructure.")}</div>
               </div>
            </div>
         </div>
@@ -3585,7 +3848,7 @@ const LoanPortal = ({ currentUser, handleNav }) => {
   );
 };
 
-  // ==========================================
+// ==========================================
 // 8. FEEDBACK (ULTIMATE EDITION WITH REAL VOICE & FILE UPLOAD)
 // ==========================================
 const Feedback = ({ currentUser, handleNav }) => {
@@ -3640,7 +3903,7 @@ const Feedback = ({ currentUser, handleNav }) => {
         setShowAdmin(false); 
         setAdminCreds({user: '', pass: ''}); 
     } else { 
-        alert("Invalid Admin Credentials!"); 
+        alert(T("Invalid Admin Credentials!")); 
     } 
   };
   
@@ -3674,7 +3937,7 @@ const Feedback = ({ currentUser, handleNav }) => {
       if (!/[.!?]$/.test(text)) text += '.';
       
       // Add Smart Prefix
-      setFeedbackText(`[AI Corrected]: ${text}`);
+      setFeedbackText(T("[AI Corrected]") + ": " + text);
       setIsEnhancing(false);
     }, 1200);
   };
@@ -3684,7 +3947,7 @@ const Feedback = ({ currentUser, handleNav }) => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     
     if (!SpeechRecognition) {
-      alert("Sorry, your browser does not support Voice Recognition. Please use Chrome or Edge.");
+      alert(T("Sorry, your browser does not support Voice Recognition. Please use Chrome or Edge."));
       return;
     }
 
@@ -3721,7 +3984,7 @@ const Feedback = ({ currentUser, handleNav }) => {
   // 🔥 REAL FILE UPLOAD (Local System Explorer)
   const triggerFileUpload = () => {
     if (attachments.length >= 3) {
-        alert("You can only attach a maximum of 3 images.");
+        alert(T("You can only attach a maximum of 3 images."));
         return;
     }
     fileInputRef.current.click();
@@ -4000,7 +4263,7 @@ export default function App() {
       case 'marketplace': return <Marketplace handleNav={handleNav} currentUser={currentUser} />;
       case 'market': return <GlobalMarketIntelligence handleNav={handleNav} />;
       case 'loan': return <LoanPortal currentUser={currentUser} handleNav={handleNav} lang={lang} />; 
-      case 'feedback': return <Feedback currentUser={currentUser} t={t} />;
+      case 'feedback': return <Feedback currentUser={currentUser} handleNav={handleNav} />;
       default: return null;
     }
   };
