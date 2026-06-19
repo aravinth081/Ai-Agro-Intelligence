@@ -2,7 +2,7 @@
 
 Agro_Intelligence is a state-of-the-art **Smart Farming & Agri-Fintech Ecosystem** designed to empower farmers with modern digital tools. From weather analytics and real-time market rates to AI-powered plant disease diagnosis and loan eligibility simulators, this platform is a complete decision-support system for agricultural success.
 
-🌐 **Live URL**: [https://agro-intelligence-sage.vercel.app/](https://agro-intelligence-sage.vercel.app/)
+🌐 **Live URL**: [https://agro-intelligence-sage.vercel.app/](https://agro-intelligence-farmers.vercel.app/)
 
 ---
 
