@@ -1,9 +1,9 @@
- import React, { useState, useEffect, useRef } from 'react';
+﻿ import React, { useState, useEffect, useRef } from 'react';
 import { Send, Mic, MicOff, Volume2, X, Bot } from 'lucide-react';
 
 export default function AgroBot({ onClose }) {
   const [messages, setMessages] = useState([
-    { text: "Hello! I am AgroBot. Ask me anything about AgroRisk AI+ or my creator.", sender: "bot" }
+    { text: "Hello! I am AgroBot. Ask me anything about Agro Intelligence or my creator.", sender: "bot" }
   ]);
   const [input, setInput] = useState("");
   const [isListening, setIsListening] = useState(false);

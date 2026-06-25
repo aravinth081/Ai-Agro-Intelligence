@@ -1,10 +1,10 @@
-/**
- * AgroRisk AI+ — Real-Time Machine Learning & Deep Learning Engine
+﻿/**
+ * Agro Intelligence â€” Real-Time Machine Learning & Deep Learning Engine
  * Implements a pure JS Multi-Layer Perceptron (MLP) Neural Network for agronomic inference,
  * an ARIMA-style econometric time-series projector, and Neural Machine Translation (NMT).
  */
 
-// ── 1. NEURAL NETWORK FOR AGRI-TELEMETRY & RISK PREDICTION ──
+// â”€â”€ 1. NEURAL NETWORK FOR AGRI-TELEMETRY & RISK PREDICTION â”€â”€
 
 class AgroNeuralNetwork {
   constructor() {
@@ -87,7 +87,7 @@ class AgroNeuralNetwork {
 export const agroNeuralNet = new AgroNeuralNetwork();
 
 
-// ── 2. ECONOMETRIC ARIMA COMMODITY PRICE PROJECTION MODEL ──
+// â”€â”€ 2. ECONOMETRIC ARIMA COMMODITY PRICE PROJECTION MODEL â”€â”€
 
 export const projectCommodityPrices = (cropName, basePrice = 3000, months = 6, stressFactor = 1.0) => {
   const prices = [];
@@ -125,7 +125,7 @@ export const projectCommodityPrices = (cropName, basePrice = 3000, months = 6, s
 };
 
 
-// ── 3. NEURAL MACHINE TRANSLATION (NMT) API UTILITY ──
+// â”€â”€ 3. NEURAL MACHINE TRANSLATION (NMT) API UTILITY â”€â”€
 
 export const translateTextML = async (text, fromLang = 'en', toLang = 'ta') => {
   if (!text || text.trim() === '') return '';
