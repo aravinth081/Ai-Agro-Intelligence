@@ -1,5 +1,5 @@
 // src/services/api.js
-const API_BASE = "http://localhost:8000/api";
+const API_BASE = process.env.NODE_ENV === 'production' ? '/_/backend/api' : 'http://localhost:8000/api';
 
 const DISTRICT_COORDS = {
   "ariyalur": { lat: 11.14, lon: 79.08 },
