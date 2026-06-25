@@ -131,9 +131,11 @@ code {
     color: #0f172a !important;
 }
 
-.light-mode-app .bg-\[\#0d120f\] {
+/* ---- Dark panels → White cards ---- */
+.light-mode-app .bg-\[\#0d120f\],
+.light-mode-app .bg-\[\#0b1410\] {
     background-color: #f1f5f9 !important;
-    border-color: #cbd5e1 !important;
+    border-color: #e2e8f0 !important;
     box-shadow: none !important;
 }
 
@@ -143,10 +145,11 @@ code {
 .light-mode-app .bg-\[\#1a1a1a\],
 .light-mode-app .bg-\[\#1f2922\],
 .light-mode-app .bg-\[\#252525\],
-.light-mode-app .bg-\[\#1a231d\] {
+.light-mode-app .bg-\[\#1a231d\],
+.light-mode-app .bg-\[\#1a3824\] {
     background-color: #ffffff !important;
     border-color: #e2e8f0 !important;
-    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1) !important;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.06) !important;
 }
 
 /* Opacity modifier cards & panels */
@@ -158,34 +161,64 @@ code {
 .light-mode-app .bg-\[\#0d120f\]\/50,
 .light-mode-app .bg-\[\#111613\]\/80,
 .light-mode-app .bg-\[\#1a231d\]\/90 {
-    background-color: #ffffff !important;
+    background-color: rgba(255, 255, 255, 0.95) !important;
     border-color: #e2e8f0 !important;
-    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1) !important;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.06) !important;
 }
 
-/* Overriding text-white and text-slate to be clearly visible on light bg */
+/* ---- Text color overrides ---- */
 .light-mode-app .text-white {
     color: #0f172a !important;
 }
 
-.light-mode-app .text-slate-400,
-.light-mode-app .text-slate-300,
-.light-mode-app .text-slate-500 {
+.light-mode-app .text-slate-300 {
     color: #475569 !important;
 }
 
+.light-mode-app .text-slate-400 {
+    color: #64748b !important;
+}
+
+.light-mode-app .text-slate-500 {
+    color: #64748b !important;
+}
+
+.light-mode-app .text-slate-600 {
+    color: #475569 !important;
+}
+
+/* Keep green accent colors visible */
+.light-mode-app .text-\[\#4CAF50\] {
+    color: #2E7D32 !important;
+}
+
+.light-mode-app .text-green-400 {
+    color: #2E7D32 !important;
+}
+
+/* ---- Border overrides ---- */
 .light-mode-app .border-white\/5,
-.light-mode-app .border-white\/10 {
+.light-mode-app .border-white\/10,
+.light-mode-app .border-white\/20 {
     border-color: #e2e8f0 !important;
 }
 
-/* Black overlays on background images */
+.light-mode-app .border-green-900\/50 {
+    border-color: #bbf7d0 !important;
+}
+
+.light-mode-app .border-\[\#4CAF50\]\/30,
+.light-mode-app .border-\[\#4CAF50\]\/50 {
+    border-color: rgba(76, 175, 80, 0.35) !important;
+}
+
+/* ---- Overlay / backdrop overrides ---- */
 .light-mode-app .bg-black\/80 {
-    background-color: rgba(255, 255, 255, 0.8) !important;
+    background-color: rgba(255, 255, 255, 0.85) !important;
 }
 
 .light-mode-app .bg-black\/40 {
-    background-color: rgba(255, 255, 255, 0.4) !important;
+    background-color: rgba(255, 255, 255, 0.5) !important;
 }
 
 .light-mode-app .bg-black\/60 {
@@ -196,7 +229,47 @@ code {
     background-color: rgba(255, 255, 255, 0.95) !important;
 }
 
-/* Form inputs & interactive widgets */
+/* ---- Gradient overrides ---- */
+.light-mode-app .from-\[\#0b1410\],
+.light-mode-app .from-green-900\/20 {
+    --tw-gradient-from: #f0fdf4 !important;
+}
+
+.light-mode-app .to-\[\#111613\],
+.light-mode-app .to-\[\#0d120f\] {
+    --tw-gradient-to: #ffffff !important;
+}
+
+/* ---- Green-tinted accent backgrounds ---- */
+.light-mode-app .bg-green-900\/30,
+.light-mode-app .bg-green-500\/20,
+.light-mode-app .bg-\[\#4CAF50\]\/5 {
+    background-color: rgba(76, 175, 80, 0.08) !important;
+}
+
+.light-mode-app .bg-\[\#4CAF50\]\/10 {
+    background-color: rgba(76, 175, 80, 0.1) !important;
+}
+
+.light-mode-app .bg-white\/5 {
+    background-color: rgba(241, 245, 249, 0.6) !important;
+}
+
+/* ---- Red zone overrides (penalties etc.) ---- */
+.light-mode-app .bg-red-950\/20 {
+    background-color: rgba(254, 226, 226, 0.5) !important;
+}
+
+.light-mode-app .bg-red-900\/20 {
+    background-color: rgba(254, 226, 226, 0.4) !important;
+}
+
+/* ---- Blue zone overrides ---- */
+.light-mode-app .bg-blue-900\/20 {
+    background-color: rgba(219, 234, 254, 0.5) !important;
+}
+
+/* ---- Form inputs & interactive widgets ---- */
 .light-mode-app input,
 .light-mode-app select,
 .light-mode-app textarea {
@@ -209,4 +282,225 @@ code {
 .light-mode-app textarea::placeholder {
     color: #94a3b8 !important;
 }
+
+.light-mode-app input:focus,
+.light-mode-app select:focus,
+.light-mode-app textarea:focus {
+    border-color: #4CAF50 !important;
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.15) !important;
+}
+
+/* ---- Shadow overrides for inner shadows ---- */
+.light-mode-app .shadow-inner {
+    box-shadow: inset 0 2px 4px 0 rgb(0 0 0 / 0.04) !important;
+}
+
+/* ---- Glowing green shadows → subtle border ---- */
+.light-mode-app .shadow-\[0_0_40px_rgba\(0\,0\,0\,0\.5\)\] {
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.06), 0 2px 4px -2px rgb(0 0 0 / 0.06) !important;
+}
+
+.light-mode-app .shadow-\[0_0_15px_rgba\(76\,175\,80\,0\.2\)\],
+.light-mode-app .shadow-\[0_0_15px_rgba\(76\,175\,80\,0\.4\)\],
+.light-mode-app .shadow-\[0_0_20px_rgba\(76\,175\,80\,0\.3\)\],
+.light-mode-app .shadow-\[0_0_30px_rgba\(76\,175\,80\,0\.2\)\],
+.light-mode-app .shadow-\[0_0_30px_rgba\(76\,175\,80\,0\.3\)\] {
+    box-shadow: 0 4px 14px -3px rgba(76, 175, 80, 0.15) !important;
+}
+
+/* ---- Scrollbar for light mode ---- */
+.light-mode-app .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #cbd5e1 !important;
+}
+
+.light-mode-app .custom-scrollbar::-webkit-scrollbar-track {
+    background-color: #f1f5f9 !important;
+}
+
+/* ---- Yellow accents ---- */
+.light-mode-app .text-yellow-400,
+.light-mode-app .text-yellow-500 {
+    color: #b45309 !important;
+}
+
+/* ---- Drop shadow override ---- */
+.light-mode-app .drop-shadow-lg {
+    filter: none !important;
+}
+
+/* ==========================================
+   SAAS-LEVEL FEATURES CARD ANIMATIONS
+   ========================================== */
+
+/* Keyframes */
+@keyframes card-scan {
+  0% { top: 0%; opacity: 0.1; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { top: 98%; opacity: 0.1; }
+}
+
+@keyframes card-pulse-dot {
+  0%, 100% { transform: scale(1); opacity: 0.4; }
+  50% { transform: scale(1.3); opacity: 1; }
+}
+
+@keyframes card-wave {
+  0%, 100% { transform: translateY(0) scaleY(1); }
+  50% { transform: translateY(-5px) scaleY(1.1); }
+}
+
+@keyframes card-float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-6px) rotate(1deg); }
+}
+
+@keyframes card-float-delayed {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-4px) rotate(-1deg); }
+}
+
+@keyframes card-spin-slow {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes card-wind-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes card-rain {
+  0% { transform: translateY(-20px); opacity: 0; }
+  50% { opacity: 0.6; }
+  100% { transform: translateY(220px); opacity: 0; }
+}
+
+@keyframes card-grid-scroll {
+  0% { background-position: 0 0; }
+  100% { background-position: 40px 40px; }
+}
+
+@keyframes card-coin-rise {
+  0% { transform: translateY(15px); opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { transform: translateY(-80px); opacity: 0; }
+}
+
+@keyframes card-plane-glide {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  50% { transform: translate(6px, -6px) rotate(-3deg); }
+}
+
+@keyframes card-bubble-pulse {
+  0%, 100% { transform: scale(0.95); opacity: 0.8; }
+  50% { transform: scale(1.05); opacity: 1; }
+}
+
+/* Custom styles for cards */
+.saas-card-grid-bg {
+  background-size: 20px 20px;
+  background-image: linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
+}
+.light-mode-app .saas-card-grid-bg {
+  background-image: linear-gradient(to right, rgba(0,0,0,0.02) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(0,0,0,0.02) 1px, transparent 1px);
+}
+
+.saas-card-scan-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #4CAF50, transparent);
+  animation: card-scan 4s linear infinite;
+  box-shadow: 0 0 10px rgba(76, 175, 80, 0.5);
+}
+
+.saas-card-scan-line-red {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #ef4444, transparent);
+  animation: card-scan 3.5s linear infinite;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+}
+
+.saas-glow-card {
+  position: relative;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Base gradients for card backgrounds in dark & light */
+.bg-gradient-digital-twin {
+  background: linear-gradient(135deg, #09170e 0%, #060b08 100%);
+}
+.light-mode-app .bg-gradient-digital-twin {
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+}
+
+.bg-gradient-dashboard {
+  background: linear-gradient(135deg, #06181b 0%, #050a0c 100%);
+}
+.light-mode-app .bg-gradient-dashboard {
+  background: linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 100%);
+}
+
+.bg-gradient-crop-doctor {
+  background: linear-gradient(135deg, #1b0a0a 0%, #0a0505 100%);
+}
+.light-mode-app .bg-gradient-crop-doctor {
+  background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+}
+
+.bg-gradient-whatif-sim {
+  background: linear-gradient(135deg, #191005 0%, #0a0703 100%);
+}
+.light-mode-app .bg-gradient-whatif-sim {
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+}
+
+.bg-gradient-marketplace {
+  background: linear-gradient(135deg, #150a1b 0%, #08040a 100%);
+}
+.light-mode-app .bg-gradient-marketplace {
+  background: linear-gradient(135deg, #faf5ff 0%, #f3e8ff 100%);
+}
+
+.bg-gradient-market-intel {
+  background: linear-gradient(135deg, #081122 0%, #040811 100%);
+}
+.light-mode-app .bg-gradient-market-intel {
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+}
+
+.bg-gradient-loan-access {
+  background: linear-gradient(135deg, #191705 0%, #0a0902 100%);
+}
+.light-mode-app .bg-gradient-loan-access {
+  background: linear-gradient(135deg, #fefce8 0%, #fef9c3 100%);
+}
+
+.bg-gradient-feedback {
+  background: linear-gradient(135deg, #07121e 0%, #04090f 100%);
+}
+.light-mode-app .bg-gradient-feedback {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+}
+
+/* Hide scrollbar globally for all elements while maintaining scroll functionality */
+* {
+  scrollbar-width: none !important; /* Firefox */
+  -ms-overflow-style: none !important; /* IE and Edge */
+}
+
+*::-webkit-scrollbar {
+  display: none !important; /* Chrome, Safari, Opera */
+  width: 0 !important;
+  height: 0 !important;
+}
+
 

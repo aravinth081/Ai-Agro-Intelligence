@@ -12,7 +12,7 @@ import {
   Settings, Save, Download, Eye, Map, Wifi, Bell, Lightbulb, Database,
   Banknote, ShoppingBag, ShoppingCart, CreditCard, Package, 
   Receipt, Truck, Building2, Landmark, Tag, Star, BadgeCheck, Box,
-  MessageSquare, MessageCircle, Send, FileText, FileStack,
+  MessageSquare, MessageCircle, Send, FileText, FileStack, Mail,
   Check, Plus, Minus, Calendar, ListPlus, Mic, MicOff, Volume2, 
   Satellite, Navigation, RefreshCcw, Image, Paperclip, CalendarCheck 
 } from 'lucide-react';
@@ -23,13 +23,16 @@ import {
 } from 'recharts';
 
 import jsPDF from 'jspdf';
+import { db, auth, googleProvider } from './lib/firebase';
+import { doc, getDoc, setDoc, getDocs, collection } from 'firebase/firestore';
+import { signInWithPopup } from 'firebase/auth';
 
 // ==========================================
 // TRANSLATION DICTIONARY & CONSTANTS
 // ==========================================
 const translations = {
   en: {
-    welcome: "Welcome", subtext: "Your agricultural command center is ready.", homeGrid: "Home Grid", mainMenu: "Main Menu", logout: "Logout", menu: "Menu", getStarted: "Get Started", f_digitalTwin: "Digital Twin Setup", f_dashboard: "Dashboard", f_whatIf: "What-If Simulator", f_marketplace: "Marketplace", f_market: "Market Intelligence", f_loan: "Loan Access", f_cropDoctor: "AI Crop Doctor", f_feedback: "Feedback", farmersAssist: "FARMERS ASSISTANCE", connectFarmers: "Connecting Farmers with Future Tech", loginBtn: "Login", registerBtn: "Registration", createAcc: "Initialize Account", joinNetwork: "Join the Agri-Intelligence Network", secureLogin: "Secure Terminal Access", welcomeBack: "Welcome back, Operator.", userPlace: "Enter Username", passPlace: "Enter Password", close: "Close", back: "← Go Back", connect: "Authenticate", createUsername: "Create Username", createPassword: "Create Password", fbCategory: "Feedback Category", catCrop: "Crop & Soil", catMarket: "Market & Price", catLoan: "Loans & Finance", catGeneral: "General", submitBtn: "Submit Log",
+    welcome: "Welcome", subtext: "Your agricultural command center is ready.", homeGrid: "Home", mainMenu: "Main Menu", logout: "Logout", menu: "Menu", getStarted: "Get Started", f_digitalTwin: "Digital Twin Setup", f_dashboard: "Dashboard", f_whatIf: "What-If Simulator", f_marketplace: "Marketplace", f_market: "Market Intelligence", f_loan: "Loan Access", f_cropDoctor: "AI Crop Doctor", f_feedback: "Feedback", farmersAssist: "FARMERS ASSISTANCE", connectFarmers: "Connecting Farmers with Future Tech", loginBtn: "Login", registerBtn: "Registration", createAcc: "Initialize Account", joinNetwork: "Join the Agri-Intelligence Network", secureLogin: "Secure Terminal Access", welcomeBack: "Welcome back, Operator.", userPlace: "Enter Username", passPlace: "Enter Password", close: "Close", back: "← Go Back", connect: "Authenticate", createUsername: "Create Username", createPassword: "Create Password", fbCategory: "Feedback Category", catCrop: "Crop & Soil", catMarket: "Market & Price", catLoan: "Loans & Finance", catGeneral: "General", submitBtn: "Submit Log",
     landingHeadline: "Smart Farming Ecosystem", landingSubtext: "Connecting agriculture with next-gen technology."
   },
   ta: {
@@ -39,6 +42,9 @@ const translations = {
 };
 
 const translationMap = {
+  "System Cockpit": "கட்டுப்பாட்டு அறை",
+  "Agri-Intelligence Services": "வேளாண் நுண்ணறிவு சேவைகள்",
+  "View": "காண்க",
   // General & Landing
   "Farmers Assistance": "உழவர் உதவி மையம்",
   "Connecting Farmers with Future Tech": "எதிர்கால தொழில்நுட்பத்துடன் விவசாயத்தை இணைத்தல்",
@@ -97,6 +103,16 @@ const translationMap = {
 
   // Dashboard & Navigation
   "Live Open-Meteo API": "நேரடி Open-Meteo API",
+  "Telemetry Status": "தொலைத்தொடர்பு நிலை",
+  "Active": "செயலில் உள்ளது",
+  "Live Time": "நேரடி நேரம்",
+  "Live Date": "நேரடி தேதி",
+  "Farming Profile": "விவசாய சுயவிவரம்",
+  "Paddy (Default)": "நெல் (இயல்புநிலை)",
+  "Add to Cart": "வண்டியில் சேர்",
+  "Buy Now": "இப்போதே வாங்கு",
+  "Price": "விலை",
+  "Access": "அணுகவும்",
   "DISTRICT, TN": "மாவட்டம், தமிழ்நாடு",
   "Farm Command": "விவசாய கட்டுப்பாட்டு",
   "Center": "மையம்",
@@ -315,6 +331,98 @@ const translationMap = {
   "Madurai": "மதுரை",
   "Trichy": "திருச்சி",
   "Conventional": "வழக்கமான முறை (ரசாயனம்)",
+
+  // Districts & States
+  "Tamil Nadu": "தமிழ்நாடு",
+  "Punjab": "பஞ்சாப்",
+  "Ariyalur": "அரியலூர்",
+  "Chennai": "சென்னை",
+  "Cuddalore": "கடலூர்",
+  "Dharmapuri": "தர்மபுரி",
+  "Dindigul": "திண்டுக்கல்",
+  "Kallakurichi": "கள்ளக்குறிச்சி",
+  "Kanchipuram": "காஞ்சிபுரம்",
+  "Kanyakumari": "கன்னியாகுமரி",
+  "Karur": "கரூர்",
+  "Krishnagiri": "கிருஷ்ணகிரி",
+  "Nagapattinam": "நாகப்பட்டினம்",
+  "Namakkal": "நாமக்கல்",
+  "Nilgiris": "நீலகிரி",
+  "Perambalur": "பெரம்பலூர்",
+  "Pudukkottai": "புதுக்கோட்டை",
+  "Ramanathapuram": "இராமநாதபுரம்",
+  "Ranipet": "ராணிப்பேட்டை",
+  "Sivaganga": "சிவகங்கை",
+  "Tenkasi": "தென்காசி",
+  "Theni": "தேனி",
+  "Thoothukudi": "தூத்துக்குடி",
+  "Tiruchirappalli": "திருச்சிராப்பள்ளி",
+  "Tirunelveli": "திருநெல்வேலி",
+  "Tirupathur": "திருப்பத்தூர்",
+  "Tiruppur": "திருப்பூர்",
+  "Tiruvallur": "திருவள்ளூர்",
+  "Tiruvannamalai": "திருவண்ணாமலை",
+  "Tiruvarur": "திருவாரூர்",
+  "Vellore": "வேலூர்",
+  "Viluppuram": "விழுப்புரம்",
+  "Virudhunagar": "விருதுநகர்",
+
+  // Soils & Crops
+  "Alluvial Soil": "வண்டல் மண்",
+  "Black Soil": "கரிசல் மண்",
+  "Red Soil": "செம்மண்",
+  "Laterite Soil": "சரளை மண்",
+  "Sandy Coastal Soil": "மணல் சார்ந்த கடலோர மண்",
+  "Clayey Soil": "களிமண்",
+  "Paddy (Rice)": "நெல் (அரிசி)",
+  "Millets (Kambu/Ragi)": "தானியங்கள் (கம்பு/கேழ்வரகு)",
+  "Wheat": "கோதுமை",
+  "Soybean": "சோயாபீன்",
+  "Millets": "தானியங்கள்",
+  "Mustard": "கடுகு",
+  "Low": "குறைந்த",
+  "Medium": "நடுத்தர",
+  "High": "அதிக",
+
+  // B2B & ESG
+  "ITC AgriBiz": "ஐடிசி அக்ரிபிஸ்",
+  "Reliance Fresh": "ரிலையன்ஸ் ஃபிரெஷ்",
+  "WayCool": "வைகூல்",
+  "Ninjacart": "நிஞ்சாகார்ட்",
+  "Britannia": "பிரிட்டானியா",
+  "Cargill": "கார்கில்",
+
+  // Market Intelligence & PDF labels
+  "-4.5% to +2.1% Volatility": "-4.5% முதல் +2.1% ஏற்ற இறக்கம்",
+  "GLOBAL MARKET INTELLIGENCE": "உலகளாவிய சந்தை நுண்ணறிவு",
+  "Commodity": "பொருள்",
+  "Volume": "அளவு",
+  "Comparison Nodes": "ஒப்பீட்டு முனையங்கள்",
+  "AI TRADE VERDICT:": "AI வர்த்தக முடிவு:",
+  "Profitable Route": "லாபகரமான வழித்தடம்",
+  "Export from": "ஏற்றுமதி: ",
+  "Spread Deficit": "விலை வித்தியாசம் குறைவு",
+  "Liquidate locally in": "உள்ளூரிலேயே விற்கவும்: ",
+  "Estimated Net Alpha (Profit)": "மதிப்பிடப்பட்ட நிகர லாபம்",
+  "After Transport": "போக்குவரத்து கட்டணத்திற்கு பின்",
+  "VALUE CHAIN & PRICING METRICS": "மதிப்பு சங்கிலி & விலை அளவீடுகள்",
+  "Farm Gate Price (Spot)": "விவசாயிக்கு கிடைக்கும் நேரடி விலை",
+  "Grade-A Export Price": "தரம்-A ஏற்றுமதி விலை",
+  "B2B DEMAND & ESG MONETIZATION": "B2B தேவை & சுற்றுச்சூழல் (ESG) வருவாய்",
+  "Top Institutional Buyer": "முக்கிய நிறுவன கொள்முதல் வாங்குபவர்",
+  "Institutional Demand Vol.": "நிறுவன கொள்முதல் அளவு",
+  "LOGISTICS & CLIMATE RISKS": "போக்குவரத்து & காலநிலை ஆபத்துகள்",
+  "Est. Freight Cost": "மதிப்பிடப்பட்ட போக்குவரத்து செலவு",
+  "Cold Storage Usage": "குளிர்பதன கிடங்கு பயன்பாடு",
+  "Spoilage Risk Est.": "அழுகல் ஆபத்து மதிப்பீடு",
+  "Pest Attack Risk": "பூச்சி தாக்குதல் ஆபத்து",
+  "Optimal Hold Strategy": "உகந்த இருப்பு உத்தி",
+  "*This is an AI-generated econometric forecast based on simulated NCDEX & E-NAM sync data.": "*இது உருவகப்படுத்தப்பட்ட NCDEX & E-NAM தரவுகளின் அடிப்படையில் கணிக்கப்பட்ட AI ஆலோசனை ஆகும்.",
+  "VS": "எதிர்",
+  "Ex: Paddy": "உதா: நெல்",
+  "Farm Gate Price": "விவசாயிக்கு கிடைக்கும் விலை",
+  "Grade-A (Export)": "தரம்-A (ஏற்றுமதி)",
+  "Retail Price": "சில்லறை விலை",
 
   // Market Intelligence
   "Review your holding strategy. If export bans or tariff cuts are active, domestic supply will surge, depressing prices. Consider immediate liquidation or hedging via futures contracts.": "உங்கள் இருப்பு உத்தியை மதிப்பாய்வு செய்யவும். ஏற்றுமதி தடைகள் அல்லது கட்டணக் குறைப்புகள் செயலில் இருந்தால், உள்ளூர் விநியோகம் அதிகரித்து விலையைக் குறைக்கும். உடனடியாக விற்க அல்லது எதிர்கால ஒப்பந்தங்கள் மூலம் ஹெட்ஜ் செய்ய பரிசீலிக்கவும்.",
@@ -564,6 +672,21 @@ const T = (text) => {
     return translationMap[text] || translationMap[text.trim()] || text;
   }
   return text;
+};
+
+const getSidebarIconColor = (color, isDark) => {
+  if (isDark) return color;
+  const lightModeMap = {
+    "#42A5F5": "#1D4ED8", // Sky Blue -> Dark Blue
+    "#00ACC1": "#0F766E", // Teal -> Dark Teal
+    "#8BC34A": "#4D7C0F", // Fresh Lime -> Dark Lime
+    "#8D6E63": "#5D4037", // Rich Brown -> Darker Brown
+    "#9C27B0": "#7B1FA2", // Purple -> Dark Purple
+    "#F9A825": "#D97706", // Golden Yellow -> Amber-600
+    "#F8F9F4": "#475569", // Cream White -> Slate Gray
+    "#FF7043": "#EA580C"  // Terracotta Orange -> Orange-600
+  };
+  return lightModeMap[color] || color;
 };
 
 const CROP_LIST = [{ en: "Paddy", ta: "நெல்" }, { en: "Sugarcane", ta: "கரும்பு" }, { en: "Turmeric", ta: "மஞ்சள்" }, { en: "Vegetables", ta: "காயறிகள்" }, { en: "Cotton", ta: "பருத்தி" }, { en: "Maize", ta: "மக்காச்சோளம்" }, { en: "Banana", ta: "வாழை" }, { en: "Groundnut", ta: "நிலக்கடலை" }];
@@ -1000,7 +1123,7 @@ const AgroBot = ({ lang: appLang }) => {
           <div className="bg-[#1a231d] p-4 flex justify-between items-center border-b border-[#4CAF50]/20 shrink-0">
             <div className="flex items-center gap-3">
                <div className="bg-[#4CAF50] p-2 rounded-full text-black relative">
-                  <Cpu size={18}/>
+                  <User size={18}/>
                   <span className="absolute top-0 right-0 w-2.5 h-2.5 bg-green-300 border-2 border-[#1a231d] rounded-full animate-ping"></span>
                </div>
                <div>
@@ -1109,20 +1232,40 @@ const DigitalTwin = ({ setDtData, handleNav }) => {
   
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [filteredNames, setFilteredNames] = useState([]);
+  const [dbUsernames, setDbUsernames] = useState([]);
 
   // 🔥 NEW FIX: Page load ஆனதும் தானாகவே மேலே (Top) செல்ல!
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
+  useEffect(() => {
+    const fetchUsernames = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "users"));
+        const names = [];
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          if (data && data.name) {
+            names.push(data.name);
+          } else {
+            names.push(doc.id);
+          }
+        });
+        setDbUsernames(names);
+      } catch (err) {
+        console.error("Error fetching usernames from Firestore:", err);
+      }
+    };
+    fetchUsernames();
+  }, []);
+
   const handleNameChange = (e) => {
     const val = e.target.value;
     setFormData({ ...formData, name: val });
     if (val.length > 0) {
-      const savedUsers = JSON.parse(localStorage.getItem('agri_users') || '{}');
-      const localNames = Object.keys(savedUsers);
       const defaultNames = ["Aravinth", "Lokesh", "Muthu", "Karthik", "Ramesh"];
-      const allNames = [...new Set([...localNames, ...defaultNames])];
+      const allNames = [...new Set([...dbUsernames, ...defaultNames])];
       setFilteredNames(allNames.filter(n => n.toLowerCase().includes(val.toLowerCase())));
       setShowSuggestions(true);
     } else setShowSuggestions(false);
@@ -1158,9 +1301,6 @@ const DigitalTwin = ({ setDtData, handleNav }) => {
             <h2 className="text-4xl font-black text-white tracking-tight flex items-center gap-3 mb-2">
                 <User className="text-[#4CAF50]" size={36}/> {T("Farmer Digital Twin")}
             </h2>
-            <p className="text-slate-400 font-bold text-sm flex items-center gap-2">
-                <Database size={16} className="text-slate-500"/> {T("Saved locally on this device (localStorage).")}
-            </p>
         </div>
         
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -1227,6 +1367,14 @@ const Dashboard = ({ dtData = {}, setDtData, handleNav }) => {
 
   // 🔥 NEW: Season Analytics Modal State
   const [showSeasonModal, setShowSeasonModal] = useState(false);
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 60000);
+    return () => clearInterval(timer);
+  }, []);
 
   useEffect(() => { 
     const fetchWeather = async () => {
@@ -1398,6 +1546,34 @@ const Dashboard = ({ dtData = {}, setDtData, handleNav }) => {
                   {T("Operator")}: {operatorName} <Settings size={14} className="ml-2 opacity-50"/>
               </button>
           </div>
+
+          {/* MIDDLE: LIVE SYSTEM MONITOR & DATE */}
+          <div className="bg-[#111613] p-5 rounded-3xl border border-white/5 flex flex-col gap-2.5 shadow-xl min-w-[280px] w-full md:w-auto mt-6 md:mt-0 md:self-center transition-all hover:border-[#4CAF50]/30">
+              <div className="flex items-center justify-between border-b border-white/5 pb-2">
+                  <span className="text-slate-500 text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5">
+                      <Activity size={12} className="text-[#4CAF50] animate-pulse"/>
+                      {T("Telemetry Status")}
+                  </span>
+                  <span className="text-[10px] font-black uppercase tracking-widest bg-green-500/10 text-green-400 px-2 py-0.5 rounded-full border border-green-500/20">
+                      {T("Active")}
+                  </span>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                  <div>
+                      <span className="text-slate-500 text-[9px] font-black uppercase tracking-widest block mb-0.5">{T("Live Time")}</span>
+                      <span className="text-sm font-black text-white">{currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })}</span>
+                  </div>
+                  <div>
+                      <span className="text-slate-500 text-[9px] font-black uppercase tracking-widest block mb-0.5">{T("Live Date")}</span>
+                      <span className="text-sm font-black text-white">{currentTime.toLocaleDateString([], { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                  </div>
+              </div>
+              <div className="pt-2 border-t border-white/5 flex items-center justify-between text-xs">
+                  <span className="text-slate-400 font-bold">{T("Farming Profile")}:</span>
+                  <span className="text-[#4CAF50] font-black uppercase tracking-wider">{T(displayCrop)}</span>
+              </div>
+          </div>
+
           <div className="bg-[#111613] p-6 rounded-3xl border border-white/5 flex items-center gap-6 shadow-xl mt-6 md:mt-0">
               <div>{realtimeData.weatherIcon}</div>
               <div>
@@ -1546,7 +1722,7 @@ const Dashboard = ({ dtData = {}, setDtData, handleNav }) => {
           </div>
           
           <button onClick={() => handleNav('market')} className="w-full mt-6 text-[#4CAF50] font-black text-[10px] uppercase tracking-widest hover:text-white transition-colors flex items-center justify-center gap-2 border border-transparent hover:border-white/10 p-2 rounded-lg">
-             <Globe size={14}/> {T("View Full Market Intelligence")}
+             <Globe size={14}/> {T("Access Full Market Intelligence")}
           </button>
         </div>
       </div>
@@ -1811,7 +1987,7 @@ const CropDiseasePrediction = ({ handleNav }) => {
                     <Volume2 size={16} className={isSpeaking ? 'animate-pulse' : ''}/> {isSpeaking ? T('Stop Audio') : T('Read Audio')}
                 </button>
                 <button onClick={() => setShowReportModal(true)} className="bg-[#1a231d] border border-[#4CAF50]/50 text-[#4CAF50] px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-[#4CAF50] hover:text-black transition-all shadow-[0_0_15px_rgba(76,175,80,0.2)] flex items-center gap-2">
-                    <FileText size={16}/> {T("View Lab Report")}
+                    <FileText size={16}/> {T("Access Lab Report")}
                 </button>
             </div>
         )}
@@ -1985,7 +2161,7 @@ const CropDiseasePrediction = ({ handleNav }) => {
                         <div key={i} onClick={() => setSelectedShop(shop)} className="bg-[#0d120f] border border-white/5 p-4 rounded-xl hover:border-blue-500/50 transition-all cursor-pointer group shadow-sm hover:shadow-blue-500/10">
                            <h5 className="text-white font-bold text-xs group-hover:text-blue-400 transition-colors mb-1 truncate">{shop.name}</h5>
                            <p className="text-slate-500 text-[9px] font-bold flex items-center gap-1 mb-2"><Navigation size={10}/> {shop.dist} {T("away")}</p>
-                           <div className="flex justify-between items-center mt-3 pt-3 border-t border-white/5"><span className={`text-[8px] font-black uppercase px-2 py-0.5 rounded ${shop.status === 'Open Now' ? 'bg-green-900/30 text-green-400' : 'bg-orange-900/30 text-orange-400'}`}>{shop.status}</span><span className="text-blue-400 text-[9px] font-black uppercase group-hover:underline">{T("View Details")}</span></div>
+                           <div className="flex justify-between items-center mt-3 pt-3 border-t border-white/5"><span className={`text-[8px] font-black uppercase px-2 py-0.5 rounded ${shop.status === 'Open Now' ? 'bg-green-900/30 text-green-400' : 'bg-orange-900/30 text-orange-400'}`}>{shop.status}</span><span className="text-blue-400 text-[9px] font-black uppercase group-hover:underline">{T("Access")}</span></div>
                         </div>
                       ))}
                     </div>
@@ -2668,6 +2844,14 @@ const Marketplace = ({ handleNav, currentUser }) => {
   };
   
   const addToCart = (product) => { setCart(prev => { const existing = prev.find(item => item.id === product.id); if (existing) return prev.map(item => item.id === product.id ? { ...item, qty: item.qty + 1 } : item); return [...prev, { ...product, qty: 1 }]; }); };
+  const buyNow = (product) => {
+    setCart(prev => {
+      const existing = prev.find(item => item.id === product.id);
+      if (existing) return prev;
+      return [...prev, { ...product, qty: 1 }];
+    });
+    setView('cart');
+  };
   const removeFromCart = (id) => { setCart(prev => prev.filter(item => item.id !== id)); };
   const updateQty = (id, amount) => { setCart(prev => prev.map(item => { if (item.id === id) { const newQty = item.qty + amount; return newQty > 0 ? { ...item, qty: newQty } : item; } return item; })); };
   
@@ -2776,32 +2960,26 @@ const Marketplace = ({ handleNav, currentUser }) => {
           <div className="flex gap-4 mb-6 overflow-x-auto pb-2 custom-scrollbar">{['All', 'Seeds', 'Fertilizers', 'Fruits', 'Vegetables'].map(cat => (<span key={cat} onClick={() => handleCategoryClick(cat)} className={`px-5 py-2 rounded-full text-xs font-black uppercase cursor-pointer shrink-0 transition-colors shadow-md ${activeCategory === cat ? 'bg-[#4CAF50] text-black shadow-[0_0_15px_rgba(76,175,80,0.4)]' : 'bg-[#1a231d] text-slate-300 hover:text-white border border-white/5'}`}>{cat}</span>))}</div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {displayedProducts.map(p => (
-                  <div key={p.id} className="bg-[#0b1410] border border-white/5 rounded-2xl p-4 flex flex-col hover:border-[#4CAF50]/50 transition-colors shadow-lg group overflow-hidden relative">
+                  <div key={p.id} className="bg-[#0b1410] border border-white/5 rounded-2xl flex flex-col hover:border-[#4CAF50]/50 transition-all duration-300 shadow-lg group overflow-hidden relative">
                       
-                      {/* 🔥 FIX: Changed object-cover to object-contain and added white/gray background so image is fully visible without cropping */}
-                      <div className="w-full h-44 mb-4 overflow-hidden rounded-xl bg-slate-100 flex items-center justify-center relative p-2">
-                          <img src={p.image} onError={(e) => { e.target.src="https://images.unsplash.com/photo-1595841696677-6489ff3f8cd1?w=300&h=300&fit=crop"; }} alt={p.name} className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-700" loading="lazy" />
+                      <div className="w-full h-48 bg-slate-100 flex items-center justify-center relative overflow-hidden">
+                          <img src={p.image} onError={(e) => { e.target.src="https://images.unsplash.com/photo-1595841696677-6489ff3f8cd1?w=300&h=300&fit=crop"; }} alt={p.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
                           <span className="absolute top-2 left-2 bg-[#1a231d]/90 backdrop-blur-sm text-[9px] font-black text-[#4CAF50] uppercase tracking-widest px-2 py-1 rounded border border-[#4CAF50]/30">{p.category}</span>
                       </div>
 
-                      <h4 className="text-base font-black text-white leading-tight mb-2 px-1">{p.name}</h4>
-                      <p className="text-slate-500 text-[11px] font-bold mb-4 line-clamp-2 px-1">{p.desc}</p>
-                      
-                      <div className="mt-auto flex flex-col border-t border-white/5 pt-4 px-1 gap-2">
-                          {p.trendDir && (
-                              <div className="flex justify-between items-center bg-[#111613] p-1.5 rounded-md border border-white/5">
-                                  <span className="text-[8px] text-slate-400 font-bold uppercase tracking-widest">Today's Trend</span>
-                                  <span className={`text-[10px] font-black flex items-center gap-1 ${p.trendDir === 'up' ? 'text-green-500' : 'text-red-500'}`}>
-                                      {p.trendDir === 'up' ? <TrendingUp size={10}/> : <TrendingDown size={10}/>} {p.trendVal}%
-                                  </span>
-                              </div>
-                          )}
-                          <div className="flex items-end justify-between mt-2">
-                              <div>
-                                  <span className="text-xl font-black text-white">₹{p.price}</span>
-                                  <span className="text-[9px] font-bold uppercase tracking-widest text-slate-500 block">{p.unit}</span>
-                              </div>
-                              <button onClick={() => addToCart(p)} className="bg-[#4CAF50] text-black p-3 rounded-xl hover:bg-green-500 transition-colors shadow-lg"><ShoppingCart size={18}/></button>
+                      <div className="p-5 flex flex-col flex-grow">
+                          <h4 className="text-lg font-black text-white leading-tight mb-1.5">{p.name}</h4>
+                          <div className="text-sm font-bold text-slate-400 mb-4">
+                              {T("Price")}: <span className="text-white font-black text-base">₹{p.price}</span> / {p.unit.replace(/per\s+/i, '').toLowerCase()}
+                          </div>
+                          
+                          <div className="mt-auto flex flex-row gap-2">
+                              <button onClick={() => addToCart(p)} className="flex-1 bg-[#1a231d] text-[#4CAF50] border border-[#4CAF50]/30 hover:bg-[#4CAF50] hover:text-black transition-all font-black uppercase tracking-widest text-[10px] py-3 rounded-xl flex items-center justify-center gap-1.5 shadow-md">
+                                  <ShoppingCart size={14}/> {T("Cart")}
+                              </button>
+                              <button onClick={() => buyNow(p)} className="flex-1 bg-[#4CAF50] text-black hover:bg-green-600 transition-all font-black uppercase tracking-widest text-[10px] py-3 rounded-xl flex items-center justify-center gap-1.5 shadow-[0_0_15px_rgba(76,175,80,0.3)]">
+                                  {T("Buy Now")}
+                              </button>
                           </div>
                       </div>
                   </div>
@@ -4032,10 +4210,10 @@ const Feedback = ({ currentUser, handleNav }) => {
 
         <div className="flex justify-between items-center mb-8 border-b border-white/10 pb-6 relative z-10">
           <h3 className="font-black text-2xl text-white uppercase tracking-widest flex items-center gap-3">
-              <MessageSquare className="text-[#4CAF50]" size={32}/> Feedback
+              <MessageSquare className="text-[#4CAF50]" size={32}/> {T("Feedback")}
           </h3>
           {!isAdminLogged && (
-              <button onClick={() => setShowAdmin(true)} className="p-3 bg-[#1a3824] rounded-xl text-[#4CAF50] hover:bg-[#4CAF50] hover:text-black transition-colors border border-[#4CAF50]/30 shadow-lg" title="Admin Login">
+              <button onClick={() => setShowAdmin(true)} className="p-3 bg-[#1a3824] rounded-xl text-[#4CAF50] hover:bg-[#4CAF50] hover:text-black transition-colors border border-[#4CAF50]/30 shadow-lg" title={T("Admin Login")}>
                   <ShieldCheck size={24} />
               </button>
           )}
@@ -4045,27 +4223,27 @@ const Feedback = ({ currentUser, handleNav }) => {
            /* ADMIN LOGS DASHBOARD */
            <div className="space-y-4 animate-in fade-in relative z-10">
              <div className="flex justify-between items-center mb-6 bg-[#111814] p-4 rounded-xl border border-[#4CAF50]/50">
-                 <h4 className="text-xl font-bold text-[#4CAF50] uppercase tracking-widest flex items-center gap-2"><Lock size={18}/> Admin Dashboard Logs</h4>
-                 <button onClick={() => setIsAdminLogged(false)} className="text-red-400 text-sm font-bold hover:text-white uppercase bg-red-900/20 hover:bg-red-600 px-4 py-2 rounded-lg transition-colors">Close View</button>
+                 <h4 className="text-xl font-bold text-[#4CAF50] uppercase tracking-widest flex items-center gap-2"><Lock size={18}/> {T("Admin Dashboard Logs")}</h4>
+                 <button onClick={() => setIsAdminLogged(false)} className="text-red-400 text-sm font-bold hover:text-white uppercase bg-red-900/20 hover:bg-red-600 px-4 py-2 rounded-lg transition-colors">{T("Close View")}</button>
              </div>
              
              <div className="max-h-[400px] overflow-y-auto space-y-4 custom-scrollbar pr-2">
                {feedbacks.length === 0 ? (
-                   <p className="text-slate-500 text-center py-10 font-bold italic flex flex-col items-center gap-2"><Sprout size={32}/> No feedback received yet.</p>
+                   <p className="text-slate-500 text-center py-10 font-bold italic flex flex-col items-center gap-2"><Sprout size={32}/> {T("No feedback received yet.")}</p>
                ) : (
                  feedbacks.map(fb => (
-                   <div key={fb.id} className="bg-[#111814] p-5 rounded-2xl border border-white/5 border-l-4 border-l-[#4CAF50] hover:bg-[#1a231d] transition-colors shadow-lg">
+                   <div key={fb.id} className="bg-[#FFFFFF] p-5 rounded-2xl border border-white/5 border-l-4 border-l-[#4CAF50] hover:bg-[#F8F9FA] transition-colors shadow-lg">
                        <div className="flex justify-between items-center mb-3">
                            <div className="flex gap-3 items-center">
-                               <span className="text-[#4CAF50] font-bold text-xs uppercase tracking-widest bg-green-900/30 px-3 py-1 rounded-md flex items-center gap-2"><User size={12}/> {fb.user}</span>
-                               <span className="text-blue-400 font-bold text-[10px] uppercase border border-blue-900/50 bg-blue-900/20 px-2 py-1 rounded-md">{fb.category}</span>
+                               <span className="text-[#4CAF50] font-bold text-xs uppercase tracking-widest bg-green-50 px-3 py-1 rounded-md flex items-center gap-2"><User size={12}/> {fb.user}</span>
+                               <span className="text-blue-700 font-bold text-[10px] uppercase border border-blue-200 bg-blue-50 px-2 py-1 rounded-md">{T(fb.category)}</span>
                            </div>
-                           <span className="text-slate-500 text-xs font-bold">{fb.date}</span>
+                           <span className="text-slate-700 text-xs font-bold">{fb.date}</span>
                        </div>
-                       <p className="text-slate-300 font-medium leading-relaxed italic">"{fb.text}"</p>
+                       <p className="text-slate-800 font-medium leading-relaxed italic">"{fb.text}"</p>
                        {fb.hasAttachments && (
-                           <div className="mt-3 flex items-center gap-2 text-slate-500 text-[10px] font-black uppercase tracking-widest bg-white/5 w-max px-2 py-1 rounded">
-                               <Paperclip size={10}/> Attached Media (Hidden in basic view)
+                           <div className="mt-3 flex items-center gap-2 text-slate-700 text-[10px] font-black uppercase tracking-widest bg-slate-100 w-max px-2 py-1 rounded">
+                               <Paperclip size={10}/> {T("Attached Media (Hidden in basic view)")}
                            </div>
                        )}
                    </div>
@@ -4079,31 +4257,31 @@ const Feedback = ({ currentUser, handleNav }) => {
                <div className="w-24 h-24 bg-green-500/20 rounded-full flex items-center justify-center mb-6 border border-[#4CAF50]/50 shadow-[0_0_30px_rgba(76,175,80,0.3)]">
                   <CheckCircle2 size={50} className="text-[#4CAF50]" />
                </div>
-               <h2 className="text-3xl font-black text-white uppercase tracking-widest mb-2">Request Submitted!</h2>
-               <p className="text-slate-400 font-bold mb-8">Thank you. Our experts will review your log shortly.</p>
+               <h2 className="text-3xl font-black text-white uppercase tracking-widest mb-2">{T("Request Submitted!")}</h2>
+               <p className="text-slate-400 font-bold mb-8">{T("Thank you. Our experts will review your log shortly.")}</p>
                
                <div className="bg-[#111814] border border-white/10 rounded-2xl p-6 w-full max-w-sm mb-8 shadow-inner">
-                  <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">Your Support Ticket ID</p>
+                  <p className="text-slate-500 text-[10px] font-black uppercase tracking-widest mb-1">{T("Your Support Ticket ID")}</p>
                   <h3 className="text-[#4CAF50] font-mono text-2xl tracking-widest">{ticketId}</h3>
                   <div className="mt-4 flex items-center justify-between border-t border-white/5 pt-4">
-                     <span className="text-slate-400 text-xs font-bold uppercase">{category}</span>
-                     <span className="text-yellow-500 text-xs font-bold flex items-center gap-1 uppercase tracking-widest"><Clock size={12}/> In Review</span>
+                     <span className="text-slate-400 text-xs font-bold uppercase">{T(category)}</span>
+                     <span className="text-yellow-500 text-xs font-bold flex items-center gap-1 uppercase tracking-widest"><Clock size={12}/> {T("In Review")}</span>
                   </div>
                </div>
 
                <button onClick={() => setSuccessMsg(false)} className="border border-[#4CAF50]/50 text-[#4CAF50] font-black uppercase tracking-widest text-xs px-8 py-3 rounded-xl hover:bg-[#4CAF50] hover:text-black transition-colors shadow-[0_0_15px_rgba(76,175,80,0.1)]">
-                  Submit Another Query
+                  {T("Submit Another Query")}
                </button>
             </div>
         ) : (
           /* FEEDBACK FORM */
           <form onSubmit={submitFeedback} className="animate-in fade-in space-y-6 relative z-10">
             <div>
-                <p className="text-slate-400 font-bold text-xs uppercase tracking-widest mb-3">Feedback Category</p>
+                <p className="text-slate-400 font-bold text-xs uppercase tracking-widest mb-3">{T("Feedback Category")}</p>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                     {catOptions.map(cat => (
                         <button key={cat.id} type="button" onClick={() => setCategory(cat.id)} className={`p-4 rounded-xl flex items-center justify-center gap-2 font-black text-[11px] md:text-sm uppercase tracking-widest transition-all border shadow-lg ${category === cat.id ? 'bg-[#4CAF50] text-black border-[#4CAF50]' : 'bg-[#111814] text-slate-400 border-white/5 hover:border-[#4CAF50]/50'}`}>
-                            {cat.icon} {cat.label}
+                            {cat.icon} {T(cat.label)}
                         </button>
                     ))}
                 </div>
@@ -4114,7 +4292,7 @@ const Feedback = ({ currentUser, handleNav }) => {
                   value={feedbackText} 
                   onChange={e => setFeedbackText(e.target.value)} 
                   className="w-full min-h-[160px] bg-transparent text-white p-6 outline-none font-bold text-sm md:text-base resize-none placeholder:text-slate-600 custom-scrollbar" 
-                  placeholder="Share your farming experience, pest issues, or ask a question to our Agri-Experts..."
+                  placeholder={T("Share your farming experience, pest issues, or ask a question to our Agri-Experts...")}
               />
               
               {/* 🔥 REAL ATTACHMENT PREVIEWS */}
@@ -4134,26 +4312,26 @@ const Feedback = ({ currentUser, handleNav }) => {
               {/* BOTTOM TOOLBAR */}
               <div className="flex flex-wrap items-center justify-between p-4 border-t border-white/5 bg-[#0d120f]/50 gap-4">
                 <div className="flex items-center gap-2">
-                   <button type="button" onClick={triggerFileUpload} title="Attach Image" className="p-2.5 rounded-lg text-slate-400 hover:bg-white/5 hover:text-[#4CAF50] transition-colors border border-transparent hover:border-white/10">
+                   <button type="button" onClick={triggerFileUpload} title={T("Attach Image")} className="p-2.5 rounded-lg text-slate-400 hover:bg-white/5 hover:text-[#4CAF50] transition-colors border border-transparent hover:border-white/10">
                        <Paperclip size={18}/>
                    </button>
                    
-                   <button type="button" onClick={handleVoiceRecord} title="Voice Note" className={`p-2.5 rounded-lg transition-colors relative border ${isRecording ? 'text-red-500 bg-red-500/10 border-red-500/30' : 'text-slate-400 hover:bg-white/5 hover:text-[#4CAF50] border-transparent hover:border-white/10'}`}>
+                   <button type="button" onClick={handleVoiceRecord} title={T("Voice Note")} className={`p-2.5 rounded-lg transition-colors relative border ${isRecording ? 'text-red-500 bg-red-500/10 border-red-500/30' : 'text-slate-400 hover:bg-white/5 hover:text-[#4CAF50] border-transparent hover:border-white/10'}`}>
                       {isRecording && <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full animate-ping"></span>}
                       <Mic size={18}/>
                    </button>
-                   {isRecording && <span className="text-red-500 text-xs font-bold animate-pulse ml-2 hidden md:inline-block">Listening... Speak now!</span>}
+                   {isRecording && <span className="text-red-500 text-xs font-bold animate-pulse ml-2 hidden md:inline-block">{T("Listening... Speak now!")}</span>}
                 </div>
 
                 <button type="button" onClick={enhanceTextWithAI} disabled={isEnhancing || (!feedbackText.trim())} className="bg-[#1a3824] text-[#4CAF50] border border-[#4CAF50]/30 hover:bg-[#4CAF50] hover:text-black px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center gap-2 disabled:opacity-50">
                   {isEnhancing ? <Loader2 size={14} className="animate-spin"/> : <Sparkles size={14}/>}
-                  {isEnhancing ? "Enhancing..." : "AI Enhancer ✨"}
+                  {isEnhancing ? T("Enhancing...") : T("AI Enhancer ✨")}
                 </button>
               </div>
             </div>
 
             <button type="submit" className="w-full bg-[#4CAF50] text-black py-4 md:py-5 rounded-2xl font-black text-lg md:text-xl uppercase tracking-widest shadow-[0_0_20px_rgba(76,175,80,0.3)] hover:bg-green-500 hover:scale-[1.01] transition-all flex items-center justify-center gap-3">
-                <Send size={24}/> Submit
+                <Send size={24}/> {T("Submit")}
             </button>
           </form>
         )}
@@ -4163,13 +4341,13 @@ const Feedback = ({ currentUser, handleNav }) => {
           <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/90 backdrop-blur-md p-4 animate-in fade-in">
              <div className="w-full max-w-sm bg-[#111613] border border-[#4CAF50]/50 text-white p-10 rounded-3xl shadow-[0_0_40px_rgba(76,175,80,0.2)] relative overflow-hidden">
                  <div className="absolute -right-4 -top-4 opacity-5"><ShieldCheck size={120} className="text-[#4CAF50]"/></div>
-                 <h3 className="text-2xl font-black mb-2 text-[#4CAF50] uppercase tracking-tighter flex items-center gap-2 relative z-10"><ShieldCheck size={24}/> Admin Login</h3>
-                 <p className="text-slate-400 font-bold text-xs mb-8 relative z-10 uppercase tracking-widest">Authorized personnel only.</p>
+                 <h3 className="text-2xl font-black mb-2 text-[#4CAF50] uppercase tracking-tighter flex items-center gap-2 relative z-10"><ShieldCheck size={24}/> {T("Admin Login")}</h3>
+                 <p className="text-slate-400 font-bold text-xs mb-8 relative z-10 uppercase tracking-widest">{T("Authorized personnel only.")}</p>
                  <form onSubmit={loginAdmin} className="space-y-4 relative z-10">
-                     <input autoFocus required type="text" placeholder="Enter Admin Username" value={adminCreds.user} onChange={e => setAdminCreds({...adminCreds, user: e.target.value})} className="w-full bg-[#0d120f] border border-white/10 p-4 rounded-xl outline-none focus:border-[#4CAF50] font-bold text-white transition-colors"/>
-                     <input required type="password" placeholder="Enter Admin Password" value={adminCreds.pass} onChange={e => setAdminCreds({...adminCreds, pass: e.target.value})} className="w-full bg-[#0d120f] border border-white/10 p-4 rounded-xl outline-none focus:border-[#4CAF50] font-bold text-white transition-colors"/>
-                     <button type="submit" className="w-full bg-[#4CAF50] text-black py-4 rounded-xl font-black uppercase tracking-widest mt-4 hover:bg-green-500 transition-colors shadow-[0_0_15px_rgba(76,175,80,0.3)]">Unlock Logs</button>
-                     <button type="button" onClick={() => setShowAdmin(false)} className="w-full text-slate-500 font-black text-[10px] uppercase tracking-widest mt-3 hover:text-white transition-colors p-2">Cancel</button>
+                     <input autoFocus required type="text" placeholder={T("Enter Admin Username")} value={adminCreds.user} onChange={e => setAdminCreds({...adminCreds, user: e.target.value})} className="w-full bg-[#0d120f] border border-white/10 p-4 rounded-xl outline-none focus:border-[#4CAF50] font-bold text-white transition-colors"/>
+                     <input required type="password" placeholder={T("Enter Admin Password")} value={adminCreds.pass} onChange={e => setAdminCreds({...adminCreds, pass: e.target.value})} className="w-full bg-[#0d120f] border border-white/10 p-4 rounded-xl outline-none focus:border-[#4CAF50] font-bold text-white transition-colors"/>
+                     <button type="submit" className="w-full bg-[#4CAF50] text-black py-4 rounded-xl font-black uppercase tracking-widest mt-4 hover:bg-green-500 transition-colors shadow-[0_0_15px_rgba(76,175,80,0.3)]">{T("Unlock Logs")}</button>
+                     <button type="button" onClick={() => setShowAdmin(false)} className="w-full text-slate-500 font-black text-[10px] uppercase tracking-widest mt-3 hover:text-white transition-colors p-2">{T("Cancel")}</button>
                  </form>
              </div>
           </div>
@@ -4185,155 +4363,655 @@ const Feedback = ({ currentUser, handleNav }) => {
 // APP COMPONENT
 // ==========================================
 export default function App() {
-  const [currentUser, setCurrentUser] = useState(null);
-  const [currentPage, setCurrentPage] = useState('home');
-  const [lang, setLang] = useState('en');
+  const [currentUser, setCurrentUser] = useState(() => localStorage.getItem('agri_currentUser') || null);
+  const [currentPage, setCurrentPage] = useState(() => localStorage.getItem('agri_currentPage') || 'home');
+  const [lang, setLang] = useState(() => localStorage.getItem('agri_lang') || 'en');
   currentAppLang = lang;
-  const [isDarkMode, setIsDarkMode] = useState(true);
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    const saved = localStorage.getItem('agri_isDarkMode');
+    return saved !== null ? saved === 'true' : true;
+  });
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [authView, setAuthView] = useState('hidden'); 
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
+  const [regName, setRegName] = useState('');
+  const [regEmail, setRegEmail] = useState('');
+  const [regPassword, setRegPassword] = useState('');
+  const [regConfirmPassword, setRegConfirmPassword] = useState('');
+  const [loginEmail, setLoginEmail] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
+  const [isAuthLoading, setIsAuthLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [authSuccess, setAuthSuccess] = useState('');
-  const [hasStarted, setHasStarted] = useState(false);
+  const [animatingHeader, setAnimatingHeader] = useState(null);
+  const [hoveredCard, setHoveredCard] = useState(null);
+  const [clickedCard, setClickedCard] = useState(null);
+  const scrollRef = useRef(null);
+  const profileMenuRef = useRef(null);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  const handleLogout = () => {
+    setIsLoggingOut(true);
+    setTimeout(() => {
+      setCurrentUser(null);
+      setCurrentPage('home');
+      setIsLoggingOut(false);
+      setShowProfileMenu(false);
+    }, 1200);
+  };
 
   const t = translations[lang];
 
-  const [digitalTwinData, setDigitalTwinData] = useState({
-    name: "", district: "", landSize: "", soilType: "", sourceIrrigation: "", primaryCropType: "", diseaseRisk: false 
+  const [digitalTwinData, setDigitalTwinData] = useState(() => {
+    const saved = localStorage.getItem('agri_digitalTwinData');
+    return saved ? JSON.parse(saved) : {
+      name: "", district: "", landSize: "", soilType: "", sourceIrrigation: "", primaryCropType: "", diseaseRisk: false 
+    };
   });
 
-  const getUsers = () => { const saved = localStorage.getItem('agri_users'); return saved ? JSON.parse(saved) : {}; };
+  useEffect(() => {
+    if (currentUser) {
+      localStorage.setItem('agri_currentUser', currentUser);
+    } else {
+      localStorage.removeItem('agri_currentUser');
+    }
+  }, [currentUser]);
 
-  const handleRegister = (e) => { 
+  useEffect(() => {
+    localStorage.setItem('agri_currentPage', currentPage);
+    setClickedCard(null);
+  }, [currentPage]);
+
+  useEffect(() => {
+    localStorage.setItem('agri_lang', lang);
+    currentAppLang = lang;
+  }, [lang]);
+
+  useEffect(() => {
+    localStorage.setItem('agri_isDarkMode', isDarkMode.toString());
+  }, [isDarkMode]);
+
+  useEffect(() => {
+    localStorage.setItem('agri_digitalTwinData', JSON.stringify(digitalTwinData));
+  }, [digitalTwinData]);
+
+  // Handle click outside to close profile menu
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (profileMenuRef.current && !profileMenuRef.current.contains(event.target)) {
+        setShowProfileMenu(false);
+      }
+    };
+    if (showProfileMenu) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showProfileMenu]);
+
+  const handleRegister = async (e) => { 
     e.preventDefault(); 
-    if (!username || !password) { setErrorMsg("Please fill all fields!"); setAuthSuccess(''); return; } 
-    const users = getUsers(); 
-    if (users[username]) { setErrorMsg("Username already exists!"); setAuthSuccess(''); return; } 
-    users[username] = password; 
-    localStorage.setItem('agri_users', JSON.stringify(users)); 
-    setAuthSuccess("Account Created Successfully! Please Login."); 
-    setErrorMsg(''); setUsername(''); setPassword(''); setAuthView('login'); 
+    if (!regName || !regEmail || !regPassword || !regConfirmPassword) { 
+      setErrorMsg("Please fill all fields!"); 
+      setAuthSuccess(''); 
+      return; 
+    } 
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(regEmail)) {
+      setErrorMsg("Please enter a valid email address!");
+      setAuthSuccess('');
+      return;
+    }
+    if (regPassword !== regConfirmPassword) { 
+      setErrorMsg("Passwords do not match!"); 
+      setAuthSuccess(''); 
+      return; 
+    } 
+    if (regPassword.length < 6) {
+      setErrorMsg("Password must be at least 6 characters!");
+      setAuthSuccess('');
+      return;
+    }
+    setIsAuthLoading(true);
+    setErrorMsg('');
+    setAuthSuccess('');
+    try {
+      const emailLower = regEmail.toLowerCase();
+      const userDocRef = doc(db, "users", emailLower);
+      const userDocSnapshot = await getDoc(userDocRef);
+      if (userDocSnapshot.exists()) { 
+        setErrorMsg("Email is already registered!"); 
+        setAuthSuccess(''); 
+        setIsAuthLoading(false);
+        return; 
+      } 
+      await setDoc(userDocRef, { name: regName, email: emailLower, password: regPassword, provider: "email" });
+      setAuthSuccess("Account Created Successfully! Please Login."); 
+      setErrorMsg('');
+      setRegName(''); setRegEmail(''); setRegPassword(''); setRegConfirmPassword('');
+      setAuthView('login'); 
+    } catch (err) {
+      console.error("Error during registration:", err);
+      setErrorMsg("Error registering user: " + err.message);
+      setAuthSuccess('');
+    } finally {
+      setIsAuthLoading(false);
+    }
   };
   
-  const handleLogin = (e) => { 
+  const handleLogin = async (e) => { 
     e.preventDefault(); 
-    const users = getUsers(); 
-    if (users[username] && users[username] === password) { 
-      setCurrentUser(username); 
-      setDigitalTwinData({...digitalTwinData, name: username}); 
-      setAuthView('hidden'); setErrorMsg(''); setAuthSuccess(''); setUsername(''); setPassword(''); 
-      setCurrentPage('home'); setIsSidebarOpen(false); 
-    } else { 
-      setErrorMsg("Invalid Username or Password!"); 
+    if (!loginEmail || !loginPassword) {
+      setErrorMsg("Please fill all fields!");
       setAuthSuccess('');
-    } 
+      return;
+    }
+    setIsAuthLoading(true);
+    setErrorMsg('');
+    setAuthSuccess('');
+    try {
+      const emailLower = loginEmail.toLowerCase();
+      const userDocRef = doc(db, "users", emailLower);
+      const userDocSnapshot = await getDoc(userDocRef);
+      if (userDocSnapshot.exists() && userDocSnapshot.data().password === loginPassword) { 
+        const userData = userDocSnapshot.data();
+        setCurrentUser(userData.name || emailLower); 
+        setDigitalTwinData({...digitalTwinData, name: userData.name || emailLower}); 
+        setAuthView('hidden'); 
+        setErrorMsg(''); setAuthSuccess(''); 
+        setLoginEmail(''); setLoginPassword(''); 
+        setCurrentPage('home'); 
+        setIsSidebarOpen(false); 
+      } else { 
+        setErrorMsg("Invalid Email or Password!"); 
+        setAuthSuccess('');
+      } 
+    } catch (err) {
+      console.error("Error during login:", err);
+      setErrorMsg("Error logging in: " + err.message);
+      setAuthSuccess('');
+    } finally {
+      setIsAuthLoading(false);
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    setIsAuthLoading(true);
+    setErrorMsg('');
+    setAuthSuccess('');
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
+      const emailLower = user.email.toLowerCase();
+      
+      const userDocRef = doc(db, "users", emailLower);
+      const userDocSnapshot = await getDoc(userDocRef);
+      let nameToUse = user.displayName || emailLower;
+      
+      if (!userDocSnapshot.exists()) {
+        await setDoc(userDocRef, {
+          name: nameToUse,
+          email: emailLower,
+          provider: "google",
+          createdAt: new Date().toISOString()
+        });
+      } else {
+        nameToUse = userDocSnapshot.data().name || nameToUse;
+      }
+      
+      setCurrentUser(nameToUse);
+      setDigitalTwinData({...digitalTwinData, name: nameToUse});
+      setAuthView('hidden');
+      setCurrentPage('home');
+      setIsSidebarOpen(false);
+    } catch (err) {
+      console.error("Google login failed:", err);
+      if (err.code === 'auth/operation-not-allowed' || err.code === 'auth/configuration-not-found') {
+        setErrorMsg("Google Sign-In is not enabled in your Firebase Console. Go to: Authentication -> Sign-in method, click 'Add new provider', choose Google, select a support email, and click Save.");
+      } else if (err.code === 'auth/popup-blocked') {
+        setErrorMsg("Google Sign-In popup was blocked by your browser. Please allow popups and try again.");
+      } else if (err.code === 'auth/popup-closed-by-user') {
+        setErrorMsg("Google Sign-In popup was closed before completion. Please try again.");
+      } else {
+        setErrorMsg("Google Sign-In failed: " + err.message);
+      }
+    } finally {
+      setIsAuthLoading(false);
+    }
   };
 
   const features = [
-    { id: "digital-twin", title: t.f_digitalTwin, icon: <User className="text-blue-500" size={36} /> },
-    { id: "dashboard", title: t.f_dashboard, icon: <Activity className="text-green-500" size={36} /> },
-    { id: "crop-doctor", title: t.f_cropDoctor, icon: <Bug className="text-red-400" size={36} /> },
-    { id: "what-if", title: t.f_whatIf, icon: <Settings className="text-orange-500" size={36} /> },
-    { id: "marketplace", title: t.f_marketplace, icon: <ShoppingBag className="text-purple-500" size={36} /> },
-    { id: "market", title: t.f_market, icon: <Globe className="text-cyan-500" size={36} /> },
-    { id: "loan", title: t.f_loan, icon: <Banknote className="text-yellow-500" size={36} /> },
-    { id: "feedback", title: t.f_feedback, icon: <MessageSquare className="text-blue-500" size={36} /> }
+    { id: "digital-twin", title: t.f_digitalTwin, icon: <User className="text-blue-500" size={36} />, bgVideo: "/digital_twin.mp4", color: "#42A5F5" },
+    { id: "dashboard", title: t.f_dashboard, icon: <Activity className="text-green-500" size={36} />, bgVideo: "/dashboard.mp4", color: "#00ACC1" },
+    { id: "crop-doctor", title: t.f_cropDoctor, icon: <Bug className="text-red-400" size={36} />, bgVideo: "/crop_doctor.mp4", color: "#8BC34A" },
+    { id: "what-if", title: t.f_whatIf, icon: <Settings className="text-orange-500" size={36} />, bgVideo: "/whatif_sim.mp4", color: "#8D6E63" },
+    { id: "marketplace", title: t.f_marketplace, icon: <ShoppingBag className="text-purple-500" size={36} />, bgVideo: "/marketplace.mp4", color: "#9C27B0" },
+    { id: "market", title: t.f_market, icon: <Globe className="text-cyan-500" size={36} />, bgVideo: "/market_intel.mp4", color: "#F9A825" },
+    { id: "loan", title: t.f_loan, icon: <Banknote className="text-yellow-500" size={36} />, bgVideo: "/loan_access.mp4", color: "#F8F9F4" },
+    { id: "feedback", title: t.f_feedback, icon: <MessageSquare className="text-blue-500" size={36} />, bgVideo: "/feedback.mp4", color: "#FF7043" }
   ];
 
   const handleNav = (id) => { setCurrentPage(id); setIsSidebarOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); };
-
-  const renderContent = () => {
-    if (currentPage === 'home') {
-      return (
-        <div className="w-full max-w-6xl animate-in zoom-in-95 duration-500 space-y-10">
-          <div className="text-center"><h2 className="text-4xl md:text-5xl font-black text-white drop-shadow-xl">{t.welcome}, <span className="text-[#4CAF50]">{currentUser}!</span> <Leaf className="inline text-[#4CAF50] ml-2" size={36}/></h2><p className="text-slate-300 font-bold mt-3 text-lg">{t.subtext}</p></div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {features.map(f => (<div key={f.id} onClick={() => handleNav(f.id)} className="bg-[#1a1a1a]/90 backdrop-blur-xl border border-white/5 p-8 rounded-[2rem] flex flex-col items-center justify-center text-center cursor-pointer hover:bg-[#252525] hover:scale-[1.02] hover:border-[#4CAF50]/50 transition-all shadow-2xl group"><div className="mb-4 group-hover:-translate-y-2 transition-transform">{f.icon}</div><h3 className="text-white font-black text-sm uppercase tracking-widest">{f.title}</h3></div>))}
-          </div>
-        </div>
-      );
-    }
-    switch(currentPage) { 
-      case 'digital-twin': return <DigitalTwin setDtData={setDigitalTwinData} handleNav={handleNav} />;
-      case 'dashboard': return <Dashboard dtData={digitalTwinData} setDtData={setDigitalTwinData} handleNav={handleNav} lang={lang} />;
-      case 'crop-doctor': return <CropDiseasePrediction dtData={digitalTwinData} setDtData={setDigitalTwinData} lang={lang} handleNav={handleNav} currentUser={currentUser} />;
-      case 'what-if': return <WhatIfSimulator handleNav={handleNav} />;
-      case 'marketplace': return <Marketplace handleNav={handleNav} currentUser={currentUser} />;
-      case 'market': return <GlobalMarketIntelligence handleNav={handleNav} />;
-      case 'loan': return <LoanPortal currentUser={currentUser} handleNav={handleNav} lang={lang} />; 
-      case 'feedback': return <Feedback currentUser={currentUser} handleNav={handleNav} />;
-      default: return null;
-    }
+  
+  const handleHeaderClick = (id) => {
+    setAnimatingHeader(id);
+    setTimeout(() => {
+      handleNav(id);
+      setAnimatingHeader(null);
+    }, 300);
   };
 
-  const closeAuth = () => { setAuthView('hidden'); setUsername(''); setPassword(''); setErrorMsg(''); setAuthSuccess(''); };
+  const renderContent = () => {
+    return (
+      <>
+        {/* Cockpit cards container (always mounted to keep videos running in the background) */}
+        <div 
+          className="w-full max-w-[95vw] animate-in zoom-in-95 duration-500 py-0 flex flex-col justify-center items-center h-full"
+          style={{ display: currentPage === 'home' ? 'flex' : 'none' }}
+        >
+          {/* Horizontal Scrollable container showing exactly 4 cards at a time on desktop */}
+          <div 
+            ref={scrollRef}
+            className="w-full flex gap-0 overflow-x-auto px-2 py-2 snap-x snap-mandatory scroll-smooth"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          >
+            {features.map((f, idx) => {
+              const isClicked = clickedCard === f.id;
+              const isAnyClicked = clickedCard !== null;
+              const isOtherClicked = isAnyClicked && !isClicked;
+
+              return (
+                <div 
+                  key={f.id} 
+                  onClick={(e) => {
+                    if (isAnyClicked) return;
+                    const video = e.currentTarget.querySelector('video');
+                    if (video) {
+                      video.currentTime = 0;
+                      video.play().catch(err => console.log("Video play error on click:", err));
+                    }
+                    setClickedCard(f.id);
+                    setTimeout(() => {
+                      handleNav(f.id);
+                    }, 500);
+                  }}
+                  onMouseEnter={() => !isAnyClicked && setHoveredCard(f.id)}
+                  onMouseLeave={() => !isAnyClicked && setHoveredCard(null)}
+                  className={`flex-shrink-0 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 snap-start h-[86vh] border relative overflow-hidden cursor-pointer group transition-all duration-500 flex flex-col p-8 text-left ${
+                    isDarkMode ? 'bg-[#111613]' : 'bg-white'
+                  } ${
+                    idx === 0 
+                      ? 'rounded-l-[2.5rem]' 
+                      : (idx === features.length - 1 
+                          ? 'rounded-r-[2.5rem]' 
+                          : 'rounded-none')
+                  }`}
+                  style={{
+                    borderColor: isClicked 
+                      ? f.color 
+                      : (hoveredCard === f.id ? f.color : (isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)')),
+                    boxShadow: isClicked 
+                      ? `0 0 50px ${f.color}dd` 
+                      : (hoveredCard === f.id ? `0 0 35px ${f.color}66` : (isDarkMode ? '0 20px 50px rgba(0,0,0,0.4)' : '0 10px 30px rgba(0, 0, 0, 0.05)')),
+                    transform: isClicked 
+                      ? 'scale(1.08)' 
+                      : (isOtherClicked 
+                          ? 'scale(0.92)' 
+                          : (hoveredCard === f.id ? 'scale(1.04)' : 'scale(1)')),
+                    opacity: isOtherClicked ? 0.15 : 1,
+                    filter: isOtherClicked ? 'grayscale(0.5) blur(2px)' : 'none',
+                    marginLeft: idx === 0 ? 0 : '-1px',
+                    zIndex: isClicked ? 30 : (hoveredCard === f.id ? 10 : 1),
+                    pointerEvents: isAnyClicked ? 'none' : 'auto'
+                  }}
+                >
+                  {/* Background Video (Vibrant HD clarity) */}
+                  <video
+                    src={f.bgVideo}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    className="absolute inset-0 w-full h-full object-cover pointer-events-none z-0"
+                  />
+
+                  {/* Dark Bottom Gradient for Text legibility only at the bottom third */}
+                  <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-black/90 via-black/40 to-transparent z-0 pointer-events-none" />
+
+                  {/* Bottom details */}
+                  <div className="flex flex-col items-start mt-auto relative z-10">
+                    <h3 className="font-black text-sm sm:text-base md:text-lg uppercase tracking-wider transition-colors duration-300 drop-shadow-lg"
+                        style={{
+                          color: hoveredCard === f.id ? f.color : '#4CAF50'
+                        }}
+                    >
+                      {f.title}
+                    </h3>
+                    {/* View Button */}
+                    <div className="mt-3 px-4 py-1.5 font-extrabold text-xs uppercase tracking-wider rounded-xl shadow-lg transform transition-all duration-300 hover:scale-105 active:scale-95 flex items-center gap-1.5 cursor-pointer"
+                         style={{
+                           backgroundColor: hoveredCard === f.id ? f.color : '#2E7D32',
+                           color: hoveredCard === f.id 
+                             ? (['what-if', 'marketplace', 'feedback'].includes(f.id) ? 'white' : '#0d120f')
+                             : 'white'
+                         }}
+                    >
+                      <span>{T("Access")}</span>
+                      <ArrowRight size={12} strokeWidth={3} />
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Subpages (Rendered conditionally when not on homepage) */}
+        {currentPage !== 'home' && (() => {
+          switch(currentPage) { 
+            case 'digital-twin': return <DigitalTwin setDtData={setDigitalTwinData} handleNav={handleNav} />;
+            case 'dashboard': return <Dashboard dtData={digitalTwinData} setDtData={setDigitalTwinData} handleNav={handleNav} lang={lang} />;
+            case 'crop-doctor': return <CropDiseasePrediction dtData={digitalTwinData} setDtData={setDigitalTwinData} lang={lang} handleNav={handleNav} currentUser={currentUser} />;
+            case 'what-if': return <WhatIfSimulator handleNav={handleNav} />;
+            case 'marketplace': return <Marketplace handleNav={handleNav} currentUser={currentUser} />;
+            case 'market': return <GlobalMarketIntelligence handleNav={handleNav} />;
+            case 'loan': return <LoanPortal currentUser={currentUser} handleNav={handleNav} lang={lang} />; 
+            case 'feedback': return <Feedback currentUser={currentUser} handleNav={handleNav} />;
+            default: return null;
+          }
+        })()}
+      </>
+    );
+  };
+
+  const closeAuth = () => { 
+    setAuthView('hidden'); 
+    setRegName(''); setRegEmail(''); setRegPassword(''); setRegConfirmPassword(''); 
+    setLoginEmail(''); setLoginPassword(''); 
+    setErrorMsg(''); setAuthSuccess(''); 
+  };
 
   return (
     <div className={`h-screen w-screen relative overflow-hidden font-sans flex ${isDarkMode ? 'bg-[#0d120f]' : 'light-mode-app'}`}>
       
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');`}</style>
 
-      {/* Background Image */}
-      <div className="absolute inset-0 z-0">
-          <img src="/agriculture.jpeg" alt="BG" className="w-full h-full object-cover" onError={(e) => { e.target.src = "https://images.unsplash.com/photo-1500382017468-9049fee74a52"; }} />
-          <div className={`absolute inset-0 backdrop-blur-[2px] ${isDarkMode ? 'bg-black/60' : 'bg-white/80'}`} />
+      {/* Background Gradient / Hero Image */}
+      <div className="absolute inset-0 z-0 transition-colors duration-500">
+        {!currentUser ? (
+          <div 
+            className="absolute inset-0 bg-cover bg-center transition-all duration-700"
+            style={{ 
+              backgroundImage: 'url(/agro_hero_background.png?v=3)'
+            }} 
+          >
+            {/* Dark overlay to ensure text readability */}
+            <div className={`absolute inset-0 ${isDarkMode ? 'bg-black/60' : 'bg-black/30'}`}></div>
+          </div>
+        ) : (
+          <div className={`absolute inset-0 ${
+            isDarkMode 
+              ? 'bg-[radial-gradient(circle_at_top_right,_#111814_0%,_#0d120f_100%)]' 
+              : 'bg-[radial-gradient(circle_at_top_right,_#e8f5e9_0%,_#f8fafc_100%)]'
+          }`} />
+        )}
       </div>
       
       {currentUser && (
-        <aside className={`fixed top-0 left-0 h-full bg-[#111814]/95 backdrop-blur-2xl border-r border-white/10 z-50 transition-all duration-300 ease-in-out ${isSidebarOpen ? 'w-72 translate-x-0' : 'w-72 -translate-x-full'} print:hidden`}>
-          <div className="p-6 flex justify-between items-center border-b border-white/5"><h2 className="text-white font-black text-xl tracking-widest uppercase flex items-center gap-2"><Sprout className="text-[#4CAF50]"/> {t.menu}</h2><button onClick={() => setIsSidebarOpen(false)} className="text-slate-400 hover:text-white bg-white/5 p-2 rounded-xl transition-colors"><X size={20}/></button></div>
-          <div className="p-4 space-y-2 overflow-y-auto h-[calc(100vh-80px)] custom-scrollbar">
-            <button onClick={() => handleNav('home')} className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl font-bold transition-all ${currentPage === 'home' ? 'bg-[#4CAF50] text-black shadow-lg shadow-green-900/50' : 'text-slate-300 hover:bg-white/5 hover:text-white'}`}><Activity size={20} className={currentPage === 'home' ? 'text-black' : 'text-slate-400'}/><span className="uppercase tracking-wider text-sm">{t.homeGrid}</span></button><div className="my-2 border-b border-white/5"></div>
-            {features.map(f => (<button key={f.id} onClick={() => handleNav(f.id)} className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl font-bold transition-all ${currentPage === f.id ? 'bg-[#4CAF50] text-black shadow-lg shadow-green-900/50' : 'text-slate-300 hover:bg-white/5 hover:text-white'}`}><div className={currentPage === f.id ? 'text-black' : ''}>{React.cloneElement(f.icon, { size: 20, className: currentPage === f.id ? 'text-black' : f.icon.props.className })}</div><span className="uppercase tracking-wider text-sm">{f.title}</span></button>))}
+        <aside className={`fixed top-0 left-0 h-full border-r z-50 transition-all duration-300 ease-in-out ${isSidebarOpen ? 'w-72 translate-x-0' : 'w-72 -translate-x-full'} print:hidden flex flex-col`}
+              style={{ backgroundColor: '#FFFFFF', borderColor: '#e2e8f0', boxShadow: '4px 0 24px rgba(30,58,95,0.15)' }}>
+          <div className="p-6 flex justify-between items-center border-b border-white/10 flex-shrink-0"
+               style={{ backgroundColor: '#1E3A5F' }}>
+            <h2 className="font-black text-xl tracking-widest uppercase flex items-center gap-2" style={{ color: '#FFFFFF' }}>
+              <Sprout style={{ color: '#FACC15' }}/> {t.menu}
+            </h2>
+            <button onClick={() => setIsSidebarOpen(false)}
+                    className="p-2 rounded-xl transition-all hover:scale-110"
+                    style={{ backgroundColor: 'rgba(255,255,255,0.12)', color: '#FFFFFF' }}>
+              <X size={20}/>
+            </button>
+          </div>
+          
+          <div className="p-4 space-y-2 overflow-y-auto flex-1 custom-scrollbar">
+            <button 
+              onClick={() => handleHeaderClick('home')} 
+              className={`w-full relative overflow-hidden flex items-center gap-4 px-5 py-4 rounded-2xl font-bold transition-all duration-300 ${
+                (currentPage === 'home' && animatingHeader === null)
+                  ? 'shadow-lg' 
+                  : 'hover:bg-slate-100'
+              }`}
+              style={(currentPage === 'home' && animatingHeader === null)
+                ? { backgroundColor: '#1E3A5F', color: '#FFFFFF', boxShadow: '0 4px 20px rgba(30,58,95,0.6)' }
+                : {}}
+            >
+              <div 
+                className="absolute top-0 left-0 h-full transition-all duration-300 ease-out origin-left pointer-events-none"
+                style={{
+                  backgroundColor: '#1E3A5F',
+                  width: animatingHeader === 'home' ? '100%' : '0%',
+                  zIndex: 0
+                }}
+              />
+              <div className="relative z-10 flex items-center gap-4 w-full">
+                <Activity 
+                  size={20} 
+                  className="transition-colors duration-300"
+                  style={{ color: ((currentPage === 'home' && animatingHeader === null) || animatingHeader === 'home') ? '#FACC15' : '#1E3A5F' }}
+                />
+                <span className="uppercase tracking-wider text-sm transition-colors duration-300"
+                      style={{ color: ((currentPage === 'home' && animatingHeader === null) || animatingHeader === 'home') ? '#FFFFFF' : '#1E3A5F' }}>
+                  {t.homeGrid}
+                </span>
+              </div>
+            </button>
+            {features.map(f => (
+              <button 
+                key={f.id} 
+                onClick={() => handleHeaderClick(f.id)} 
+                className={`w-full relative overflow-hidden flex items-center gap-4 px-5 py-4 rounded-2xl font-bold transition-all duration-300 ${
+                  (currentPage === f.id && animatingHeader === null)
+                    ? 'shadow-lg' 
+                    : 'hover:bg-slate-100'
+                }`}
+                style={(currentPage === f.id && animatingHeader === null)
+                  ? { backgroundColor: '#1E3A5F', color: '#FFFFFF', boxShadow: '0 4px 20px rgba(30,58,95,0.6)' }
+                  : {}}
+              >
+                <div 
+                  className="absolute top-0 left-0 h-full transition-all duration-300 ease-out origin-left pointer-events-none"
+                  style={{
+                    backgroundColor: '#1E3A5F',
+                    width: animatingHeader === f.id ? '100%' : '0%',
+                    zIndex: 0
+                  }}
+                />
+                <div className="relative z-10 flex items-center gap-4 w-full">
+                  <div className="transition-colors duration-300">
+                    {React.cloneElement(f.icon, { 
+                      size: 20, 
+                      className: 'transition-colors duration-300',
+                      style: ((currentPage === f.id && animatingHeader === null) || animatingHeader === f.id) 
+                        ? { color: '#FACC15' } 
+                        : { color: '#1E3A5F' }
+                    })}
+                  </div>
+                  <span className="uppercase tracking-wider text-sm transition-colors duration-300"
+                        style={{ color: ((currentPage === f.id && animatingHeader === null) || animatingHeader === f.id) ? '#FFFFFF' : '#1E3A5F' }}>
+                    {f.title}
+                  </span>
+                </div>
+              </button>
+            ))}
+          </div>
+
+          <div className="p-4 border-t flex-shrink-0" style={{ borderColor: '#e2e8f0', backgroundColor: '#f8fafc' }}>
+            <button 
+              onClick={() => {
+                setCurrentUser(null); 
+                setIsSidebarOpen(false); 
+                setCurrentPage('home'); 
+                closeAuth();
+                setDigitalTwinData({
+                  name: "", district: "", landSize: "", soilType: "", sourceIrrigation: "", primaryCropType: "", diseaseRisk: false 
+                });
+                localStorage.removeItem('agri_digitalTwinData');
+                localStorage.removeItem('agri_currentPage');
+              }} 
+              className={`w-full flex items-center gap-4 px-5 py-4 rounded-2xl font-black transition-all active:scale-95 duration-200 ${
+                isDarkMode 
+                  ? 'bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white active:bg-red-600 active:text-white hover:shadow-[0_0_20px_rgba(239,68,68,0.45)]' 
+                  : 'bg-red-50 text-red-600 hover:bg-red-600 hover:text-white active:bg-red-700 active:text-white hover:shadow-[0_0_15px_rgba(220,38,38,0.25)] border border-red-200/50'
+              }`}
+            >
+              <LogOut size={20} className={isDarkMode ? 'text-red-500' : 'text-red-600'} />
+              <span className="uppercase tracking-wider text-sm">{t.logout}</span>
+            </button>
           </div>
         </aside>
       )}
 
       <div className="flex-1 flex flex-col relative z-10 w-full">
-        <nav className="w-full px-6 py-5 flex justify-between items-center bg-black/40 backdrop-blur-md border-b border-white/10 print:hidden">
+        <nav className="w-full px-6 py-4 flex justify-between items-center print:hidden"
+             style={{ backgroundColor: '#1E3A5F' }}>
           <div className="flex items-center gap-3 sm:gap-4">
-            {currentUser && (<button onClick={() => setIsSidebarOpen(true)} className="p-3 bg-[#1f2922] border border-white/10 text-white rounded-xl shadow-lg hover:bg-[#4CAF50] hover:text-black transition-colors"><Menu size={24} /></button>)}
-            <div className={`flex items-center gap-3 cursor-pointer`} onClick={() => { if(currentUser) handleNav('home'); else setHasStarted(false); }}>
-              <div className="bg-[#4CAF50] p-2 rounded-xl text-black shadow-lg"><Sprout size={28}/></div>
-              <h1 className="text-xl md:text-2xl font-black text-white uppercase tracking-widest drop-shadow-lg hidden sm:block">AGRO INTELLIGENCE</h1>
+            {currentUser && (
+              <button
+                onClick={() => setIsSidebarOpen(true)}
+                className="p-3 rounded-xl shadow-lg transition-colors border border-white/20 hover:scale-105 active:scale-95"
+                style={{ backgroundColor: '#162d4a', color: '#FFFFFF' }}
+                onMouseEnter={e => { e.currentTarget.style.backgroundColor = '#2E7D32'; }}
+                onMouseLeave={e => { e.currentTarget.style.backgroundColor = '#162d4a'; }}
+              >
+                <Menu size={24} />
+              </button>
+            )}
+            <div className="flex items-center gap-3 cursor-pointer" onClick={() => { if(currentUser) handleNav('home'); else closeAuth(); }}>
+              <div className="p-2 rounded-xl shadow-lg" style={{ backgroundColor: '#FACC15' }}>
+                <Sprout size={28} style={{ color: '#1E3A5F' }} />
+              </div>
+              <h1 className="text-xl md:text-2xl font-black uppercase tracking-widest drop-shadow-lg hidden sm:block"
+                  style={{ color: '#FFFFFF' }}>
+                AGRO INTELLIGENCE
+              </h1>
             </div>
           </div>
           <div className="flex items-center gap-3 sm:gap-4">
-            {currentUser && currentPage !== 'home' && (<button onClick={() => handleNav('home')} className="bg-[#0b1410] border border-[#4CAF50]/40 text-[#4CAF50] px-4 py-2 rounded-xl hover:bg-[#4CAF50] hover:text-black transition-all flex items-center gap-2 font-black text-xs uppercase tracking-widest shadow-[0_0_15px_rgba(76,175,80,0.2)]"><Home size={16}/> <span className="hidden sm:inline">{t.mainMenu}</span></button>)}
-            <div className="hidden md:flex bg-[#1a1a1a] border border-white/10 rounded-full p-1"><button onClick={() => setLang('en')} className={`px-4 py-2 rounded-full text-xs font-bold transition-colors ${lang === 'en' ? 'bg-[#4CAF50] text-black' : 'text-slate-300 hover:text-white'}`}>English</button><button onClick={() => setLang('ta')} className={`px-4 py-2 rounded-full text-xs font-bold transition-colors ${lang === 'ta' ? 'bg-[#4CAF50] text-black' : 'text-slate-300 hover:text-white'}`}>தமிழ்</button></div>
-            <button onClick={() => setIsDarkMode(!isDarkMode)} className="p-2.5 rounded-xl bg-[#1a1a1a] border border-white/10 hover:border-[#4CAF50] transition-colors shadow-lg">
-              {isDarkMode ? <Sun size={20} className="text-yellow-400" /> : <Moon size={20} className="text-slate-400" />}
+            {/* Language switcher */}
+            <div className="hidden md:flex rounded-full p-1 border border-white/20"
+                 style={{ backgroundColor: 'rgba(255,255,255,0.08)' }}>
+              <button
+                onClick={() => setLang('en')}
+                className="px-4 py-2 rounded-full text-xs font-bold transition-all duration-200"
+                style={{
+                  backgroundColor: lang === 'en' ? '#2E7D32' : 'transparent',
+                  color: '#FFFFFF'
+                }}
+              >
+                English
+              </button>
+              <button
+                onClick={() => setLang('ta')}
+                className="px-4 py-2 rounded-full text-xs font-bold transition-all duration-200"
+                style={{
+                  backgroundColor: lang === 'ta' ? '#2E7D32' : 'transparent',
+                  color: '#FFFFFF'
+                }}
+              >
+                தமிழ்
+              </button>
+            </div>
+            {/* Dark/Light mode toggle */}
+            <button
+              onClick={() => setIsDarkMode(!isDarkMode)}
+              className="p-2.5 rounded-xl shadow-lg transition-all border hover:scale-105 active:scale-95"
+              style={{ 
+                backgroundColor: 'rgba(255,255,255,0.12)', 
+                color: '#FFFFFF',
+                borderColor: 'rgba(255,255,255,0.2)'
+              }}
+            >
+              {isDarkMode ? <Sun size={20} style={{ color: '#FACC15' }} /> : <Moon size={20} style={{ color: '#FFFFFF' }} />}
             </button>
-            {currentUser && <button onClick={() => {setCurrentUser(null); setIsSidebarOpen(false); setCurrentPage('home'); setHasStarted(false);}} className="bg-red-500/20 text-red-500 px-4 py-2.5 rounded-xl hover:bg-red-500 hover:text-white transition-colors flex items-center gap-2 font-bold text-sm"><LogOut size={16}/> <span className="hidden sm:inline">{t.logout}</span></button>}
+            
+            {/* User Profile / Logout (Only visible if logged in) */}
+            {currentUser && (
+              <div className="relative" ref={profileMenuRef}>
+                <button
+                  onClick={() => setShowProfileMenu(!showProfileMenu)}
+                  className="flex flex-col items-center justify-center p-1.5 px-3 rounded-xl shadow-lg transition-all border hover:scale-105 active:scale-95 group"
+                  style={{ 
+                    backgroundColor: 'rgba(255,255,255,0.12)',
+                    borderColor: 'rgba(255,255,255,0.2)'
+                  }}
+                >
+                  {(currentUser.includes('@')) ? (
+                    <img src={`https://ui-avatars.com/api/?name=${currentUser.split('@')[0]}&background=random&color=fff`} alt="profile" className="w-5 h-5 rounded-full mb-0.5 shadow-sm" />
+                  ) : (
+                    <div className="w-5 h-5 rounded-full mb-0.5 flex items-center justify-center shadow-sm" style={{ backgroundColor: 'rgba(76,175,80,0.2)', color: '#4CAF50' }}>
+                      <User size={12} />
+                    </div>
+                  )}
+                  <span className="text-[9px] font-black uppercase tracking-widest" style={{ color: '#FFFFFF' }}>
+                    {currentUser.split('@')[0].slice(0,8)}
+                  </span>
+                </button>
+
+                {/* Realistic Logout Dropdown Menu */}
+                {showProfileMenu && (
+                  <div className="absolute top-full mt-3 right-0 w-56 rounded-[1.5rem] shadow-2xl border overflow-hidden animate-in fade-in slide-in-from-top-2 z-50 backdrop-blur-xl"
+                       style={{ 
+                         backgroundColor: isDarkMode ? 'rgba(17, 22, 19, 0.95)' : 'rgba(255, 255, 255, 0.95)',
+                         borderColor: isDarkMode ? 'rgba(255,255,255,0.1)' : '#e2e8f0'
+                       }}>
+                    <div className="p-5 border-b" style={{ borderColor: isDarkMode ? 'rgba(255,255,255,0.05)' : '#f1f5f9' }}>
+                      <p className="text-[10px] font-black opacity-50 uppercase tracking-widest mb-1" style={{ color: isDarkMode ? '#FFFFFF' : '#1E3A5F' }}>{T("Signed in as")}</p>
+                      <p className="font-bold text-sm truncate" style={{ color: isDarkMode ? '#FFFFFF' : '#1E3A5F' }}>{currentUser}</p>
+                    </div>
+                    <div className="p-3">
+                      <button 
+                        onClick={handleLogout}
+                        disabled={isLoggingOut}
+                        className="w-full flex items-center justify-center gap-2 px-4 py-3.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all shadow-sm"
+                        style={{ 
+                          color: isLoggingOut ? '#f87171' : '#FFFFFF', 
+                          backgroundColor: isLoggingOut ? 'rgba(239,68,68,0.1)' : '#ef4444' 
+                        }}
+                        onMouseOver={(e) => !isLoggingOut && (e.currentTarget.style.backgroundColor = '#dc2626')}
+                        onMouseOut={(e) => !isLoggingOut && (e.currentTarget.style.backgroundColor = '#ef4444')}
+                      >
+                        {isLoggingOut ? (
+                          <>
+                            <Loader2 size={16} className="animate-spin" /> {T("Logging Out...")}
+                          </>
+                        ) : (
+                          <>
+                            <LogOut size={16} /> {T("Sign Out")}
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </nav>
         
-        <main className="flex-1 flex flex-col items-center justify-center overflow-y-auto p-4 sm:p-6 lg:p-8 custom-scrollbar relative">
+        <main className={`flex-1 flex flex-col items-center justify-center overflow-y-auto custom-scrollbar relative w-full ${
+          currentPage === 'home' ? 'p-2 pt-0 pb-1' : 'p-4 sm:p-6 lg:p-8'
+        }`}>
           {!currentUser ? (
             <div className="w-full max-w-4xl m-auto text-center relative z-20">
-               {!hasStarted ? (
-                  // Clean Flat Landing Page
-                  <div className="animate-in fade-in zoom-in duration-1000 py-20">
-                    <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-6 tracking-tight drop-shadow-lg">{t.landingHeadline}</h1>
-                    <p className="text-green-400 text-sm md:text-base font-bold mb-10 tracking-widest uppercase drop-shadow-lg">{t.landingSubtext}</p>
-                    <button onClick={() => setHasStarted(true)} className="group relative bg-[#4CAF50] text-black px-14 py-5 rounded-full text-xl font-black uppercase tracking-widest hover:scale-105 transition-all shadow-[0_10px_40px_rgba(76,175,80,0.5)] overflow-hidden">
-                      <span className="relative z-10 flex items-center gap-2">{t.getStarted} <ChevronRight size={24} className="group-hover:translate-x-1 transition-transform"/></span>
-                      <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
-                    </button>
-                  </div>
-               ) : (
-                  <div className="animate-in fade-in slide-in-from-bottom-10 duration-700 bg-[#1f2922]/80 backdrop-blur-xl border border-green-900/50 p-12 rounded-[3rem] shadow-2xl text-center w-full max-w-xl mx-auto">
-                    <h2 className="text-4xl font-black text-white mb-4 flex justify-center items-center gap-3 tracking-wide"><Leaf className="text-[#4CAF50]" size={32}/> {t.farmersAssist}</h2>
-                    <p className="text-slate-300 mb-10 font-bold text-lg leading-relaxed">{t.connectFarmers}</p>
-                    <div className="flex flex-col sm:flex-row justify-center gap-6">
-                      <button onClick={() => {setAuthView('login'); setErrorMsg(''); setAuthSuccess('');}} className="bg-[#4CAF50] text-black px-10 py-4 rounded-full font-black text-lg hover:bg-green-500 flex-1 shadow-lg transition-transform hover:scale-105">{t.loginBtn}</button>
-                      <button onClick={() => {setAuthView('register'); setErrorMsg(''); setAuthSuccess('');}} className="bg-white text-green-900 px-10 py-4 rounded-full font-black text-lg hover:bg-slate-200 flex-1 shadow-lg transition-transform hover:scale-105">{t.registerBtn}</button>
-                    </div>
-                    <button onClick={() => setHasStarted(false)} className="mt-10 text-slate-400 text-sm font-black hover:text-white uppercase tracking-widest flex items-center justify-center gap-2 mx-auto transition-colors"><X size={16}/> {t.close}</button>
-                  </div>
-               )}
+              {/* Clean Flat Landing Page */}
+              <div className="animate-in fade-in zoom-in duration-1000 py-20">
+                <h1 className="text-4xl md:text-6xl font-extrabold !text-white mb-6 tracking-tight drop-shadow-2xl">{t.landingHeadline}</h1>
+                <p className="!text-[#FACC15] text-sm md:text-base font-bold mb-10 tracking-widest uppercase drop-shadow-2xl">{t.landingSubtext}</p>
+                <button onClick={() => { setAuthView('register'); setErrorMsg(''); setAuthSuccess(''); }} className="group relative !bg-[#FACC15] !text-[#1E3A5F] px-14 py-5 rounded-full text-xl font-black uppercase tracking-widest hover:scale-105 transition-all shadow-[0_10px_40px_rgba(250,204,21,0.4)] overflow-hidden border-2 border-transparent hover:border-[#1E3A5F]/20">
+                  <span className="relative z-10 flex items-center gap-2">{t.getStarted} <ChevronRight size={24} className="group-hover:translate-x-1 transition-transform"/></span>
+                  <div className="absolute inset-0 bg-white/30 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
+                </button>
+              </div>
             </div>
           ) : (<div className="w-full h-full flex flex-col items-center relative z-20">{renderContent()}</div>)}
         </main>
@@ -4343,9 +5021,208 @@ export default function App() {
       {currentUser && currentPage !== 'home' && <AgroBot />}
 
       {authView !== 'hidden' && authView !== 'choice' && (
-        <div className="fixed inset-0 z-[100] flex items-start justify-center bg-black/80 backdrop-blur-md p-4 animate-in fade-in print:hidden">
-          {authView === 'register' && (<div className="w-full max-w-sm bg-[#1f2922] border border-green-900/50 text-white p-10 rounded-[2.5rem] shadow-2xl relative z-20 my-auto animate-in zoom-in-95"><h3 className="text-3xl font-black mb-2 italic text-white uppercase tracking-tighter">{t.createAcc}</h3><p className="text-[#4CAF50] font-bold text-sm mb-8">{t.joinNetwork}</p>{errorMsg && <div className="bg-red-500/20 text-red-400 p-3 rounded-xl mb-4 text-sm font-bold flex items-center gap-2 animate-in fade-in"><AlertCircle size={16}/> {errorMsg}</div>}<form onSubmit={handleRegister} className="space-y-5"><div className="relative"><User className="absolute left-4 top-4 text-slate-400" size={20}/><input required type="text" placeholder={t.createUsername} value={username} onChange={e => setUsername(e.target.value)} className="w-full bg-[#111814] border border-white/10 p-4 pl-12 rounded-2xl outline-none focus:border-[#4CAF50] font-bold transition-colors text-white" /></div><div className="relative"><Lock className="absolute left-4 top-4 text-slate-400" size={20}/><input required type="password" placeholder={t.createPassword} value={password} onChange={e => setPassword(e.target.value)} className="w-full bg-[#111814] border border-white/10 p-4 pl-12 rounded-2xl outline-none focus:border-[#4CAF50] font-bold transition-colors text-white" /></div><button type="submit" className="w-full bg-white text-green-950 py-4 rounded-2xl font-black uppercase tracking-widest mt-4 hover:bg-slate-200 transition-transform hover:scale-[1.02]">{t.registerBtn}</button><div className="flex justify-between items-center mt-4"><button type="button" onClick={() => {setAuthView('login'); setErrorMsg(''); setAuthSuccess('');}} className="text-[#4CAF50] font-bold text-sm hover:underline">{t.loginBtn}</button><button type="button" onClick={closeAuth} className="text-slate-500 font-black text-xs uppercase hover:text-white">{t.close}</button></div></form></div>)}
-          {authView === 'login' && (<div className="w-full max-w-sm bg-[#1f2922] border border-green-900/50 text-white p-10 rounded-[2.5rem] shadow-2xl relative z-20 my-auto animate-in zoom-in-95"><h3 className="text-3xl font-black mb-2 italic text-[#4CAF50] uppercase tracking-tighter">{t.secureLogin}</h3><p className="text-slate-300 font-bold text-sm mb-8">{t.welcomeBack}</p>{authSuccess && <div className="bg-green-500/20 text-green-400 p-3 rounded-xl mb-4 text-sm font-bold flex items-center gap-2 animate-in fade-in"><CheckCircle2 size={16}/> {authSuccess}</div>}{errorMsg && <div className="bg-red-500/20 text-red-400 p-3 rounded-xl mb-4 text-sm font-bold flex items-center gap-2 animate-in fade-in"><AlertCircle size={16}/> {errorMsg}</div>}<form onSubmit={handleLogin} className="space-y-5"><div className="relative"><User className="absolute left-4 top-4 text-slate-400" size={20}/><input required type="text" placeholder={t.userPlace} value={username} onChange={e => {setUsername(e.target.value); setAuthSuccess('');}} className="w-full bg-[#111814] border border-white/10 p-4 pl-12 rounded-2xl outline-none focus:border-[#4CAF50] font-bold transition-colors text-white" /></div><div className="relative"><Lock className="absolute left-4 top-4 text-slate-400" size={20}/><input required type="password" placeholder={t.passPlace} value={password} onChange={e => {setPassword(e.target.value); setAuthSuccess('');}} className="w-full bg-[#111814] border border-white/10 p-4 pl-12 rounded-2xl outline-none focus:border-[#4CAF50] font-bold transition-colors text-white" /></div><button type="submit" className="w-full bg-[#4CAF50] text-black py-4 rounded-2xl font-black uppercase tracking-widest mt-4 hover:bg-[#3d8c58] transition-transform hover:scale-[1.02]">{t.connect}</button><div className="flex justify-between items-center mt-4"><button type="button" onClick={() => {setAuthView('register'); setErrorMsg(''); setAuthSuccess('');}} className="text-slate-300 font-bold text-sm hover:underline">{t.registerBtn}</button><button type="button" onClick={closeAuth} className="text-slate-500 font-black text-xs uppercase hover:text-white">{t.close}</button></div></form></div>)}
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/85 backdrop-blur-md p-4 animate-in fade-in print:hidden">
+          <div className={`w-full max-w-md p-8 md:p-10 rounded-[2.5rem] border shadow-2xl relative z-20 my-auto animate-in zoom-in-95 duration-300 ${
+            isDarkMode ? 'bg-[#111613]/95 border-[#4CAF50]/20 text-white' : 'bg-white/95 border-slate-200 text-slate-800'
+          }`}>
+            {/* Sliding Tab Switcher */}
+            <div className={`flex p-1 rounded-2xl mb-6 ${isDarkMode ? 'bg-black/40 border border-white/5' : 'bg-slate-100 border border-slate-200/50'}`}>
+              <button
+                type="button"
+                onClick={() => { setAuthView('register'); setErrorMsg(''); setAuthSuccess(''); }}
+                className={`flex-1 py-3 text-xs font-black uppercase tracking-wider rounded-xl transition-all duration-300 ${
+                  authView === 'register'
+                    ? (isDarkMode ? 'bg-[#4CAF50] text-black shadow-lg shadow-[#4CAF50]/20' : 'bg-white text-slate-800 shadow-sm')
+                    : (isDarkMode ? 'text-slate-400 hover:text-white' : 'text-slate-500 hover:text-slate-800')
+                }`}
+              >
+                Create Account
+              </button>
+              <button
+                type="button"
+                onClick={() => { setAuthView('login'); setErrorMsg(''); setAuthSuccess(''); }}
+                className={`flex-1 py-3 text-xs font-black uppercase tracking-wider rounded-xl transition-all duration-300 ${
+                  authView === 'login'
+                    ? (isDarkMode ? 'bg-[#4CAF50] text-black shadow-lg shadow-[#4CAF50]/20' : 'bg-white text-slate-800 shadow-sm')
+                    : (isDarkMode ? 'text-slate-400 hover:text-white' : 'text-slate-500 hover:text-slate-800')
+                }`}
+              >
+                Sign In
+              </button>
+            </div>
+
+            {/* Header Title */}
+            <div className="text-center mb-6">
+              <h3 className="text-2xl font-black italic uppercase tracking-tighter flex items-center justify-center gap-2">
+                {authView === 'register' ? (
+                  <>
+                    <Leaf className="text-[#4CAF50]" size={26}/> 
+                    <span>{t.createAcc}</span>
+                  </>
+                ) : (
+                  <>
+                    <ShieldCheck className="text-[#4CAF50]" size={26}/> 
+                    <span>{t.secureLogin}</span>
+                  </>
+                )}
+              </h3>
+              <p className={`font-bold text-[11px] mt-1.5 uppercase tracking-widest ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>
+                {authView === 'register' ? t.joinNetwork : t.welcomeBack}
+              </p>
+            </div>
+
+            {/* Google Sign In Button */}
+            <button 
+              type="button" 
+              onClick={handleGoogleSignIn} 
+              disabled={isAuthLoading}
+              className={`w-full flex items-center justify-center py-3.5 rounded-2xl font-bold transition-all border outline-none text-sm mb-4 ${
+                isDarkMode 
+                  ? 'bg-white/5 border-white/10 text-white hover:bg-white/10' 
+                  : 'bg-white border-slate-200 text-slate-700 hover:bg-slate-50 shadow-sm'
+              }`}
+            >
+              <svg className="w-5 h-5 mr-3" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
+                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
+                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05" />
+                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335" />
+              </svg>
+              <span>Continue with Google</span>
+            </button>
+
+            <div className="relative flex py-3 items-center">
+              <div className={`flex-grow border-t ${isDarkMode ? 'border-white/10' : 'border-slate-200'}`}></div>
+              <span className={`flex-shrink mx-4 text-[10px] font-black uppercase tracking-widest ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`}>
+                {authView === 'register' ? 'Or register with email' : 'Or sign in with email'}
+              </span>
+              <div className={`flex-grow border-t ${isDarkMode ? 'border-white/10' : 'border-slate-200'}`}></div>
+            </div>
+
+            {/* Error & Success Messages */}
+            {errorMsg && (
+              <div className="bg-red-500/10 text-red-400 border border-red-500/20 p-3.5 rounded-xl mb-4 text-xs font-bold flex items-center gap-2 animate-in fade-in">
+                <AlertCircle size={16}/> <span>{errorMsg}</span>
+              </div>
+            )}
+
+            {authSuccess && (
+              <div className="bg-green-500/10 text-green-400 border border-green-500/20 p-3.5 rounded-xl mb-4 text-xs font-bold flex items-center gap-2 animate-in fade-in">
+                <CheckCircle2 size={16}/> <span>{authSuccess}</span>
+              </div>
+            )}
+
+            {/* Dynamic Form Content */}
+            <form onSubmit={authView === 'register' ? handleRegister : handleLogin} className="space-y-4">
+              {authView === 'register' && (
+                <div className="relative">
+                  <User className={`absolute left-4 top-4 ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`} size={18}/>
+                  <input 
+                    required 
+                    type="text" 
+                    placeholder="Full Name" 
+                    value={regName} 
+                    onChange={e => setRegName(e.target.value)} 
+                    disabled={isAuthLoading}
+                    className={`w-full border p-3.5 pl-12 rounded-2xl outline-none font-bold text-sm transition-all ${
+                      isDarkMode 
+                        ? 'bg-[#111814] border-white/10 text-white focus:border-[#4CAF50]' 
+                        : 'bg-[#f8fafc] border-slate-200 text-slate-800 focus:border-[#4CAF50]'
+                    }`} 
+                  />
+                </div>
+              )}
+
+              <div className="relative">
+                <Mail className={`absolute left-4 top-4 ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`} size={18}/>
+                <input 
+                  required 
+                  type="email" 
+                  placeholder="Email Address" 
+                  value={authView === 'register' ? regEmail : loginEmail} 
+                  onChange={e => authView === 'register' ? setRegEmail(e.target.value) : setLoginEmail(e.target.value)} 
+                  disabled={isAuthLoading}
+                  className={`w-full border p-3.5 pl-12 rounded-2xl outline-none font-bold text-sm transition-all ${
+                    isDarkMode 
+                      ? 'bg-[#111814] border-white/10 text-white focus:border-[#4CAF50]' 
+                      : 'bg-[#f8fafc] border-slate-200 text-slate-800 focus:border-[#4CAF50]'
+                  }`} 
+                />
+              </div>
+
+              <div className="relative">
+                <Lock className={`absolute left-4 top-4 ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`} size={18}/>
+                <input 
+                  required 
+                  type="password" 
+                  placeholder="Password" 
+                  value={authView === 'register' ? regPassword : loginPassword} 
+                  onChange={e => authView === 'register' ? setRegPassword(e.target.value) : setLoginPassword(e.target.value)} 
+                  disabled={isAuthLoading}
+                  className={`w-full border p-3.5 pl-12 rounded-2xl outline-none font-bold text-sm transition-all ${
+                    isDarkMode 
+                      ? 'bg-[#111814] border-white/10 text-white focus:border-[#4CAF50]' 
+                      : 'bg-[#f8fafc] border-slate-200 text-slate-800 focus:border-[#4CAF50]'
+                  }`} 
+                />
+              </div>
+
+              {authView === 'register' && (
+                <div className="relative">
+                  <Lock className={`absolute left-4 top-4 ${isDarkMode ? 'text-slate-500' : 'text-slate-400'}`} size={18}/>
+                  <input 
+                    required 
+                    type="password" 
+                    placeholder="Confirm Password" 
+                    value={regConfirmPassword} 
+                    onChange={e => setRegConfirmPassword(e.target.value)} 
+                    disabled={isAuthLoading}
+                    className={`w-full border p-3.5 pl-12 rounded-2xl outline-none font-bold text-sm transition-all ${
+                      isDarkMode 
+                        ? 'bg-[#111814] border-white/10 text-white focus:border-[#4CAF50]' 
+                        : 'bg-[#f8fafc] border-slate-200 text-slate-800 focus:border-[#4CAF50]'
+                    }`} 
+                  />
+                </div>
+              )}
+
+              <button 
+                type="submit" 
+                disabled={isAuthLoading}
+                className="w-full bg-[#4CAF50] text-black py-4 rounded-2xl font-black uppercase tracking-widest mt-6 hover:bg-green-500 transition-all active:scale-95 shadow-md flex items-center justify-center gap-2"
+              >
+                {isAuthLoading && <Loader2 size={18} className="animate-spin" />}
+                <span>{authView === 'register' ? t.registerBtn : t.connect}</span>
+              </button>
+
+              <div className="flex justify-between items-center mt-6 text-sm">
+                {authView === 'register' ? (
+                  <button 
+                    type="button" 
+                    onClick={() => { setAuthView('login'); setErrorMsg(''); setAuthSuccess(''); }} 
+                    className="text-[#4CAF50] font-black hover:underline"
+                  >
+                    Already have an account? Sign In
+                  </button>
+                ) : (
+                  <button 
+                    type="button" 
+                    onClick={() => { setAuthView('register'); setErrorMsg(''); setAuthSuccess(''); }} 
+                    className="text-[#4CAF50] font-black hover:underline"
+                  >
+                    Don't have an account? Register
+                  </button>
+                )}
+                <button 
+                  type="button" 
+                  onClick={closeAuth} 
+                  className={`font-black uppercase tracking-wider text-xs ${isDarkMode ? 'text-slate-500 hover:text-white' : 'text-slate-400 hover:text-slate-700'}`}
+                >
+                  {t.close}
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
     </div>

@@ -9,8 +9,7 @@ from pydantic import BaseModel, Field, ConfigDict
 from typing import List
 import uuid
 from datetime import datetime, timezone
-
-
+from ml_engine import init_ml_models, predict_agri_risk, project_prices_arima, diagnose_disease_ml, translate_text
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
@@ -65,6 +64,59 @@ async def get_status_checks():
             check['timestamp'] = datetime.fromisoformat(check['timestamp'])
     
     return status_checks
+
+# Define ML Pydantic Models
+class PredictRiskInput(BaseModel):
+    temp: float
+    humidity: float
+    wind: float
+    area: float
+    crop_idx: int
+    soil_idx: int
+    irr_idx: int
+
+class ForecastPricesInput(BaseModel):
+    crop_name: str
+    base_price: int
+    months: int = 6
+    stress_factor: float = 1.0
+
+class DiagnoseDiseaseInput(BaseModel):
+    crop_name: str
+    temp: float
+    humidity: float
+    wetness_hrs: float = 12.0
+
+class TranslateInput(BaseModel):
+    text: str
+    from_lang: str = "en"
+    to_lang: str = "ta"
+
+# ML Endpoints
+@api_router.post("/ml/predict-risk")
+async def api_predict_risk(input: PredictRiskInput):
+    return predict_agri_risk(
+        input.temp, input.humidity, input.wind, input.area,
+        input.crop_idx, input.soil_idx, input.irr_idx
+    )
+
+@api_router.post("/ml/forecast-prices")
+async def api_forecast_prices(input: ForecastPricesInput):
+    return project_prices_arima(input.crop_name, input.base_price, input.months, input.stress_factor)
+
+@api_router.post("/ml/diagnose-disease")
+async def api_diagnose_disease(input: DiagnoseDiseaseInput):
+    return diagnose_disease_ml(input.crop_name, input.temp, input.humidity, input.wetness_hrs)
+
+@api_router.post("/ml/translate")
+async def api_translate(input: TranslateInput):
+    translated_text = translate_text(input.text, input.from_lang, input.to_lang)
+    return {"translatedText": translated_text}
+
+# Startup Event to initialize and train ML models
+@app.on_event("startup")
+async def startup_event():
+    init_ml_models()
 
 # Include the router in the main app
 app.include_router(api_router)
